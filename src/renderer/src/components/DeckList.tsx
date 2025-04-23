@@ -1,0 +1,198 @@
+import { useState, useEffect } from 'react'
+import { Deck } from '../types'
+import { getDecks, deleteDeck, addDeck } from '../services/storageService'
+import { Button, Input } from '../ui/common'
+
+interface DeckListProps {
+  onDeckSelect: (deck: Deck) => void
+}
+
+export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Element {
+  const [decks, setDecks] = useState<Deck[]>([])
+  const [newDeckName, setNewDeckName] = useState('')
+  const [isAddingDeck, setIsAddingDeck] = useState(false)
+
+  useEffect(() => {
+    loadDecks()
+  }, [])
+
+  const loadDecks = (): void => {
+    setDecks(getDecks())
+  }
+
+  const handleDeleteDeck = (e: React.MouseEvent, deckId: string): void => {
+    e.stopPropagation() // Prevent triggering the deck click
+    if (confirm('Are you sure you want to delete this deck?')) {
+      deleteDeck(deckId)
+      loadDecks()
+    }
+  }
+
+  const handleAddDeck = (): void => {
+    if (newDeckName.trim()) {
+      const newDeck: Deck = {
+        id: Date.now().toString(),
+        name: newDeckName.trim(),
+        cards: [],
+        createdAt: new Date()
+      }
+      addDeck(newDeck)
+      setNewDeckName('')
+      setIsAddingDeck(false)
+      loadDecks()
+    }
+  }
+
+  const handleDeckClick = (deck: Deck): void => {
+    onDeckSelect(deck)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter') {
+      handleAddDeck()
+    } else if (e.key === 'Escape') {
+      setIsAddingDeck(false)
+    }
+  }
+
+  return (
+    <div className="w-full max-w-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-medium text-gray-800">Your Decks</h2>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={() => setIsAddingDeck(true)}
+          leftIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          }
+        >
+          Add
+        </Button>
+      </div>
+
+      {isAddingDeck && (
+        <div className="mb-6 bg-white rounded-lg border border-gray-100 overflow-hidden">
+          <div className="p-3">
+            <Input
+              placeholder="Deck name"
+              value={newDeckName}
+              onChange={(e) => setNewDeckName(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              leftIcon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  />
+                </svg>
+              }
+            />
+          </div>
+          <div className="flex justify-end gap-2 px-3 py-2 bg-gray-50">
+            <Button variant="ghost" size="xs" onClick={() => setIsAddingDeck(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="xs"
+              onClick={handleAddDeck}
+              disabled={!newDeckName.trim()}
+            >
+              Create
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {decks.length > 0 ? (
+        <>
+          <div className="text-xs text-gray-400 mb-2 ml-1">
+            {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
+          </div>
+          <ul className="space-y-3">
+            {decks.map((deck) => (
+              <li
+                key={deck.id}
+                className="bg-white rounded-lg border border-gray-100 overflow-hidden hover:border-gray-200 transition-all duration-200 cursor-pointer"
+                onClick={() => handleDeckClick(deck)}
+              >
+                <div className="px-4 py-3 flex justify-between items-center">
+                  <div>
+                    <h3 className="font-medium text-gray-800">{deck.name}</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={(e) => handleDeleteDeck(e, deck.id)}
+                    className="text-gray-300 hover:text-gray-500 p-1 rounded-full transition-colors duration-200"
+                    aria-label="Delete deck"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-gray-50">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7 text-gray-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+          </div>
+          <p className="text-gray-400 text-sm mb-4">No decks yet</p>
+          <Button variant="primary" size="sm" onClick={() => setIsAddingDeck(true)}>
+            Create your first deck
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}

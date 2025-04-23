@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
-import Versions from './components/Versions'
-import DeckList from './components/DeckList'
-import { Deck } from './types'
-import DeckView from './components/DeckView'
+import { Outlet, useNavigate } from 'react-router-dom'
 import AddCard from './components/AddCard'
-import Logo from './components/Logo'
+import Layout from './components/Layout'
 import { getDecks } from './services/storageService'
+import { getSettings } from './services/settingsService'
 
 // Define window API types
 declare global {
@@ -17,8 +15,8 @@ declare global {
 }
 
 function App(): React.JSX.Element {
-  const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null)
   const [capturedText, setCapturedText] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Listen for text captured from main process
@@ -26,15 +24,14 @@ function App(): React.JSX.Element {
       console.log('Text captured in renderer:', text)
       setCapturedText(text)
     })
+
+    // Load initial settings
+    const settings = getSettings()
+    console.log('Loaded settings:', settings)
+
+    // In a real app, we would set up the daily notification here
+    // based on the reviewTime setting
   }, [])
-
-  const handleDeckSelect = (deck: Deck): void => {
-    setSelectedDeck(deck)
-  }
-
-  const handleBackToDecks = (): void => {
-    setSelectedDeck(null)
-  }
 
   const handleCloseAddCard = (): void => {
     setCapturedText(null)
@@ -45,49 +42,25 @@ function App(): React.JSX.Element {
     const decks = getDecks()
     const updatedDeck = decks.find((deck) => deck.id === deckId)
     if (updatedDeck) {
-      setSelectedDeck(updatedDeck)
+      navigate(`/deck/${deckId}`)
     }
     setCapturedText(null)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8 md:py-12">
-        <header className="mb-10">
-          <div className="flex items-center gap-3">
-            <Logo size={32} />
-            <div>
-              <h1 className="text-2xl font-medium text-gray-800">Flash Snap</h1>
-              <p className="text-sm text-gray-400 mt-1">A lightweight, passive memorization tool</p>
-            </div>
-          </div>
-        </header>
+    <>
+      <Layout>
+        <Outlet />
+      </Layout>
 
-        <main>
-          {selectedDeck ? (
-            <DeckView
-              deck={selectedDeck}
-              onBack={handleBackToDecks}
-              onDeckUpdated={setSelectedDeck}
-            />
-          ) : (
-            <DeckList onDeckSelect={handleDeckSelect} />
-          )}
-        </main>
-
-        {capturedText && (
-          <AddCard
-            capturedText={capturedText}
-            onClose={handleCloseAddCard}
-            onCardAdded={handleCardAdded}
-          />
-        )}
-
-        <footer className="mt-16 pt-6 border-t border-gray-100">
-          <Versions />
-        </footer>
-      </div>
-    </div>
+      {capturedText && (
+        <AddCard
+          capturedText={capturedText}
+          onClose={handleCloseAddCard}
+          onCardAdded={handleCardAdded}
+        />
+      )}
+    </>
   )
 }
 

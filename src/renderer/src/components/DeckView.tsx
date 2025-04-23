@@ -3,6 +3,7 @@ import { Deck, Card } from '../types'
 import { Button, Input } from '../ui/common'
 import { updateDeck } from '../services/storageService'
 import { playPronunciation } from '../services/translationService'
+import { useNavigate } from 'react-router-dom'
 
 interface DeckViewProps {
   deck: Deck
@@ -27,8 +28,6 @@ export default function DeckView({
   const [newCardFront, setNewCardFront] = useState('')
   const [newCardBack, setNewCardBack] = useState('')
   const [newCardTranslation, setNewCardTranslation] = useState('')
-
-  // Mock data as state - in a real app, this would come from an API or be part of the card object
   const [translations, setTranslations] = useState<Record<string, string>>({
     Ephemeral: 'Efêmero',
     Ubiquitous: 'Onipresente',
@@ -49,7 +48,6 @@ export default function DeckView({
     Serendipity: 'ˌsɛr(ə)nˈdɪpɪti'
   }
 
-  // Convert Cards to ExtendedCards with translation and pronunciation
   const extendedCards: ExtendedCard[] = deck.cards.map((card) => ({
     ...card,
     translation: translations[card.front] || '',
@@ -57,7 +55,6 @@ export default function DeckView({
     audioUrl: '' // Would link to audio file in real app
   }))
 
-  // Filter cards based on search term
   const filteredCards = extendedCards.filter(
     (card) =>
       card.front.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -130,6 +127,12 @@ export default function DeckView({
     }
   }
 
+  const navigate = useNavigate()
+
+  const handleStartReview = (): void => {
+    navigate(`/review/${deck.id}`)
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
@@ -157,27 +160,51 @@ export default function DeckView({
             {deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}
           </p>
         </div>
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={() => setIsAddingCard(true)}
-          leftIcon={
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-          }
-        >
-          Add Card
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleStartReview}
+            disabled={deck.cards.length === 0}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          >
+            Review
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setIsAddingCard(true)}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          >
+            Add Card
+          </Button>
+        </div>
       </div>
 
       <div className="mb-6">

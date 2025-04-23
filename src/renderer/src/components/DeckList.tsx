@@ -2,22 +2,33 @@ import { useState, useEffect } from 'react'
 import { Deck } from '../types'
 import { getDecks, deleteDeck, addDeck } from '../services/storageService'
 import { Button, Input } from '../ui/common'
+import { useNavigate } from 'react-router-dom'
+import { getDueCards } from '../services/reviewService'
 
 interface DeckListProps {
   onDeckSelect: (deck: Deck) => void
 }
 
 export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Element {
+  const navigate = useNavigate()
+
   const [decks, setDecks] = useState<Deck[]>([])
   const [newDeckName, setNewDeckName] = useState('')
   const [isAddingDeck, setIsAddingDeck] = useState(false)
+  const [dueCardCount, setDueCardCount] = useState(0)
 
   useEffect(() => {
     loadDecks()
+
+    // Count due cards
+    const dueCards = getDueCards()
+    setDueCardCount(dueCards.length)
   }, [])
 
   const loadDecks = (): void => {
-    setDecks(getDecks())
+    const decks = getDecks()
+    console.log('Decks loaded:', decks)
+    setDecks(decks)
   }
 
   const handleDeleteDeck = (e: React.MouseEvent, deckId: string): void => {
@@ -57,10 +68,35 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
 
   return (
     <div className="w-full max-w-lg">
+      <div className="my-6">
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={() => navigate('/review')}
+          disabled={dueCardCount === 0}
+          className="w-full flex items-center justify-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Start Review {dueCardCount > 0 && `(${dueCardCount} cards due)`}
+        </Button>
+      </div>
+
+      <hr className="my-6 border-gray-200" />
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-medium text-gray-800">Your Decks</h2>
         <Button
-          variant="primary"
+          variant="outline"
           size="sm"
           onClick={() => setIsAddingDeck(true)}
           leftIcon={

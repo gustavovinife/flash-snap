@@ -4,7 +4,9 @@ export interface Card {
   back: string
   dueDate?: Date
   interval?: number
-  ease?: number
+  easeFactor?: number
+  repetition?: number
+  nextReview?: Date
 }
 
 export interface Deck {

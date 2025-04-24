@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Deck, Card } from '../types'
 import { Button, Input } from '../ui/common'
 import { getDecks, updateDeck } from '../services/storageService'
@@ -14,6 +15,7 @@ export default function AddCard({
   onClose,
   onCardAdded
 }: AddCardProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [decks, setDecks] = useState<Deck[]>([])
   const [selectedDeckId, setSelectedDeckId] = useState<string>('')
   const [cardFront, setCardFront] = useState(capturedText)
@@ -81,12 +83,14 @@ export default function AddCard({
     <div className="fixed inset-0  flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-800">Add to Flashcards</h3>
+          <h3 className="text-lg font-medium text-gray-800">{t('addCard.title')}</h3>
         </div>
 
         <div className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Deck</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {t('addCard.selectDeck')}
+            </label>
             <select
               value={selectedDeckId}
               onChange={(e) => setSelectedDeckId(e.target.value)}
@@ -94,7 +98,7 @@ export default function AddCard({
             >
               {decks.length === 0 && (
                 <option value="" disabled>
-                  No decks available
+                  {t('addCard.noDecksAvailable')}
                 </option>
               )}
               {decks.map((deck) => (
@@ -106,38 +110,38 @@ export default function AddCard({
           </div>
 
           <Input
-            label="Front"
+            label={t('addCard.front')}
             value={cardFront}
             onChange={(e) => setCardFront(e.target.value)}
-            placeholder="Term or question"
+            placeholder={t('addCard.termPlaceholder')}
           />
 
           <Input
-            label="Back"
+            label={t('addCard.back')}
             value={cardBack}
             onChange={(e) => setCardBack(e.target.value)}
-            placeholder="Definition or answer"
+            placeholder={t('addCard.definitionPlaceholder')}
           />
 
           <Input
-            label="Translation (Optional)"
+            label={t('addCard.translation')}
             value={cardTranslation}
             onChange={(e) => setCardTranslation(e.target.value)}
-            placeholder="Portuguese translation"
+            placeholder={t('addCard.translationPlaceholder')}
             onKeyDown={handleKeyDown}
           />
         </div>
 
         <div className="px-6 py-4 bg-gray-50 flex justify-end gap-2 rounded-b-lg">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant="primary"
             onClick={handleAddCard}
             disabled={!cardFront.trim() || !selectedDeckId}
           >
-            Add Card
+            {t('addCard.addCard')}
           </Button>
         </div>
       </div>

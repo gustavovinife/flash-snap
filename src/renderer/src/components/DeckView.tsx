@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Deck, Card } from '../types'
 import { Button, Input } from '../ui/common'
 import { updateDeck } from '../services/storageService'
@@ -22,6 +23,7 @@ export default function DeckView({
   onBack,
   onDeckUpdated
 }: DeckViewProps): React.JSX.Element {
+  const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState('')
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
   const [isAddingCard, setIsAddingCard] = useState(false)
@@ -99,7 +101,7 @@ export default function DeckView({
   }
 
   const handleDeleteCard = (cardId: string): void => {
-    if (confirm('Are you sure you want to delete this card?')) {
+    if (confirm(t('common.deleteConfirm', { item: t('common.card') }))) {
       const updatedDeck = {
         ...deck,
         cards: deck.cards.filter((card) => card.id !== cardId)
@@ -133,6 +135,10 @@ export default function DeckView({
     navigate(`/review/${deck.id}`)
   }
 
+  const handleViewReports = (): void => {
+    navigate(`/reports/${deck.id}`)
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
@@ -153,11 +159,14 @@ export default function DeckView({
                 clipRule="evenodd"
               />
             </svg>
-            Back to Decks
+            {t('deckView.backToDecks')}
           </button>
           <h2 className="text-xl font-medium text-gray-800">{deck.name}</h2>
           <p className="text-sm text-gray-400 mt-1">
-            {deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}
+            {t('deckView.cardCount', {
+              count: deck.cards.length,
+              card: deck.cards.length === 1 ? t('common.card') : t('common.cards')
+            })}
           </p>
         </div>
         <div className="flex space-x-2">
@@ -181,7 +190,29 @@ export default function DeckView({
               </svg>
             }
           >
-            Review
+            {t('common.review')}
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleViewReports}
+            disabled={deck.cards.length === 0}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          >
+            {t('deckView.reports')}
           </Button>
           <Button
             variant="primary"
@@ -202,14 +233,14 @@ export default function DeckView({
               </svg>
             }
           >
-            Add Card
+            {t('deckView.addCard')}
           </Button>
         </div>
       </div>
 
       <div className="mb-6">
         <Input
-          placeholder="Search cards..."
+          placeholder={t('deckView.searchCards')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           leftIcon={
@@ -235,21 +266,21 @@ export default function DeckView({
         <div className="mb-6 bg-white rounded-lg border border-gray-100 overflow-hidden">
           <div className="p-4 space-y-4">
             <Input
-              label="Front"
-              placeholder="Enter the word or phrase"
+              label={t('deckView.front')}
+              placeholder={t('deckView.enterWord')}
               value={newCardFront}
               onChange={(e) => setNewCardFront(e.target.value)}
               autoFocus
             />
             <Input
-              label="Back"
-              placeholder="Enter the definition or meaning"
+              label={t('deckView.back')}
+              placeholder={t('deckView.enterDefinition')}
               value={newCardBack}
               onChange={(e) => setNewCardBack(e.target.value)}
             />
             <Input
-              label="Translation (Portuguese)"
-              placeholder="Enter the Portuguese translation"
+              label={t('deckView.translation')}
+              placeholder={t('deckView.enterTranslation')}
               value={newCardTranslation}
               onChange={(e) => setNewCardTranslation(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -257,7 +288,7 @@ export default function DeckView({
           </div>
           <div className="flex justify-end gap-2 px-4 py-3 bg-gray-50">
             <Button variant="ghost" size="xs" onClick={() => setIsAddingCard(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant="primary"
@@ -265,7 +296,7 @@ export default function DeckView({
               onClick={handleAddCard}
               disabled={!newCardFront.trim() || !newCardBack.trim()}
             >
-              Add Card
+              {t('deckView.addCard')}
             </Button>
           </div>
         </div>
@@ -296,7 +327,7 @@ export default function DeckView({
                         type="button"
                         onClick={(e) => handlePlayAudio(e, card.front)}
                         className="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
-                        aria-label="Play pronunciation"
+                        aria-label={t('deckView.playPronunciation')}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +351,7 @@ export default function DeckView({
                         handleDeleteCard(card.id)
                       }}
                       className="text-gray-300 hover:text-gray-500 p-1 rounded-full transition-colors"
-                      aria-label="Delete card"
+                      aria-label={t('deckView.deleteCard')}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -344,14 +375,16 @@ export default function DeckView({
                   <div className="mt-3 pt-3 border-t border-gray-100">
                     <div className="space-y-3">
                       <div>
-                        <h4 className="text-xs font-medium text-gray-500 uppercase">Definition</h4>
+                        <h4 className="text-xs font-medium text-gray-500 uppercase">
+                          {t('deckView.definition')}
+                        </h4>
                         <p className="mt-1 text-gray-700">{card.back}</p>
                       </div>
 
                       {card.translation && (
                         <div>
                           <h4 className="text-xs font-medium text-gray-500 uppercase">
-                            Portuguese Translation
+                            {t('deckView.portugueseTranslation')}
                           </h4>
                           <p className="mt-1 text-gray-700">{card.translation}</p>
                         </div>
@@ -360,14 +393,14 @@ export default function DeckView({
                       {card.front && (
                         <div>
                           <h4 className="text-xs font-medium text-gray-500 uppercase">
-                            Pronunciation
+                            {t('deckView.pronunciation')}
                           </h4>
                           <div className="mt-1 flex items-center">
                             <span className="text-gray-700 mr-2">{card.pronunciation}</span>
                             <button
                               onClick={(e) => handlePlayAudio(e, card.front)}
                               className="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
-                              aria-label="Play pronunciation"
+                              aria-label={t('deckView.playPronunciation')}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -419,10 +452,10 @@ export default function DeckView({
             </svg>
           </div>
           <p className="text-gray-400 text-sm mb-4">
-            {searchTerm ? 'No cards match your search' : 'No cards in this deck yet'}
+            {searchTerm ? t('deckView.noCardsMatch') : t('deckView.noCardsYet')}
           </p>
           <Button variant="primary" size="sm" onClick={() => setIsAddingCard(true)}>
-            Add your first card
+            {t('deckView.addFirstCard')}
           </Button>
         </div>
       )}

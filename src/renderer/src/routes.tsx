@@ -3,6 +3,7 @@ import DeckListPage from './pages/DeckListPage'
 import DeckViewPage from './pages/DeckViewPage'
 import ReviewPage from './pages/ReviewPage'
 import SettingsPage from './pages/SettingsPage'
+import ReportsPage from './pages/ReportsPage'
 import App from './App'
 
 const router = createHashRouter([
@@ -25,6 +26,10 @@ const router = createHashRouter([
       {
         path: '/review/:id',
         element: <ReviewPage />
+      },
+      {
+        path: '/reports/:id',
+        element: <ReportsPage />
       },
       {
         path: '/settings',

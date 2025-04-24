@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { getSettings, saveSettings, getLanguages, Settings } from '../services/settingsService'
 import { Button } from '@renderer/ui/common'
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [settings, setSettings] = useState<Settings>(getSettings())
   const languages = getLanguages()
 
@@ -12,7 +14,7 @@ const SettingsPage: React.FC = () => {
     // Save settings to localStorage via the service
     saveSettings(settings)
     // Show success message or notification
-    alert('Settings saved successfully!')
+    alert(t('settings.saveSuccess'))
   }
 
   const handleBack = (): void => {
@@ -40,17 +42,17 @@ const SettingsPage: React.FC = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back
+          {t('common.back')}
         </button>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-medium mb-6">Settings</h2>
+        <h2 className="text-2xl font-medium mb-6">{t('settings.title')}</h2>
 
         <div className="space-y-6">
           <div className="space-y-2">
             <label htmlFor="language" className="block text-sm font-medium text-gray-700">
-              Main Language
+              {t('settings.language.label')}
             </label>
             <select
               id="language"
@@ -64,14 +66,12 @@ const SettingsPage: React.FC = () => {
                 </option>
               ))}
             </select>
-            <p className="text-sm text-gray-500">
-              Select your native language for better learning.
-            </p>
+            <p className="text-sm text-gray-500">{t('settings.language.description')}</p>
           </div>
 
           <div className="space-y-2">
             <label htmlFor="reviewTime" className="block text-sm font-medium text-gray-700">
-              Daily Review Time
+              {t('settings.reviewTime.label')}
             </label>
             <input
               id="reviewTime"
@@ -80,14 +80,12 @@ const SettingsPage: React.FC = () => {
               onChange={(e) => setSettings({ ...settings, reviewTime: e.target.value })}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
-            <p className="text-sm text-gray-500">
-              Set a daily reminder time for your reviews. Default is 9:00 AM.
-            </p>
+            <p className="text-sm text-gray-500">{t('settings.reviewTime.description')}</p>
           </div>
 
           <div className="pt-4">
             <Button variant="primary" size="md" onClick={handleSave}>
-              Save Settings
+              {t('settings.saveButton')}
             </Button>
           </div>
         </div>

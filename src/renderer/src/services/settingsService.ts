@@ -1,10 +1,12 @@
+import i18n from '../i18n'
+
 export interface Settings {
   language: string
   reviewTime: string
 }
 
 const DEFAULT_SETTINGS: Settings = {
-  language: 'english',
+  language: 'en-US',
   reviewTime: '09:00'
 }
 
@@ -25,17 +27,27 @@ export const getSettings = (): Settings => {
 export const saveSettings = (settings: Settings): void => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+
+    // Change the application language if different from current
+    if (settings.language !== i18n.language) {
+      i18n.changeLanguage(settings.language)
+    }
   } catch (error) {
     console.error('Error saving settings:', error)
   }
 }
 
 export const getLanguages = (): { value: string; label: string }[] => [
-  { value: 'english', label: 'English' },
-  { value: 'spanish', label: 'Spanish' },
-  { value: 'french', label: 'French' },
-  { value: 'german', label: 'German' },
-  { value: 'portuguese', label: 'Portuguese' },
-  { value: 'chinese', label: 'Chinese' },
-  { value: 'japanese', label: 'Japanese' }
+  { value: 'en-US', label: 'English (US)' },
+  { value: 'pt-BR', label: 'Português (Brasil)' }
 ]
+
+// Initialize settings
+export function initSettings(): void {
+  const settings = getSettings()
+
+  // Set the initial language based on settings
+  if (settings.language && settings.language !== i18n.language) {
+    i18n.changeLanguage(settings.language)
+  }
+}

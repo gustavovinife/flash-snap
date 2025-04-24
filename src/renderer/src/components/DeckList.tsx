@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Deck } from '../types'
 import { getDecks, deleteDeck, addDeck } from '../services/storageService'
 import { Button, Input } from '../ui/common'
@@ -11,6 +12,7 @@ interface DeckListProps {
 
 export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Element {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [decks, setDecks] = useState<Deck[]>([])
   const [newDeckName, setNewDeckName] = useState('')
@@ -33,7 +35,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
 
   const handleDeleteDeck = (e: React.MouseEvent, deckId: string): void => {
     e.stopPropagation() // Prevent triggering the deck click
-    if (confirm('Are you sure you want to delete this deck?')) {
+    if (confirm(t('common.deleteConfirm', { item: t('common.deck') }))) {
       deleteDeck(deckId)
       loadDecks()
     }
@@ -88,13 +90,14 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
               clipRule="evenodd"
             />
           </svg>
-          Start Review {dueCardCount > 0 && `(${dueCardCount} cards due)`}
+          {t('deckList.startReview')}{' '}
+          {dueCardCount > 0 && t('deckList.cardsDue', { count: dueCardCount })}
         </Button>
       </div>
 
       <hr className="my-6 border-gray-200" />
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-medium text-gray-800">Your Decks</h2>
+        <h2 className="text-xl font-medium text-gray-800">{t('deckList.title')}</h2>
         <Button
           variant="outline"
           size="sm"
@@ -114,7 +117,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
             </svg>
           }
         >
-          Add
+          {t('common.add')}
         </Button>
       </div>
 
@@ -122,7 +125,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
         <div className="mb-6 bg-white rounded-lg border border-gray-100 overflow-hidden">
           <div className="p-3">
             <Input
-              placeholder="Deck name"
+              placeholder={t('deckList.deckName')}
               value={newDeckName}
               onChange={(e) => setNewDeckName(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -147,7 +150,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
           </div>
           <div className="flex justify-end gap-2 px-3 py-2 bg-gray-50">
             <Button variant="ghost" size="xs" onClick={() => setIsAddingDeck(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant="primary"
@@ -155,7 +158,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
               onClick={handleAddDeck}
               disabled={!newDeckName.trim()}
             >
-              Create
+              {t('common.create')}
             </Button>
           </div>
         </div>
@@ -164,7 +167,10 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
       {decks.length > 0 ? (
         <>
           <div className="text-xs text-gray-400 mb-2 ml-1">
-            {decks.length} {decks.length === 1 ? 'deck' : 'decks'}
+            {t('deckList.deckCount', {
+              count: decks.length,
+              deck: decks.length === 1 ? t('common.deck') : t('common.decks')
+            })}
           </div>
           <ul className="space-y-3">
             {decks.map((deck) => (
@@ -177,13 +183,14 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
                   <div>
                     <h3 className="font-medium text-gray-800">{deck.name}</h3>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      {deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}
+                      {deck.cards.length}{' '}
+                      {deck.cards.length === 1 ? t('common.card') : t('common.cards')}
                     </p>
                   </div>
                   <button
                     onClick={(e) => handleDeleteDeck(e, deck.id)}
                     className="text-gray-300 hover:text-gray-500 p-1 rounded-full transition-colors duration-200"
-                    aria-label="Delete deck"
+                    aria-label={t('deckList.deleteDeck')}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -223,9 +230,9 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
               />
             </svg>
           </div>
-          <p className="text-gray-400 text-sm mb-4">No decks yet</p>
+          <p className="text-gray-400 text-sm mb-4">{t('deckList.noDeck')}</p>
           <Button variant="primary" size="sm" onClick={() => setIsAddingDeck(true)}>
-            Create your first deck
+            {t('deckList.createFirstDeck')}
           </Button>
         </div>
       )}

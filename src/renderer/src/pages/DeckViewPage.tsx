@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
 import DeckView from '../components/DeckView'
 import { Deck } from '../types'
 import { getDecks } from '../services/storageService'
 
 const DeckViewPage: React.FC = () => {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [deck, setDeck] = useState<Deck | null>(null)
@@ -26,7 +28,7 @@ const DeckViewPage: React.FC = () => {
   }
 
   if (!deck) {
-    return <div>Loading...</div>
+    return <div>{t('common.loading')}</div>
   }
 
   return (

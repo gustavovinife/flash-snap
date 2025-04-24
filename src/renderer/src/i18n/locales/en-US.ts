@@ -24,7 +24,8 @@ const enUS = {
     review: 'Review',
     lastReviewed: 'Last reviewed: {{date}}',
     neverReviewed: 'Never reviewed',
-    deleteConfirm: 'Are you sure you want to delete this {{item}}?'
+    deleteConfirm: 'Are you sure you want to delete this {{item}}?',
+    optional: 'Optional'
   },
 
   // DeckList component
@@ -36,6 +37,9 @@ const enUS = {
     noDeck: 'No decks yet',
     createFirstDeck: 'Create your first deck',
     addDeck: 'Add Deck',
+    deckType: 'Deck Type',
+    language: 'Language',
+    knowledge: 'Knowledge',
     deckName: 'Deck name',
     deleteDeck: 'Delete deck'
   },
@@ -60,7 +64,9 @@ const enUS = {
     playPronunciation: 'Play pronunciation',
     definition: 'Definition',
     portugueseTranslation: 'Portuguese Translation',
-    pronunciation: 'Pronunciation'
+    pronunciation: 'Pronunciation',
+    context: 'Context',
+    enterContext: 'Enter the context of the card (optional)'
   },
 
   // AddCard component
@@ -74,7 +80,9 @@ const enUS = {
     termPlaceholder: 'Term or question',
     definitionPlaceholder: 'Definition or answer',
     translationPlaceholder: 'Portuguese translation',
-    addCard: 'Add Card'
+    addCard: 'Add Card',
+    contextPlaceholder: 'Enter the context of the card (optional)',
+    context: 'Context'
   },
 
   // Review page
@@ -103,7 +111,8 @@ const enUS = {
     grade3: '3 - Good',
     grade4: '4 - Easy',
     grade5: '5 - Perfect',
-    showAnswer: 'Show Answer'
+    showAnswer: 'Show Answer',
+    context: 'Context'
   },
 
   // Reports page

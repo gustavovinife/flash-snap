@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Deck, Card } from '../types'
-import { Button, Input } from '../ui/common'
+import { Button, Input, Select } from '../ui/common'
 import { getDecks, updateDeck } from '../services/storageService'
 
 interface AddCardProps {
@@ -20,8 +20,7 @@ export default function AddCard({
   const [selectedDeckId, setSelectedDeckId] = useState<string>('')
   const [cardFront, setCardFront] = useState(capturedText)
   const [cardBack, setCardBack] = useState('')
-  const [cardTranslation, setCardTranslation] = useState('')
-
+  const [cardContext, setCardContext] = useState('')
   useEffect(() => {
     // Load decks
     const availableDecks = getDecks()
@@ -44,7 +43,8 @@ export default function AddCard({
     const newCard: Card = {
       id: Date.now().toString(),
       front: cardFront.trim(),
-      back: cardBack.trim()
+      back: cardBack.trim(),
+      context: cardContext
     }
 
     // Add card to deck
@@ -55,17 +55,6 @@ export default function AddCard({
 
     // Save to storage
     updateDeck(updatedDeck)
-
-    // If translation provided, save it in local storage or to a translations service
-    if (cardTranslation.trim()) {
-      // This is a simplified approach - in a real app, this might
-      // be stored differently or handled by a separate service
-      const existingTranslations = localStorage.getItem('translations')
-      const translations = existingTranslations ? JSON.parse(existingTranslations) : {}
-
-      translations[cardFront.trim()] = cardTranslation.trim()
-      localStorage.setItem('translations', JSON.stringify(translations))
-    }
 
     // Notify parent
     onCardAdded(selectedDeckId)
@@ -91,22 +80,16 @@ export default function AddCard({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               {t('addCard.selectDeck')}
             </label>
-            <select
+            <Select
               value={selectedDeckId}
+              label={t('addCard.selectDeck')}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setSelectedDeckId(e.target.value)}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {decks.length === 0 && (
-                <option value="" disabled>
-                  {t('addCard.noDecksAvailable')}
-                </option>
-              )}
-              {decks.map((deck) => (
-                <option key={deck.id} value={deck.id}>
-                  {deck.name}
-                </option>
-              ))}
-            </select>
+              options={decks.map((deck) => ({
+                label: deck.name,
+                value: deck.id
+              }))}
+            />
           </div>
 
           <Input
@@ -124,11 +107,10 @@ export default function AddCard({
           />
 
           <Input
-            label={t('addCard.translation')}
-            value={cardTranslation}
-            onChange={(e) => setCardTranslation(e.target.value)}
-            placeholder={t('addCard.translationPlaceholder')}
-            onKeyDown={handleKeyDown}
+            label={t('addCard.context')}
+            value={cardContext}
+            onChange={(e) => setCardContext(e.target.value)}
+            placeholder={t('addCard.contextPlaceholder')}
           />
         </div>
 

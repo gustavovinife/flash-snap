@@ -6,9 +6,10 @@ const DECKS_STORAGE_KEY = 'flashsnap-decks'
 const sampleDecks: Deck[] = [
   {
     id: '1',
-    name: 'Daily Vocabulary',
+    name: 'English Vocabulary',
     cards: [],
-    createdAt: new Date()
+    createdAt: new Date(),
+    type: 'language'
   }
 ]
 

@@ -12,76 +12,36 @@ interface DeckViewProps {
   onDeckUpdated: (updatedDeck: Deck) => void
 }
 
-interface ExtendedCard extends Card {
-  translation?: string
-  pronunciation?: string
-  audioUrl?: string
-}
-
 export default function DeckView({
   deck,
   onBack,
   onDeckUpdated
 }: DeckViewProps): React.JSX.Element {
   const { t } = useTranslation()
+
   const [searchTerm, setSearchTerm] = useState('')
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
   const [isAddingCard, setIsAddingCard] = useState(false)
   const [newCardFront, setNewCardFront] = useState('')
   const [newCardBack, setNewCardBack] = useState('')
-  const [newCardTranslation, setNewCardTranslation] = useState('')
-  const [translations, setTranslations] = useState<Record<string, string>>({
-    Ephemeral: 'Efêmero',
-    Ubiquitous: 'Onipresente',
-    Serendipity: 'Serendipidade',
-    'What is a closure?': 'O que é uma closure?',
-    'What is immutability?': 'O que é imutabilidade?',
-    'What is a pure function?': 'O que é uma função pura?',
-    'The unexamined life is not worth living': 'A vida não examinada não vale a pena ser vivida',
-    'The only thing we have to fear is fear itself':
-      'A única coisa que devemos temer é o próprio medo',
-    'In the middle of difficulty lies opportunity':
-      'No meio da dificuldade encontra-se a oportunidade'
-  })
-
-  const mockPronunciations: Record<string, string> = {
-    Ephemeral: 'ɪˈfɛm(ə)r(ə)l',
-    Ubiquitous: 'juːˈbɪkwɪtəs',
-    Serendipity: 'ˌsɛr(ə)nˈdɪpɪti'
-  }
-
-  const extendedCards: ExtendedCard[] = deck.cards.map((card) => ({
-    ...card,
-    translation: translations[card.front] || '',
-    pronunciation: mockPronunciations[card.front] || '',
-    audioUrl: '' // Would link to audio file in real app
-  }))
-
-  const filteredCards = extendedCards.filter(
+  const [newCardContext, setNewCardContext] = useState('')
+  const filteredCards = deck.cards.filter(
     (card) =>
       card.front.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      card.back.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (card.translation && card.translation.toLowerCase().includes(searchTerm.toLowerCase()))
+      card.back.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const handleAddCard = (): void => {
     if (newCardFront.trim() && newCardBack.trim()) {
       const front = newCardFront.trim()
       const back = newCardBack.trim()
-      const translation = newCardTranslation.trim()
-
-      // Add to translation dictionary if provided
-      if (translation) {
-        setTranslations((prev) => ({
-          ...prev,
-          [front]: translation
-        }))
-      }
+      const context = newCardContext.trim()
 
       const newCard: Card = {
         id: Date.now().toString(),
         front,
-        back
+        back,
+        context
       }
 
       const updatedDeck = {
@@ -95,7 +55,7 @@ export default function DeckView({
       // Reset form
       setNewCardFront('')
       setNewCardBack('')
-      setNewCardTranslation('')
+      setNewCardContext('')
       setIsAddingCard(false)
     }
   }
@@ -119,14 +79,6 @@ export default function DeckView({
   const handlePlayAudio = (e: React.MouseEvent, cardFront: string): void => {
     e.stopPropagation()
     playPronunciation(cardFront)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter' && newCardFront && newCardBack) {
-      handleAddCard()
-    } else if (e.key === 'Escape') {
-      setIsAddingCard(false)
-    }
   }
 
   const navigate = useNavigate()
@@ -279,11 +231,10 @@ export default function DeckView({
               onChange={(e) => setNewCardBack(e.target.value)}
             />
             <Input
-              label={t('deckView.translation')}
-              placeholder={t('deckView.enterTranslation')}
-              value={newCardTranslation}
-              onChange={(e) => setNewCardTranslation(e.target.value)}
-              onKeyDown={handleKeyDown}
+              label={t('deckView.context')}
+              placeholder={t('deckView.enterContext')}
+              value={newCardContext}
+              onChange={(e) => setNewCardContext(e.target.value)}
             />
           </div>
           <div className="flex justify-end gap-2 px-4 py-3 bg-gray-50">
@@ -322,7 +273,8 @@ export default function DeckView({
                     )}
                   </div>
                   <div className="flex items-center space-x-2">
-                    {card.front && (
+                    {/* Pronunciation is only for language decks */}
+                    {deck.type === 'language' && card.front && (
                       <button
                         type="button"
                         onClick={(e) => handlePlayAudio(e, card.front)}
@@ -372,58 +324,26 @@ export default function DeckView({
                 </div>
 
                 {expandedCardId === card.id && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                    }}
+                    className="mt-3 pt-3 border-t border-gray-100"
+                  >
                     <div className="space-y-3">
                       <div>
                         <h4 className="text-xs font-medium text-gray-500 uppercase">
-                          {t('deckView.definition')}
+                          {t('deckView.back')}
                         </h4>
                         <p className="mt-1 text-gray-700">{card.back}</p>
                       </div>
 
-                      {card.translation && (
+                      {card.context && (
                         <div>
                           <h4 className="text-xs font-medium text-gray-500 uppercase">
-                            {t('deckView.portugueseTranslation')}
+                            {t('deckView.context')}
                           </h4>
-                          <p className="mt-1 text-gray-700">{card.translation}</p>
-                        </div>
-                      )}
-
-                      {card.front && (
-                        <div>
-                          <h4 className="text-xs font-medium text-gray-500 uppercase">
-                            {t('deckView.pronunciation')}
-                          </h4>
-                          <div className="mt-1 flex items-center">
-                            <span className="text-gray-700 mr-2">{card.pronunciation}</span>
-                            <button
-                              onClick={(e) => handlePlayAudio(e, card.front)}
-                              className="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors"
-                              aria-label={t('deckView.playPronunciation')}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
-                            </button>
-                          </div>
+                          <p className="mt-1 text-gray-700">{card.context}</p>
                         </div>
                       )}
                     </div>

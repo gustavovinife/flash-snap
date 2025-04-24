@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Deck } from '../types'
 import { getDecks, deleteDeck, addDeck } from '../services/storageService'
-import { Button, Input } from '../ui/common'
+import { Button, Input, Select } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { getDueCards } from '../services/reviewService'
 import { calculateDeckProgress } from '../services/reportingService'
@@ -19,6 +19,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
   const [newDeckName, setNewDeckName] = useState('')
   const [isAddingDeck, setIsAddingDeck] = useState(false)
   const [dueCardCount, setDueCardCount] = useState(0)
+  const [newDeckType, setNewDeckType] = useState<'language' | 'knowledge'>('language')
 
   useEffect(() => {
     loadDecks()
@@ -30,7 +31,6 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
 
   const loadDecks = (): void => {
     const decks = getDecks()
-    console.log('Decks loaded:', decks)
     setDecks(decks)
   }
 
@@ -48,7 +48,8 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
         id: Date.now().toString(),
         name: newDeckName.trim(),
         cards: [],
-        createdAt: new Date()
+        createdAt: new Date(),
+        type: newDeckType
       }
       addDeck(newDeck)
       setNewDeckName('')
@@ -149,16 +150,22 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
               }
             />
           </div>
-          <div className="flex justify-end gap-2 px-3 py-2 bg-gray-50">
+
+          <div className="p-3">
+            <Select
+              label={t('deckList.deckType')}
+              options={[
+                { label: t('deckList.language'), value: 'language' },
+                { label: t('deckList.knowledge'), value: 'knowledge' }
+              ]}
+              onChange={(e) => setNewDeckType(e.target.value as 'language' | 'knowledge')}
+            />
+          </div>
+          <div className="p-3 flex justify-end gap-2">
             <Button variant="ghost" size="xs" onClick={() => setIsAddingDeck(false)}>
               {t('common.cancel')}
             </Button>
-            <Button
-              variant="primary"
-              size="xs"
-              onClick={handleAddDeck}
-              disabled={!newDeckName.trim()}
-            >
+            <Button variant="primary" size="xs" onClick={handleAddDeck}>
               {t('common.create')}
             </Button>
           </div>

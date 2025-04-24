@@ -2,6 +2,7 @@ export interface Card {
   id: string
   front: string
   back: string
+  context?: string
   dueDate?: Date
   interval?: number
   easeFactor?: number
@@ -15,4 +16,5 @@ export interface Deck {
   cards: Card[]
   createdAt: Date
   lastReviewed?: Date
+  type: 'language' | 'knowledge'
 }

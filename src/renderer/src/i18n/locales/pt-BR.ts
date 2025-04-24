@@ -24,7 +24,8 @@ const ptBR = {
     review: 'Revisar',
     lastReviewed: 'Última revisão: {{date}}',
     neverReviewed: 'Nunca revisado',
-    deleteConfirm: 'Tem certeza que deseja excluir este {{item}}?'
+    deleteConfirm: 'Tem certeza que deseja excluir este {{item}}?',
+    optional: 'Opcional'
   },
 
   // DeckList component
@@ -37,7 +38,10 @@ const ptBR = {
     createFirstDeck: 'Crie seu primeiro baralho',
     addDeck: 'Adicionar Baralho',
     deckName: 'Nome do baralho',
-    deleteDeck: 'Excluir baralho'
+    deleteDeck: 'Excluir baralho',
+    deckType: 'Tipo de Baralho',
+    language: 'Idioma',
+    knowledge: 'Conhecimento'
   },
 
   // DeckView component
@@ -60,7 +64,9 @@ const ptBR = {
     playPronunciation: 'Reproduzir pronúncia',
     definition: 'Definição',
     portugueseTranslation: 'Tradução em Português',
-    pronunciation: 'Pronúncia'
+    pronunciation: 'Pronúncia',
+    context: 'Contexto',
+    enterContext: 'Digite o contexto do cartão (opcional)'
   },
 
   // AddCard component
@@ -74,7 +80,9 @@ const ptBR = {
     termPlaceholder: 'Termo ou pergunta',
     definitionPlaceholder: 'Definição ou resposta',
     translationPlaceholder: 'Tradução em português',
-    addCard: 'Adicionar Cartão'
+    addCard: 'Adicionar Cartão',
+    contextPlaceholder: 'Digite o contexto do cartão (opcional)',
+    context: 'Contexto'
   },
 
   // Review page
@@ -103,7 +111,8 @@ const ptBR = {
     grade3: '3 - Bom',
     grade4: '4 - Fácil',
     grade5: '5 - Perfeito',
-    showAnswer: 'Mostrar Resposta'
+    showAnswer: 'Mostrar Resposta',
+    context: 'Contexto'
   },
 
   // Reports page

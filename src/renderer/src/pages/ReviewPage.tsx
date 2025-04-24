@@ -181,20 +181,28 @@ const ReviewPage: React.FC = () => {
       </div>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex flex-col items-center">
-          <div className="w-full min-h-[200px] flex flex-col items-center justify-center mb-8 p-6 bg-gray-50 rounded-lg">
+          <div className="w-full min-h-[100px] flex flex-col items-center justify-center mb-8 p-6 bg-gray-50 rounded-lg">
             <h3 className="text-sm text-gray-500 mb-2">{t('review.front')}</h3>
             <p className="text-xl text-center font-medium">{currentCard?.front}</p>
           </div>
           {showAnswer ? (
             <>
-              <div className="w-full min-h-[200px] flex flex-col items-center justify-center mb-4 p-6 bg-gray-50 rounded-lg">
+              <div className="w-full min-h-[100px] flex flex-col items-center justify-center mb-4 p-6 bg-gray-50 rounded-lg">
                 <h3 className="text-sm text-gray-500 mb-2">{t('review.back')}</h3>
                 <p className="text-xl text-center">{currentCard?.back}</p>
+
+                {currentCard?.context && (
+                  <div className="w-full flex flex-col items-center justify-center mb-4 p-6 bg-gray-50 rounded-lg">
+                    <h3 className="text-sm text-gray-500 mb-2">{t('review.context')}</h3>
+                    <p className="text-xl text-center">{currentCard?.context}</p>
+                  </div>
+                )}
               </div>
+
               {showCardStats && currentCard && formatCardStats(currentCard)}
               <button
                 onClick={toggleCardStats}
-                className="mb-6 text-sm text-blue-500 hover:text-blue-700 flex items-center"
+                className="mb-6 text-sm text-purple-500 hover:text-purple-700 flex items-center"
               >
                 {showCardStats ? t('review.hideStats') : t('review.showStats')}
                 <svg
@@ -237,7 +245,7 @@ const ReviewPage: React.FC = () => {
           ) : (
             <button
               onClick={handleShowAnswer}
-              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              className="px-6 py-3 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
             >
               {t('review.showAnswer')}
             </button>

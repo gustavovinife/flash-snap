@@ -5,6 +5,7 @@ import { getDecks, deleteDeck, addDeck } from '../services/storageService'
 import { Button, Input } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { getDueCards } from '../services/reviewService'
+import { calculateDeckProgress } from '../services/reportingService'
 
 interface DeckListProps {
   onDeckSelect: (deck: Deck) => void
@@ -187,26 +188,58 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
                       {deck.cards.length === 1 ? t('common.card') : t('common.cards')}
                     </p>
                   </div>
-                  <button
-                    onClick={(e) => handleDeleteDeck(e, deck.id)}
-                    className="text-gray-300 hover:text-gray-500 p-1 rounded-full transition-colors duration-200"
-                    aria-label={t('deckList.deleteDeck')}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="relative w-8 h-8"
+                      title={`${calculateDeckProgress(deck)}% Cards Mastered`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                      <svg className="w-8 h-8" viewBox="0 0 36 36">
+                        <path
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="#E5E7EB"
+                          strokeWidth="3"
+                        />
+                        <path
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                          fill="none"
+                          stroke="#10B981"
+                          strokeWidth="3"
+                          strokeDasharray={`${calculateDeckProgress(deck)}, 100`}
+                        />
+                      </svg>
+                      <div
+                        className="absolute inset-0 flex items-center justify-center text-xs font-medium"
+                        style={{ fontSize: '0.60rem' }}
+                      >
+                        {calculateDeckProgress(deck)}%
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => handleDeleteDeck(e, deck.id)}
+                      className="text-gray-300 hover:text-gray-500 p-1 rounded-full transition-colors duration-200"
+                      aria-label={t('deckList.deleteDeck')}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}

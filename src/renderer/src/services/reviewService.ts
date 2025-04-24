@@ -1,90 +1,91 @@
 import { Card } from '../types'
 import { getDecks, updateDeck } from './storageService'
 
-const SM2_EASE_INITIAL_FACTOR = 2.5
+const INITIAL_EASE_FACTOR = 2.5
+const MIN_EASE_FACTOR = 1.3
 
-// SM2 algorithm implementation
-// goes from 1 to 5
+/**
+ * Applies the SM-2 spaced repetition algorithm to a card based on the review grade.
+ *
+ * @param card The card being reviewed
+ * @param grade The recall grade (0–5). Lower grades mean poor recall.
+ * @returns Updated scheduling properties for the card
+ */
 export function sm2(card: Card, grade: number): Partial<Card> {
-  let { interval = 0, repetition = 0, easeFactor = SM2_EASE_INITIAL_FACTOR } = card
+  let { interval = 0, repetition = 0, easeFactor = INITIAL_EASE_FACTOR } = card
 
   if (grade < 3) {
+    // Poor recall: reset repetition and set minimal interval
     repetition = 0
     interval = 1
   } else {
-    if (repetition === 0) {
-      interval = 1
-    } else if (repetition === 1) {
-      interval = 6
-    } else {
-      interval = Math.round(interval * easeFactor)
-    }
+    // Good recall: increase interval based on repetition count
+    interval = repetition === 0 ? 1 : repetition === 1 ? 6 : Math.round(interval * easeFactor)
     repetition += 1
   }
 
-  easeFactor = easeFactor + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02))
-  if (easeFactor < 1.3) easeFactor = 1.3
+  // Adjust ease factor (EF)
+  easeFactor += 0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02)
+  easeFactor = Math.max(easeFactor, MIN_EASE_FACTOR)
 
   const nextReview = new Date()
   nextReview.setDate(nextReview.getDate() + interval)
 
-  return {
-    interval,
-    repetition,
-    easeFactor,
-    nextReview
-  }
+  return { interval, repetition, easeFactor, nextReview }
 }
 
-/*
-HOW TO USE:
-
-const updated = sm2(card, 4) // 4 = lembrei com leve dificuldade
-Object.assign(card, updated) */
-
-// Get all cards that are due for review across all decks
+/**
+ * Returns all cards that are due for review today or earlier.
+ *
+ * @param deckId Optional: only return cards from a specific deck
+ * @returns List of due cards with their deck context
+ */
 export function getDueCards(deckId?: string): { card: Card; deckId: string; deckName: string }[] {
   const decks = getDecks()
-  const today = new Date()
+  const now = new Date()
+
+  // Normalize "today" to ignore time component
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+  const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
   const dueCards: { card: Card; deckId: string; deckName: string }[] = []
 
-  // If deckId is provided, only get cards from that deck
-  const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
+  for (const deck of decksToCheck) {
+    for (const card of deck.cards) {
+      const reviewDate = card.nextReview ? new Date(card.nextReview) : null
+      const isDue = !reviewDate || reviewDate <= today
 
-  decksToCheck.forEach((deck) => {
-    deck.cards.forEach((card) => {
-      // A card is due if it has never been reviewed or its next review date is today or earlier
-      if (!card.nextReview || card.nextReview <= today) {
-        dueCards.push({
-          card,
-          deckId: deck.id,
-          deckName: deck.name
-        })
+      if (isDue) {
+        dueCards.push({ card, deckId: deck.id, deckName: deck.name })
       }
-    })
-  })
+    }
+  }
 
   return dueCards
 }
 
-// Update a card after review
+/**
+ * Updates a card after a review session and saves it back to its deck.
+ *
+ * @param deckId The ID of the deck containing the card
+ * @param card The card being reviewed
+ * @param grade The recall grade (0–5)
+ */
 export function updateCardAfterReview(deckId: string, card: Card, grade: number): void {
-  const updatedCardData = sm2(card, grade)
-  const updatedCard = { ...card, ...updatedCardData }
+  const updatedCard = { ...card, ...sm2(card, grade) }
 
   const decks = getDecks()
-  const deckIndex = decks.findIndex((d) => d.id === deckId)
+  const deck = decks.find((d) => d.id === deckId)
 
-  if (deckIndex === -1) {
-    console.error(`Deck with ID ${deckId} not found`)
+  if (!deck) {
+    console.error(`Deck with ID "${deckId}" not found.`)
     return
   }
 
-  const deck = decks[deckIndex]
   const cardIndex = deck.cards.findIndex((c) => c.id === card.id)
 
   if (cardIndex === -1) {
-    console.error(`Card with ID ${card.id} not found in deck ${deckId}`)
+    console.error(`Card with ID "${card.id}" not found in deck "${deckId}".`)
     return
   }
 

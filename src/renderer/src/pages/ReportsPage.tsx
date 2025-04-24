@@ -279,20 +279,20 @@ const ReportsPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-medium text-gray-800 mb-4">{t('reports.stats.dueCards')}</h3>
-          <div className="flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold text-gray-800">{cardStats.dueSoon}</p>
               <p className="text-sm text-gray-500">{t('reports.stats.cardsDueNext7Days')}</p>
             </div>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => navigate(`/review/${deck.id}`)}
-              disabled={cardStats.dueSoon === 0}
-            >
-              {t('reports.stats.startReview')}
-            </Button>
           </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate(`/review/${deck.id}`)}
+            disabled={cardStats.dueSoon === 0}
+          >
+            {t('reports.stats.startReview')}
+          </Button>
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200 p-6">

@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, globalShortcut, Tray, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import trayIcon from '../../resources/trayIcon.png?asset'
+import AutoLaunch from 'auto-launch'
 import {
   getSelectedText,
   showNotification,
@@ -9,37 +10,37 @@ import {
   resetPermissionError
 } from './clipboard-utils'
 
-// Initialize clipboard monitoring
-function setupClipboardMonitoring(): void {
-  console.log('Setting up clipboard monitoring...')
-  // Store initial clipboard content
-}
+let tray: Tray | null = null
+let mainWindow: BrowserWindow | null = null
+let isQuiting = false
 
 function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...(process.platform === 'linux' ? { icon: trayIcon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
+  mainWindow.on('ready-to-show', () => mainWindow?.show())
+
+  mainWindow.on('close', (event) => {
+    if (!isQuiting) {
+      event.preventDefault()
+      mainWindow?.hide()
+    }
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url)
     return { action: 'deny' }
   })
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
@@ -47,84 +48,117 @@ function createWindow(): void {
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+function createTray(): void {
+  tray = new Tray(trayIcon)
 
-  // Set up clipboard monitoring
-  setupClipboardMonitoring()
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Flash Snap',
+      click: () => {
+        mainWindow?.show()
+      }
+    },
+    {
+      label: 'Quit',
+      click: () => {
+        isQuiting = true
+        app.quit()
+      }
+    }
+  ])
 
+  tray.setToolTip('Flash Snap')
+  tray.setContextMenu(contextMenu)
+
+  tray.on('click', () => {
+    mainWindow?.isVisible() ? mainWindow.hide() : mainWindow?.show()
+  })
+}
+
+function registerGlobalShortcut(): void {
   const shortcut = 'CommandOrControl+Shift+X'
 
   const success = globalShortcut.register(shortcut, async () => {
     try {
-      // Automatically copy selected text and get it
       const clipboardText = await getSelectedText()
 
       if (hasPermissionError()) {
-        console.error('❌ Accessibility permission error')
         showNotification(
-          'Accessibility permission denied. Please grant accessibility permissions to the app in System Preferences > Security & Privacy > Privacy > Accessibility.',
+          'Permission denied. Enable it in System Preferences > Security & Privacy > Accessibility.',
           'error'
         )
         resetPermissionError()
         return
       }
 
-      if (clipboardText && clipboardText.trim() !== '') {
-        console.log('🔤 Captured Text:', clipboardText)
+      if (clipboardText?.trim()) {
+        console.log('🔤 Text captured:', clipboardText)
 
-        //open the app
-        app.focus()
-        // Send the captured text to renderer to open the AddCard component
-        BrowserWindow.getAllWindows()[0]?.webContents.send('text-captured', clipboardText)
+        // Garante que a janela vai abrir e receber foco
+        if (mainWindow) {
+          mainWindow.show()
+          mainWindow.focus()
+        }
+
+        mainWindow?.webContents.send('text-captured', clipboardText)
       } else {
         console.log('⚠️ No text selected')
       }
     } catch (error) {
-      console.error('Error processing clipboard:', error)
-      showNotification(`Error: ${error instanceof Error ? error.message : String(error)}`, 'error')
+      const message = error instanceof Error ? error.message : String(error)
+      console.error('Error in clipboard:', message)
+      showNotification(`Error: ${message}`, 'error')
     }
   })
 
   if (!success) {
-    console.error('❌ Failed to register shortcut')
+    console.error('❌ Failed to register global shortcut')
   }
+}
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+function setupAutoLaunch(): void {
+  const flashSnapAutoLauncher = new AutoLaunch({
+    name: 'Flash Snap',
+    path: app.getPath('exe'),
+    isHidden: true
+  })
+
+  flashSnapAutoLauncher
+    .isEnabled()
+    .then((isEnabled) => {
+      if (!isEnabled) flashSnapAutoLauncher.enable()
+    })
+    .catch((err) => {
+      console.error('Error configuring auto-launch:', err)
+    })
+}
+
+app.whenReady().then(() => {
+  electronApp.setAppUserModelId('com.electron')
+
+  setupAutoLaunch()
+  createWindow()
+  createTray()
+  registerGlobalShortcut()
+
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-
-  createWindow()
-
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-
-  app.on('will-quit', () => {
-    globalShortcut.unregisterAll()
-  })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+})
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
+  tray?.destroy()
+})
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+ipcMain.on('ping', () => console.log('pong'))

@@ -42,6 +42,7 @@ export function sm2(card: Card, grade: number): Partial<Card> {
  */
 export function getDueCards(deckId?: string): { card: Card; deckId: string; deckName: string }[] {
   const decks = getDecks()
+
   const now = new Date()
 
   // Normalize "today" to ignore time component
@@ -53,7 +54,10 @@ export function getDueCards(deckId?: string): { card: Card; deckId: string; deck
   for (const deck of decksToCheck) {
     for (const card of deck.cards) {
       const reviewDate = card.nextReview ? new Date(card.nextReview) : null
-      const isDue = !reviewDate || reviewDate <= today
+      const reviewDateWithNoTime = reviewDate
+        ? new Date(reviewDate.getFullYear(), reviewDate.getMonth(), reviewDate.getDate())
+        : null
+      const isDue = !reviewDate || !reviewDateWithNoTime || reviewDateWithNoTime <= today
 
       if (isDue) {
         dueCards.push({ card, deckId: deck.id, deckName: deck.name })

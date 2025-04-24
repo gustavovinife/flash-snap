@@ -41,7 +41,8 @@ const enUS = {
     language: 'Language',
     knowledge: 'Knowledge',
     deckName: 'Deck name',
-    deleteDeck: 'Delete deck'
+    deleteDeck: 'Delete deck',
+    commandToInsertText: 'Highlight a text and press {{key}} to insert it into the deck'
   },
 
   // DeckView component

@@ -6,7 +6,7 @@ import { Button, Input, Select } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { getDueCards } from '../services/reviewService'
 import { calculateDeckProgress } from '../services/reportingService'
-
+import { Info } from 'lucide-react'
 interface DeckListProps {
   onDeckSelect: (deck: Deck) => void
 }
@@ -31,6 +31,7 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
 
   const loadDecks = (): void => {
     const decks = getDecks()
+
     setDecks(decks)
   }
 
@@ -276,6 +277,15 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
           </Button>
         </div>
       )}
+
+      <div className="bg-gray-100 p-2 mt-12 rounded-md flex items-center gap-2 text-xs">
+        <Info className="h-4 w-4" />
+        <span>
+          {t('deckList.commandToInsertText', {
+            key: 'Ctrl + Shift + X'
+          })}
+        </span>
+      </div>
     </div>
   )
 }

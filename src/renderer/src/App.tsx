@@ -3,13 +3,12 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import AddCard from './components/AddCard'
 import Layout from './components/Layout'
 import { getDecks } from './services/storageService'
-import { getSettings } from './services/settingsService'
 
 // Define window API types
 declare global {
   interface Window {
     api: {
-      onTextCaptured: (callback: (text: string) => void) => void
+      onTextCaptured?: (callback: (text: string) => void) => void
     }
   }
 }
@@ -20,17 +19,12 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     // Listen for text captured from main process
-    window.api.onTextCaptured((text) => {
-      console.log('Text captured in renderer:', text)
-      setCapturedText(text)
-    })
-
-    // Load initial settings
-    const settings = getSettings()
-    console.log('Loaded settings:', settings)
-
-    // In a real app, we would set up the daily notification here
-    // based on the reviewTime setting
+    if (window.api?.onTextCaptured) {
+      window.api.onTextCaptured((text) => {
+        console.log('Text captured in renderer:', text)
+        setCapturedText(text)
+      })
+    }
   }, [])
 
   const handleCloseAddCard = (): void => {

@@ -41,7 +41,8 @@ const ptBR = {
     deleteDeck: 'Excluir baralho',
     deckType: 'Tipo de Baralho',
     language: 'Idioma',
-    knowledge: 'Conhecimento'
+    knowledge: 'Conhecimento',
+    commandToInsertText: 'Selecione um texto e pressione {{key}} para inserir no baralho'
   },
 
   // DeckView component

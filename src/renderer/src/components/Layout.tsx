@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Logo from './Logo'
 import { useNavigate } from 'react-router-dom'
+import Versions from './Versions'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -79,6 +80,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               Gustavo Ferreira
             </a>
           </small>
+
+          <Versions />
         </footer>
       </div>
     </div>

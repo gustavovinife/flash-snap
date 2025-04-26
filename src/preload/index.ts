@@ -10,6 +10,11 @@ const api = {
   // Notify main process that settings have been updated
   notifySettingsUpdated: (): void => {
     ipcRenderer.send('settings-updated')
+  },
+
+  // Check for app updates
+  checkForUpdates: (): void => {
+    ipcRenderer.send('check-for-updates')
   }
 }
 

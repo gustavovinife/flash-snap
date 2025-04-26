@@ -1,6 +1,6 @@
 {
   "name": "flash-snap",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Flash Snap",
   "main": "./out/main/index.js",
   "author": "example.com",
@@ -18,7 +18,12 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win --x64",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux --x64"
+    "build:linux": "electron-vite build && electron-builder --linux --x64",
+    "publish:win": "source .env.sh && npm run build && electron-builder --win --x64 --publish always",
+    "publish:mac": "source .env.sh && npm run build && electron-builder --mac --publish always",
+    "publish:linux": "source .env.sh && npm run build && electron-builder --linux --x64 --publish always",
+    "publish": "source .env.sh && npm run build && electron-builder --mac --win --linux --x64 --publish always",
+    "publish:all": "source .env.sh && npm run build && electron-builder -mwl --x64 --publish always"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
@@ -30,7 +35,8 @@
     "i18next-browser-languagedetector": "^8.0.5",
     "lucide-react": "^0.503.0",
     "react-i18next": "^15.5.1",
-    "react-router-dom": "^7.5.1"
+    "react-router-dom": "^7.5.1",
+    "update-electron-app": "^3.1.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

@@ -8,7 +8,9 @@ import { getDecks } from './services/storageService'
 declare global {
   interface Window {
     api: {
-      onTextCaptured?: (callback: (text: string) => void) => void
+      onTextCaptured: (callback: (text: string) => void) => void
+      notifySettingsUpdated: () => void
+      checkForUpdates: () => void
     }
   }
 }

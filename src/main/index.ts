@@ -12,12 +12,36 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayIcon from '../../resources/trayIcon.png?asset'
 import AutoLaunch from 'auto-launch'
+import { updateElectronApp } from 'update-electron-app'
 import {
   getSelectedText,
   showNotification,
   hasPermissionError,
   resetPermissionError
 } from './clipboard-utils'
+
+// Initialize automatic updates
+updateElectronApp({
+  repo: 'gustavowebjs/flash-snap',
+  updateInterval: '1 hour',
+  logger: {
+    info: (message: string) => console.log(`Update info: ${message}`),
+    warn: (message: string) => console.warn(`Update warning: ${message}`),
+    error: (message: string) => console.error(`Update error: ${message}`),
+    log: (message: string) => console.log(`Update log: ${message}`)
+  },
+  notifyUser: true
+})
+
+// Listen for update events
+ipcMain.on('check-for-updates', () => {
+  // The update-electron-app package automatically checks for updates
+  // This is just to provide feedback to the user when manually checking
+  new Notification({
+    title: 'Flash Snap',
+    body: 'Checking for updates...'
+  }).show()
+})
 
 let tray: Tray | null = null
 let mainWindow: BrowserWindow | null = null

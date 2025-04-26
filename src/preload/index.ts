@@ -5,6 +5,11 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   onTextCaptured: (callback: (text: string) => void): void => {
     ipcRenderer.on('text-captured', (_event, text) => callback(text))
+  },
+
+  // Notify main process that settings have been updated
+  notifySettingsUpdated: (): void => {
+    ipcRenderer.send('settings-updated')
   }
 }
 

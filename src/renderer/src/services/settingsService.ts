@@ -32,6 +32,11 @@ export const saveSettings = (settings: Settings): void => {
     if (settings.language !== i18n.language) {
       i18n.changeLanguage(settings.language)
     }
+
+    // Notify main process that settings have changed
+    if (window.api && window.api.notifySettingsUpdated) {
+      window.api.notifySettingsUpdated()
+    }
   } catch (error) {
     console.error('Error saving settings:', error)
   }

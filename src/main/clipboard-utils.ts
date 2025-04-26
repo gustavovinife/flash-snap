@@ -1,5 +1,5 @@
 import { clipboard, dialog } from 'electron'
-import robot from 'robotjs'
+import { exec } from 'child_process'
 
 let isCapturing = false
 let permissionError = false
@@ -22,25 +22,59 @@ export function getClipboardText(): string {
   }
 }
 
-export function simulateCommandC(): Promise<boolean> {
-  return new Promise((resolve) => {
-    try {
-      // Store clipboard before trying to copy
-      const beforeText = getClipboardText()
-
-      console.log('Simulating Cmd+C with robotjs...')
-
-      // Different approach for different platforms
-      if (process.platform === 'darwin') {
-        // macOS
-        robot.keyTap('c', 'command')
+/**
+ * Execute a system command
+ */
+function executeCommand(cmd: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error) => {
+      if (error) {
+        console.error(`Error executing command: ${cmd}`, error)
+        reject(error)
       } else {
-        // Windows/Linux
-        robot.keyTap('c', 'control')
+        resolve()
       }
+    })
+  })
+}
 
-      // Wait for clipboard to update
-      setTimeout(() => {
+/**
+ * Simulates copy command using system-specific commands
+ * This is a more reliable approach than using native modules
+ */
+export function simulateCommandC(): Promise<boolean> {
+  // Store clipboard before trying to copy
+  const beforeText = getClipboardText()
+
+  // Create a promise for the copy operation
+  return new Promise((resolve) => {
+    // Inner async function to handle the copy operation
+    const performCopy = async (): Promise<void> => {
+      try {
+        // Try to simulate Ctrl+C/Cmd+C using OS-specific commands
+        try {
+          if (process.platform === 'darwin') {
+            // macOS - use AppleScript
+            await executeCommand(
+              'osascript -e \'tell application "System Events" to keystroke "c" using command down\''
+            )
+          } else if (process.platform === 'win32') {
+            // Windows - use PowerShell and .NET
+            await executeCommand(
+              'powershell -command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait(\'^c\')"'
+            )
+          } else {
+            // Linux - use xdotool if available
+            await executeCommand('xdotool key ctrl+c')
+          }
+        } catch (err) {
+          console.error('Failed to simulate key press:', err)
+        }
+
+        // Wait for clipboard to update
+        await new Promise((r) => setTimeout(r, 500))
+
+        // Check if clipboard changed
         const afterText = getClipboardText()
         const success = afterText !== beforeText
 
@@ -51,46 +85,55 @@ export function simulateCommandC(): Promise<boolean> {
         }
 
         resolve(success)
-      }, 500)
-    } catch (error) {
-      console.error(
-        'Permission error with robotjs:',
-        error instanceof Error ? error.message : String(error)
-      )
-      permissionError = true
-      resolve(false)
+      } catch (error) {
+        console.error(
+          'Error simulating copy command:',
+          error instanceof Error ? error.message : String(error)
+        )
+        permissionError = true
+        resolve(false)
+      }
     }
+
+    // Execute the async function
+    performCopy()
   })
 }
 
-// This function simulates Cmd+C and returns selected text
+// Alternative implementation that uses the system clipboard directly
 export async function getSelectedText(): Promise<string> {
   if (isCapturing) return ''
 
   isCapturing = true
 
-  // Get clipboard content before simulating Cmd+C
-  const beforeText = getClipboardText()
+  try {
+    // Store original clipboard content
+    const originalClipboard = getClipboardText()
 
-  // Simulate Cmd+C to copy selected text
-  const copySuccess = await simulateCommandC()
+    // Clear the clipboard
+    clipboard.clear()
 
-  // Get clipboard content after simulating Cmd+C
-  const afterText = getClipboardText()
+    // Wait a moment for clipboard to clear
+    await new Promise((resolve) => setTimeout(resolve, 100))
 
-  isCapturing = false
+    // Try to capture selection via clipboard
+    const copied = await simulateCommandC()
 
-  // If clipboard content changed, return the new content
-  if (copySuccess && afterText !== beforeText) {
-    return afterText
+    // Get the new clipboard content
+    const selectedText = getClipboardText()
+
+    // Restore original clipboard content
+    if (originalClipboard) {
+      clipboard.writeText(originalClipboard)
+    }
+
+    return copied ? selectedText : ''
+  } catch (error) {
+    console.error('Error getting selected text:', error)
+    return ''
+  } finally {
+    isCapturing = false
   }
-
-  // If nothing changed but there's something in the clipboard, return it
-  if (afterText.trim() !== '') {
-    return afterText
-  }
-
-  return ''
 }
 
 export function hasPermissionError(): boolean {

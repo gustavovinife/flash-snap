@@ -91,6 +91,12 @@ export default function DeckView({
     navigate(`/reports/${deck.id}`)
   }
 
+  const handleOnKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter') {
+      handleAddCard()
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
@@ -229,12 +235,14 @@ export default function DeckView({
               placeholder={t('deckView.enterDefinition')}
               value={newCardBack}
               onChange={(e) => setNewCardBack(e.target.value)}
+              onKeyDown={handleOnKeyDown}
             />
             <Input
               label={t('deckView.context')}
               placeholder={t('deckView.enterContext')}
               value={newCardContext}
               onChange={(e) => setNewCardContext(e.target.value)}
+              onKeyDown={handleOnKeyDown}
             />
           </div>
           <div className="flex justify-end gap-2 px-4 py-3 bg-gray-50">

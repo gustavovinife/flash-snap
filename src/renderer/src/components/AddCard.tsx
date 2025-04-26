@@ -102,6 +102,7 @@ export default function AddCard({
           <Input
             label={t('addCard.back')}
             value={cardBack}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setCardBack(e.target.value)}
             placeholder={t('addCard.definitionPlaceholder')}
           />
@@ -109,6 +110,7 @@ export default function AddCard({
           <Input
             label={t('addCard.context')}
             value={cardContext}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setCardContext(e.target.value)}
             placeholder={t('addCard.contextPlaceholder')}
           />

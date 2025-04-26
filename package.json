@@ -16,9 +16,9 @@
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
+    "build:win": "npm run build && electron-builder --win --x64",
     "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux"
+    "build:linux": "electron-vite build && electron-builder --linux --x64"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
@@ -30,8 +30,7 @@
     "i18next-browser-languagedetector": "^8.0.5",
     "lucide-react": "^0.503.0",
     "react-i18next": "^15.5.1",
-    "react-router-dom": "^7.5.1",
-    "robotjs": "^0.6.0"
+    "react-router-dom": "^7.5.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

@@ -13,6 +13,8 @@ asarUnpack:
   - resources/**
 win:
   executableName: flash-snap
+  artifactName: ${name}-${version}-setup.${ext}
+  icon: build/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -29,14 +31,42 @@ mac:
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
+  category: Utility
+  packageCategory: utils
+  synopsis: 'Flash Snap Application'
+  description: 'A clipboard text capture utility'
+  maintainer: 'Flash Snap Team <example@example.com>'
+  vendor: 'Flash Snap'
   target:
     - AppImage
-    - snap
     - deb
-  maintainer: electronjs.org
-  category: Utility
+  executableName: flash-snap
+  desktop:
+    Name: Flash Snap
+    Comment: Text capture utility
+    GenericName: Text Utility
+    Categories: Utility;TextTools;
+    Terminal: false
+    Type: Application
+  artifactName: ${name}-${version}.${ext}
+deb:
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libuuid1
+    - libsecret-1-0
 appImage:
   artifactName: ${name}-${version}.${ext}
+  desktop:
+    Name: Flash Snap
+    Comment: Text capture utility
+    Categories: Utility;TextTools;
+    Terminal: false
 npmRebuild: false
 publish:
   provider: generic

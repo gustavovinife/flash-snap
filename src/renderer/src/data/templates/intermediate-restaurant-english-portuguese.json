@@ -1,0 +1,210 @@
+{
+  "name": "Food & Restaurants",
+  "description": "Frases e vocabulário sobre comida e experiências de refeição em restaurantes para nível intermediário",
+  "type": "language",
+  "language": "english",
+  "emoji": "🍴",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "Can you recommend a good restaurant?",
+      "back": "Você pode recomendar um bom restaurante?",
+      "content": "Pergunta por sugestões de lugares para comer"
+    },
+    {
+      "front": "This place has great reviews!",
+      "back": "Este lugar tem ótimas avaliações!",
+      "content": "Expressa entusiasmo por um restaurante"
+    },
+    {
+      "front": "Do you have a reservation?",
+      "back": "Você tem uma reserva?",
+      "content": "Pergunta comum ao chegar a um restaurante"
+    },
+    {
+      "front": "I’d like a table for two, please.",
+      "back": "Quero uma mesa para dois, por favor.",
+      "content": "Solicita uma mesa para um grupo pequeno"
+    },
+    {
+      "front": "What’s the special of the day?",
+      "back": "Qual é o prato especial do dia?",
+      "content": "Pergunta sobre pratos destacados no menu"
+    },
+    {
+      "front": "The chef recommends the seafood pasta.",
+      "back": "O chef recomenda a massa com frutos do mar.",
+      "content": "Sugere um prato recomendado pelo restaurante"
+    },
+    {
+      "front": "Is this dish spicy?",
+      "back": "Este prato é picante?",
+      "content": "Pergunta sobre o nível de tempero de um prato"
+    },
+    {
+      "front": "It has a mild flavor.",
+      "back": "Tem um sabor suave.",
+      "content": "Descreve o sabor de um prato como não picante"
+    },
+    {
+      "front": "Can you make it quick, please?",
+      "back": "Pode ser rápido, por favor?",
+      "content": "Solicita serviço acelerado"
+    },
+    {
+      "front": "We’ll have your order out soon.",
+      "back": "Seu pedido sairá em breve.",
+      "content": "Garante que o pedido será servido rapidamente"
+    },
+    {
+      "front": "Do you have any vegetarian options?",
+      "back": "Vocês têm opções vegetarianas?",
+      "content": "Pergunta sobre pratos sem carne"
+    },
+    {
+      "front": "We have a great veggie stir-fry.",
+      "back": "Temos um ótimo refogado de vegetais.",
+      "content": "Sugere uma opção vegetariana"
+    },
+    {
+      "front": "Can I see the dessert menu?",
+      "back": "Posso ver o cardápio de sobremesas?",
+      "content": "Solicita o menu de sobremesas"
+    },
+    {
+      "front": "The chocolate lava cake is a must-try!",
+      "back": "O bolo de chocolate vulcão é imperdível!",
+      "content": "Recomenda uma sobremesa popular"
+    },
+    {
+      "front": "What’s in this dish?",
+      "back": "O que tem neste prato?",
+      "content": "Pergunta sobre os ingredientes de um prato"
+    },
+    {
+      "front": "It’s made with fresh local ingredients.",
+      "back": "É feito com ingredientes frescos e locais.",
+      "content": "Descreve a qualidade dos ingredientes"
+    },
+    {
+      "front": "Can you make it gluten-free?",
+      "back": "Você pode fazer sem glúten?",
+      "content": "Solicita uma adaptação para restrições alimentares"
+    },
+    {
+      "front": "We can modify it for you.",
+      "back": "Podemos adaptá-lo para você.",
+      "content": "Confirma que a solicitação pode ser atendida"
+    },
+    {
+      "front": "How’s the food here?",
+      "back": "Como é a comida aqui?",
+      "content": "Pergunta sobre a qualidade da comida"
+    },
+    {
+      "front": "It’s absolutely delicious!",
+      "back": "É absolutamente delicioso!",
+      "content": "Expressa satisfação com a comida"
+    },
+    {
+      "front": "Can I have the bill, please?",
+      "back": "Posso ter a conta, por favor?",
+      "content": "Solicita a conta para pagamento"
+    },
+    {
+      "front": "I’ll bring it right over.",
+      "back": "Vou trazer agora mesmo.",
+      "content": "Confirma que a conta será entregue rapidamente"
+    },
+    {
+      "front": "Do you take credit cards?",
+      "back": "Vocês aceitam cartões de crédito?",
+      "content": "Pergunta sobre formas de pagamento"
+    },
+    {
+      "front": "We accept all major cards.",
+      "back": "Aceitamos todos os cartões principais.",
+      "content": "Confirma aceitação de cartões de crédito"
+    },
+    {
+      "front": "Can you split the bill?",
+      "back": "Vocês podem dividir a conta?",
+      "content": "Solicita divisão da conta entre várias pessoas"
+    },
+    {
+      "front": "No problem, I’ll handle it.",
+      "back": "Sem problema, eu cuido disso.",
+      "content": "Confirma que a conta pode ser dividida"
+    },
+    {
+      "front": "What’s the house specialty?",
+      "back": "Qual é a especialidade da casa?",
+      "content": "Pergunta sobre o prato mais famoso do restaurante"
+    },
+    {
+      "front": "Our signature dish is the grilled salmon.",
+      "back": "Nosso prato principal é o salmão grelhado.",
+      "content": "Destaca o prato mais conhecido"
+    },
+    {
+      "front": "Can I have it to go?",
+      "back": "Posso levar para viagem?",
+      "content": "Solicita que o pedido seja embalado para levar"
+    },
+    {
+      "front": "We’ll pack it up for you.",
+      "back": "Vamos embalar para você.",
+      "content": "Confirma que o pedido será preparado para viagem"
+    },
+    {
+      "front": "Is the service included?",
+      "back": "O serviço está incluído?",
+      "content": "Pergunta se a gorjeta está incluída na conta"
+    },
+    {
+      "front": "Service is not included.",
+      "back": "O serviço não está incluído.",
+      "content": "Esclarece que a gorjeta é separada"
+    },
+    {
+      "front": "What drinks do you recommend?",
+      "back": "Quais bebidas você recomenda?",
+      "content": "Pergunta por sugestões de bebidas"
+    },
+    {
+      "front": "Our house lemonade is refreshing!",
+      "back": "Nossa limonada da casa é refrescante!",
+      "content": "Sugere uma bebida popular"
+    },
+    {
+      "front": "Can you make it quick?",
+      "back": "Pode ser rápido?",
+      "content": "Solicita preparação rápida do pedido"
+    },
+    {
+      "front": "We’ll prioritize your order.",
+      "back": "Vamos priorizar seu pedido.",
+      "content": "Confirma que o pedido será tratado com urgência"
+    },
+    {
+      "front": "Is this locally sourced?",
+      "back": "Isso é de origem local?",
+      "content": "Pergunta sobre a procedência dos ingredientes"
+    },
+    {
+      "front": "We pride ourselves on local produce.",
+      "back": "Temos orgulho de usar produtos locais.",
+      "content": "Destaca o uso de ingredientes regionais"
+    },
+    {
+      "front": "Can I have some water, please?",
+      "back": "Posso ter água, por favor?",
+      "content": "Solicita água durante a refeição"
+    },
+    {
+      "front": "Still or sparkling?",
+      "back": "Com ou sem gás?",
+      "content": "Pergunta sobre o tipo de água preferido"
+    }
+  ]
+}

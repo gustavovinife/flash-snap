@@ -1,0 +1,500 @@
+{
+  "name": "Small Talk Phrases",
+  "description": "Frases de pequena conversação em inglês/português, adequadas para iniciantes",
+  "type": "language",
+  "language": "english",
+  "emoji": "💬",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "How are you?",
+      "back": "Como você está?",
+      "content": "Pergunta educada sobre o bem-estar de alguém"
+    },
+    {
+      "front": "I'm fine, thanks!",
+      "back": "Estou bem, obrigado!",
+      "content": "Resposta positiva à pergunta sobre bem-estar"
+    },
+    {
+      "front": "Nice to meet you!",
+      "back": "Prazer em conhecê-lo!",
+      "content": "Saudação ao conhecer alguém pela primeira vez"
+    },
+    {
+      "front": "What's your name?",
+      "back": "Qual é o seu nome?",
+      "content": "Pergunta para saber o nome de alguém"
+    },
+    {
+      "front": "Where are you from?",
+      "back": "De onde você é?",
+      "content": "Pergunta sobre a origem ou nacionalidade"
+    },
+    {
+      "front": "How's the weather?",
+      "back": "Como está o tempo?",
+      "content": "Pergunta comum para iniciar uma conversa"
+    },
+    {
+      "front": "It's nice today!",
+      "back": "Está bonito hoje!",
+      "content": "Comentário positivo sobre o clima"
+    },
+    {
+      "front": "What do you do?",
+      "back": "O que você faz?",
+      "content": "Pergunta sobre a profissão ou ocupação"
+    },
+    {
+      "front": "Have a nice day!",
+      "back": "Tenha um bom dia!",
+      "content": "Despedida amigável"
+    },
+    {
+      "front": "See you later!",
+      "back": "Até mais!",
+      "content": "Despedida informal"
+    },
+    {
+      "front": "What's new with you?",
+      "back": "O que há de novo com você?",
+      "content": "Pergunta sobre novidades na vida de alguém"
+    },
+    {
+      "front": "How was your weekend?",
+      "back": "Como foi o seu fim de semana?",
+      "content": "Pergunta sobre atividades recentes"
+    },
+    {
+      "front": "It was great!",
+      "back": "Foi ótimo!",
+      "content": "Resposta positiva sobre uma experiência"
+    },
+    {
+      "front": "Do you like to travel?",
+      "back": "Você gosta de viajar?",
+      "content": "Pergunta sobre interesses pessoais"
+    },
+    {
+      "front": "What's your favorite food?",
+      "back": "Qual é a sua comida favorita?",
+      "content": "Pergunta sobre preferências alimentares"
+    },
+    {
+      "front": "I love pizza!",
+      "back": "Eu amo pizza!",
+      "content": "Expressa uma preferência por algo"
+    },
+    {
+      "front": "Do you have any hobbies?",
+      "back": "Você tem algum hobby?",
+      "content": "Pergunta sobre atividades de lazer"
+    },
+    {
+      "front": "What time is it?",
+      "back": "Que horas são?",
+      "content": "Pergunta sobre a hora atual"
+    },
+    {
+      "front": "Can you help me?",
+      "back": "Você pode me ajudar?",
+      "content": "Pedido educado de assistência"
+    },
+    {
+      "front": "Sure, no problem!",
+      "back": "Claro, sem problema!",
+      "content": "Resposta positiva a um pedido de ajuda"
+    },
+    {
+      "front": "How's it going?",
+      "back": "Como estão as coisas?",
+      "content": "Pergunta informal sobre a situação de alguém"
+    },
+    {
+      "front": "Everything okay?",
+      "back": "Tudo bem?",
+      "content": "Verificação de bem-estar"
+    },
+    {
+      "front": "Nice weather, isn't it?",
+      "back": "Tempo bom, não é?",
+      "content": "Comentário para iniciar conversa sobre o clima"
+    },
+    {
+      "front": "What are you up to?",
+      "back": "O que você está fazendo?",
+      "content": "Pergunta sobre atividades atuais"
+    },
+    {
+      "front": "Just chilling!",
+      "back": "Só relaxando!",
+      "content": "Resposta informal sobre estar relaxado"
+    },
+    {
+      "front": "Do you watch movies?",
+      "back": "Você assiste filmes?",
+      "content": "Pergunta sobre interesses em entretenimento"
+    },
+    {
+      "front": "What's your favorite movie?",
+      "back": "Qual é o seu filme favorito?",
+      "content": "Pergunta sobre preferências cinematográficas"
+    },
+    {
+      "front": "I had a great time!",
+      "back": "Eu me diverti muito!",
+      "content": "Expressa que uma experiência foi agradável"
+    },
+    {
+      "front": "Are you busy?",
+      "back": "Você está ocupado?",
+      "content": "Pergunta sobre a disponibilidade de alguém"
+    },
+    {
+      "front": "Not really!",
+      "back": "Na verdade, não!",
+      "content": "Resposta indicando que não está ocupado"
+    },
+    {
+      "front": "What's the plan?",
+      "back": "Qual é o plano?",
+      "content": "Pergunta sobre intenções ou atividades planejadas"
+    },
+    {
+      "front": "Let's catch up soon!",
+      "back": "Vamos nos encontrar em breve!",
+      "content": "Sugestão para manter contato"
+    },
+    {
+      "front": "Sounds good!",
+      "back": "Parece bom!",
+      "content": "Resposta positiva a uma sugestão"
+    },
+    {
+      "front": "How's your day going?",
+      "back": "Como está sendo o seu dia?",
+      "content": "Pergunta sobre o dia de alguém"
+    },
+    {
+      "front": "Pretty good!",
+      "back": "Muito bom!",
+      "content": "Resposta positiva sobre o dia"
+    },
+    {
+      "front": "Do you like music?",
+      "back": "Você gosta de música?",
+      "content": "Pergunta sobre interesses musicais"
+    },
+    {
+      "front": "What's your favorite song?",
+      "back": "Qual é a sua música favorita?",
+      "content": "Pergunta sobre preferências musicais"
+    },
+    {
+      "front": "I like to dance!",
+      "back": "Eu gosto de dançar!",
+      "content": "Expressa um interesse em dança"
+    },
+    {
+      "front": "Are you free tomorrow?",
+      "back": "Você está livre amanhã?",
+      "content": "Pergunta sobre disponibilidade futura"
+    },
+    {
+      "front": "What do you think?",
+      "back": "O que você acha?",
+      "content": "Pergunta sobre a opinião de alguém"
+    },
+    {
+      "front": "I agree!",
+      "back": "Eu concordo!",
+      "content": "Expressa concordância"
+    },
+    {
+      "front": "That’s cool!",
+      "back": "Isso é legal!",
+      "content": "Expressa entusiasmo ou aprovação"
+    },
+    {
+      "front": "How's your family?",
+      "back": "Como está a sua família?",
+      "content": "Pergunta sobre o bem-estar da família"
+    },
+    {
+      "front": "They're doing great!",
+      "back": "Eles estão ótimos!",
+      "content": "Resposta positiva sobre a família"
+    },
+    {
+      "front": "Do you have pets?",
+      "back": "Você tem animais de estimação?",
+      "content": "Pergunta sobre animais de estimação"
+    },
+    {
+      "front": "I have a dog!",
+      "back": "Eu tenho um cachorro!",
+      "content": "Resposta indicando posse de um animal"
+    },
+    {
+      "front": "What’s for lunch?",
+      "back": "O que tem para o almoço?",
+      "content": "Pergunta sobre planos para uma refeição"
+    },
+    {
+      "front": "I’m hungry!",
+      "back": "Estou com fome!",
+      "content": "Expressa necessidade de comida"
+    },
+    {
+      "front": "Do you like coffee?",
+      "back": "Você gosta de café?",
+      "content": "Pergunta sobre preferência por café"
+    },
+    {
+      "front": "I prefer tea!",
+      "back": "Eu prefiro chá!",
+      "content": "Expressa preferência por chá"
+    },
+    {
+      "front": "What’s your favorite color?",
+      "back": "Qual é a sua cor favorita?",
+      "content": "Pergunta sobre preferência de cor"
+    },
+    {
+      "front": "I love blue!",
+      "back": "Eu amo azul!",
+      "content": "Expressa preferência por uma cor"
+    },
+    {
+      "front": "Are you okay?",
+      "back": "Você está bem?",
+      "content": "Pergunta sobre o estado de alguém"
+    },
+    {
+      "front": "I’m good, thanks!",
+      "back": "Estou bem, obrigado!",
+      "content": "Resposta positiva sobre o estado"
+    },
+    {
+      "front": "What’s the news?",
+      "back": "Quais são as novidades?",
+      "content": "Pergunta sobre eventos recentes"
+    },
+    {
+      "front": "Nothing much!",
+      "back": "Nada de mais!",
+      "content": "Resposta indicando pouca novidade"
+    },
+    {
+      "front": "Do you like sports?",
+      "back": "Você gosta de esportes?",
+      "content": "Pergunta sobre interesses esportivos"
+    },
+    {
+      "front": "I play soccer!",
+      "back": "Eu jogo futebol!",
+      "content": "Expressa envolvimento em um esporte"
+    },
+    {
+      "front": "What’s your favorite team?",
+      "back": "Qual é o seu time favorito?",
+      "content": "Pergunta sobre preferência esportiva"
+    },
+    {
+      "front": "How’s work going?",
+      "back": "Como está o trabalho?",
+      "content": "Pergunta sobre a situação profissional"
+    },
+    {
+      "front": "It’s busy!",
+      "back": "Está corrido!",
+      "content": "Resposta indicando trabalho intenso"
+    },
+    {
+      "front": "Do you like to read?",
+      "back": "Você gosta de ler?",
+      "content": "Pergunta sobre interesse em leitura"
+    },
+    {
+      "front": "What’s your favorite book?",
+      "back": "Qual é o seu livro favorito?",
+      "content": "Pergunta sobre preferência literária"
+    },
+    {
+      "front": "I’m tired!",
+      "back": "Estou cansado!",
+      "content": "Expressa cansaço"
+    },
+    {
+      "front": "Take care!",
+      "back": "Cuide-se!",
+      "content": "Despedida desejando bem-estar"
+    },
+    {
+      "front": "What’s the weather like?",
+      "back": "Como está o tempo?",
+      "content": "Pergunta sobre as condições climáticas"
+    },
+    {
+      "front": "It’s sunny!",
+      "back": "Está ensolarado!",
+      "content": "Descrição de clima ensolarado"
+    },
+    {
+      "front": "Do you like to cook?",
+      "back": "Você gosta de cozinhar?",
+      "content": "Pergunta sobre interesse em culinária"
+    },
+    {
+      "front": "I love cooking!",
+      "back": "Eu amo cozinhar!",
+      "content": "Expressa entusiasmo por cozinhar"
+    },
+    {
+      "front": "What’s your favorite dish?",
+      "back": "Qual é o seu prato favorito?",
+      "content": "Pergunta sobre preferência culinária"
+    },
+    {
+      "front": "How’s school going?",
+      "back": "Como está a escola?",
+      "content": "Pergunta sobre a situação acadêmica"
+    },
+    {
+      "front": "It’s fun!",
+      "back": "É divertido!",
+      "content": "Resposta positiva sobre a escola"
+    },
+    {
+      "front": "Do you have plans tonight?",
+      "back": "Você tem planos para hoje à noite?",
+      "content": "Pergunta sobre planos para o futuro próximo"
+    },
+    {
+      "front": "Not yet!",
+      "back": "Ainda não!",
+      "content": "Resposta indicando ausência de planos"
+    },
+    {
+      "front": "What’s your favorite place?",
+      "back": "Qual é o seu lugar favorito?",
+      "content": "Pergunta sobre preferência de local"
+    },
+    {
+      "front": "I love the beach!",
+      "back": "Eu amo a praia!",
+      "content": "Expressa preferência por um lugar"
+    },
+    {
+      "front": "Are you having fun?",
+      "back": "Você está se divertindo?",
+      "content": "Pergunta sobre o nível de diversão"
+    },
+    {
+      "front": "Yeah, it’s great!",
+      "back": "Sim, está ótimo!",
+      "content": "Resposta positiva sobre diversão"
+    },
+    {
+      "front": "Do you like games?",
+      "back": "Você gosta de jogos?",
+      "content": "Pergunta sobre interesse em jogos"
+    },
+    {
+      "front": "What’s your favorite game?",
+      "back": "Qual é o seu jogo favorito?",
+      "content": "Pergunta sobre preferência de jogo"
+    },
+    {
+      "front": "I’m excited!",
+      "back": "Estou animado!",
+      "content": "Expressa entusiasmo"
+    },
+    {
+      "front": "What’s up?",
+      "back": "E aí?",
+      "content": "Saudação informal"
+    },
+    {
+      "front": "Not much, you?",
+      "back": "Nada de mais, e você?",
+      "content": "Resposta informal a uma saudação"
+    },
+    {
+      "front": "Do you like to shop?",
+      "back": "Você gosta de fazer compras?",
+      "content": "Pergunta sobre interesse em compras"
+    },
+    {
+      "front": "I love shopping!",
+      "back": "Eu amo fazer compras!",
+      "content": "Expressa entusiasmo por compras"
+    },
+    {
+      "front": "What’s your favorite store?",
+      "back": "Qual é a sua loja favorita?",
+      "content": "Pergunta sobre preferência de loja"
+    },
+    {
+      "front": "How’s the food?",
+      "back": "Como está a comida?",
+      "content": "Pergunta sobre a qualidade da comida"
+    },
+    {
+      "front": "It’s delicious!",
+      "back": "Está delicioso!",
+      "content": "Resposta positiva sobre a comida"
+    },
+    {
+      "front": "Do you like to walk?",
+      "back": "Você gosta de caminhar?",
+      "content": "Pergunta sobre interesse em caminhadas"
+    },
+    {
+      "front": "I love walking!",
+      "back": "Eu amo caminhar!",
+      "content": "Expressa entusiasmo por caminhadas"
+    },
+    {
+      "front": "What’s your favorite day?",
+      "back": "Qual é o seu dia favorito?",
+      "content": "Pergunta sobre preferência de dia da semana"
+    },
+    {
+      "front": "I love Fridays!",
+      "back": "Eu amo sextas-feiras!",
+      "content": "Expressa preferência por um dia"
+    },
+    {
+      "front": "Are you ready?",
+      "back": "Você está pronto?",
+      "content": "Pergunta sobre preparação"
+    },
+    {
+      "front": "Let’s go!",
+      "back": "Vamos lá!",
+      "content": "Expressa prontidão ou entusiasmo"
+    },
+    {
+      "front": "What’s the time?",
+      "back": "Que horas são?",
+      "content": "Pergunta sobre a hora atual"
+    },
+    {
+      "front": "It’s time to go!",
+      "back": "Está na hora de ir!",
+      "content": "Indica que é hora de partir"
+    },
+    {
+      "front": "Do you like parties?",
+      "back": "Você gosta de festas?",
+      "content": "Pergunta sobre interesse em festas"
+    },
+    {
+      "front": "I love parties!",
+      "back": "Eu amo festas!",
+      "content": "Expressa entusiasmo por festas"
+    }
+  ]
+}

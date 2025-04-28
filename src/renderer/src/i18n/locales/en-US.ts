@@ -25,7 +25,20 @@ const enUS = {
     lastReviewed: 'Last reviewed: {{date}}',
     neverReviewed: 'Never reviewed',
     deleteConfirm: 'Are you sure you want to delete this {{item}}?',
-    optional: 'Optional'
+    optional: 'Optional',
+    addTemplate: 'Add Template',
+    language: 'Language',
+    knowledge: 'Knowledge'
+  },
+
+  // Templates page
+  templates: {
+    title: 'Template Library',
+    availableTemplates: 'available templates',
+    searchTemplates: 'Search templates...',
+    previewCards: 'Preview Cards',
+    andMore: 'and {{count}} more cards',
+    install: 'Install Template'
   },
 
   // DeckList component

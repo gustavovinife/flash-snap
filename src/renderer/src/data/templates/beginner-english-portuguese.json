@@ -1,0 +1,505 @@
+{
+  "name": "Beginner English",
+  "description": "Guia para iniciantes em inglês/português, focado em gramática e vocabulário",
+  "type": "language",
+  "language": "english",
+  "emoji": "🇬🇧",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "Hello",
+      "back": "Olá",
+      "content": "Forma de dizer saudações"
+    },
+    {
+      "front": "Goodbye",
+      "back": "Adeus",
+      "content": "Forma de se despedir"
+    },
+    {
+      "front": "Thank you",
+      "back": "Obrigado",
+      "content": "Expressa gratidão"
+    },
+    {
+      "front": "Please",
+      "back": "Por favor",
+      "content": "Usado para fazer pedidos educados"
+    },
+    {
+      "front": "Sorry",
+      "back": "Desculpe-me",
+      "content": "Expressa arrependimento ou pedido de desculpas"
+    },
+    {
+      "front": "Yes",
+      "back": "Sim",
+      "content": "Confirmação positiva"
+    },
+    {
+      "front": "No",
+      "back": "Não",
+      "content": "Confirmação negativa"
+    },
+    {
+      "front": "What",
+      "back": "O que",
+      "content": "Usado para perguntar sobre algo"
+    },
+    {
+      "front": "Who",
+      "back": "Quem",
+      "content": "Usado para perguntar sobre uma pessoa"
+    },
+    {
+      "front": "Where",
+      "back": "Onde",
+      "content": "Usado para perguntar sobre um lugar"
+    },
+    {
+      "front": "When",
+      "back": "Quando",
+      "content": "Usado para perguntar sobre tempo"
+    },
+    {
+      "front": "Why",
+      "back": "Por que",
+      "content": "Usado para perguntar a razão"
+    },
+    {
+      "front": "How",
+      "back": "Como",
+      "content": "Usado para perguntar sobre o modo ou maneira"
+    },
+    {
+      "front": "Good morning",
+      "back": "Bom dia",
+      "content": "Saudação usada pela manhã"
+    },
+    {
+      "front": "Good night",
+      "back": "Boa noite",
+      "content": "Saudação usada à noite"
+    },
+    {
+      "front": "My name is",
+      "back": "Meu nome é",
+      "content": "Usado para se apresentar"
+    },
+    {
+      "front": "I am",
+      "back": "Eu sou",
+      "content": "Usado para descrever a si mesmo"
+    },
+    {
+      "front": "You are",
+      "back": "Você é",
+      "content": "Usado para descrever outra pessoa"
+    },
+    {
+      "front": "He is",
+      "back": "Ele é",
+      "content": "Usado para descrever um homem"
+    },
+    {
+      "front": "She is",
+      "back": "Ela é",
+      "content": "Usado para descrever uma mulher"
+    },
+    {
+      "front": "We are",
+      "back": "Nós somos",
+      "content": "Usado para descrever um grupo incluindo você"
+    },
+    {
+      "front": "They are",
+      "back": "Eles são",
+      "content": "Usado para descrever um grupo de pessoas"
+    },
+    {
+      "front": "Big",
+      "back": "Grande",
+      "content": "Descreve algo de tamanho grande"
+    },
+    {
+      "front": "Small",
+      "back": "Pequeno",
+      "content": "Descreve algo de tamanho pequeno"
+    },
+    {
+      "front": "Hot",
+      "back": "Quente",
+      "content": "Descreve algo com alta temperatura"
+    },
+    {
+      "front": "Cold",
+      "back": "Frio",
+      "content": "Descreve algo com baixa temperatura"
+    },
+    {
+      "front": "Happy",
+      "back": "Feliz",
+      "content": "Descreve um estado de alegria"
+    },
+    {
+      "front": "Sad",
+      "back": "Triste",
+      "content": "Descreve um estado de tristeza"
+    },
+    {
+      "front": "House",
+      "back": "Casa",
+      "content": "Lugar onde pessoas moram"
+    },
+    {
+      "front": "Car",
+      "back": "Carro",
+      "content": "Veículo para transporte"
+    },
+    {
+      "front": "Book",
+      "back": "Livro",
+      "content": "Objeto para leitura"
+    },
+    {
+      "front": "Pen",
+      "back": "Caneta",
+      "content": "Instrumento para escrita"
+    },
+    {
+      "front": "Table",
+      "back": "Mesa",
+      "content": "Móvel para apoiar objetos"
+    },
+    {
+      "front": "Chair",
+      "back": "Cadeira",
+      "content": "Móvel para sentar"
+    },
+    {
+      "front": "Door",
+      "back": "Porta",
+      "content": "Entrada ou saída de um ambiente"
+    },
+    {
+      "front": "Window",
+      "back": "Janela",
+      "content": "Abertura para luz ou ventilação"
+    },
+    {
+      "front": "Dog",
+      "back": "Cachorro",
+      "content": "Animal de estimação comum"
+    },
+    {
+      "front": "Cat",
+      "back": "Gato",
+      "content": "Animal de estimação comum"
+    },
+    {
+      "front": "Water",
+      "back": "Água",
+      "content": "Líquido essencial para a vida"
+    },
+    {
+      "front": "Food",
+      "back": "Comida",
+      "content": "Alimento para consumo"
+    },
+    {
+      "front": "One",
+      "back": "Um",
+      "content": "Número 1"
+    },
+    {
+      "front": "Two",
+      "back": "Dois",
+      "content": "Número 2"
+    },
+    {
+      "front": "Three",
+      "back": "Três",
+      "content": "Número 3"
+    },
+    {
+      "front": "Four",
+      "back": "Quatro",
+      "content": "Número 4"
+    },
+    {
+      "front": "Five",
+      "back": "Cinco",
+      "content": "Número 5"
+    },
+    {
+      "front": "Red",
+      "back": "Vermelho",
+      "content": "Uma cor primária"
+    },
+    {
+      "front": "Blue",
+      "back": "Azul",
+      "content": "Uma cor primária"
+    },
+    {
+      "front": "Green",
+      "back": "Verde",
+      "content": "Uma cor secundária"
+    },
+    {
+      "front": "Yellow",
+      "back": "Amarelo",
+      "content": "Uma cor primária"
+    },
+    {
+      "front": "Black",
+      "back": "Preto",
+      "content": "Ausência de cor"
+    },
+    {
+      "front": "White",
+      "back": "Branco",
+      "content": "Combinação de todas as cores"
+    },
+    {
+      "front": "Eat",
+      "back": "Comer",
+      "content": "Ato de consumir comida"
+    },
+    {
+      "front": "Drink",
+      "back": "Beber",
+      "content": "Ato de consumir líquidos"
+    },
+    {
+      "front": "Run",
+      "back": "Correr",
+      "content": "Mover-se rapidamente a pé"
+    },
+    {
+      "front": "Walk",
+      "back": "Andar",
+      "content": "Mover-se a pé lentamente"
+    },
+    {
+      "front": "Sleep",
+      "back": "Dormir",
+      "content": "Estado de descanso"
+    },
+    {
+      "front": "Read",
+      "back": "Ler",
+      "content": "Interpretar texto escrito"
+    },
+    {
+      "front": "Write",
+      "back": "Escrever",
+      "content": "Produzir texto"
+    },
+    {
+      "front": "Listen",
+      "back": "Ouvir",
+      "content": "Prestar atenção a sons"
+    },
+    {
+      "front": "Speak",
+      "back": "Falar",
+      "content": "Expressar-se verbalmente"
+    },
+    {
+      "front": "I have",
+      "back": "Eu tenho",
+      "content": "Indica posse"
+    },
+    {
+      "front": "You have",
+      "back": "Você tem",
+      "content": "Indica posse de outra pessoa"
+    },
+    {
+      "front": "Today",
+      "back": "Hoje",
+      "content": "O dia atual"
+    },
+    {
+      "front": "Tomorrow",
+      "back": "Amanhã",
+      "content": "O dia seguinte"
+    },
+    {
+      "front": "Yesterday",
+      "back": "Ontem",
+      "content": "O dia anterior"
+    },
+    {
+      "front": "Morning",
+      "back": "Manhã",
+      "content": "Parte do dia antes do meio-dia"
+    },
+    {
+      "front": "Afternoon",
+      "back": "Tarde",
+      "content": "Parte do dia após o meio-dia"
+    },
+    {
+      "front": "Night",
+      "back": "Noite",
+      "content": "Parte do dia após o pôr do sol"
+    },
+    {
+      "front": "School",
+      "back": "Escola",
+      "content": "Lugar de aprendizado"
+    },
+    {
+      "front": "Teacher",
+      "back": "Professor",
+      "content": "Pessoa que ensina"
+    },
+    {
+      "front": "Student",
+      "back": "Estudante",
+      "content": "Pessoa que aprende"
+    },
+    {
+      "front": "Friend",
+      "back": "Amigo",
+      "content": "Pessoa com quem se tem amizade"
+    },
+    {
+      "front": "Family",
+      "back": "Família",
+      "content": "Grupo de pessoas relacionadas"
+    },
+    {
+      "front": "Mother",
+      "back": "Mãe",
+      "content": "Parente feminina que deu à luz"
+    },
+    {
+      "front": "Father",
+      "back": "Pai",
+      "content": "Parente masculino que gerou"
+    },
+    {
+      "front": "Brother",
+      "back": "Irmão",
+      "content": "Parente masculino da mesma geração"
+    },
+    {
+      "front": "Sister",
+      "back": "Irmã",
+      "content": "Parente feminina da mesma geração"
+    },
+    {
+      "front": "Love",
+      "back": "Amor",
+      "content": "Sentimento de afeição intensa"
+    },
+    {
+      "front": "Like",
+      "back": "Gostar",
+      "content": "Sentir prazer ou preferência"
+    },
+    {
+      "front": "Want",
+      "back": "Querer",
+      "content": "Desejar algo"
+    },
+    {
+      "front": "Need",
+      "back": "Precisar",
+      "content": "Ter necessidade de algo"
+    },
+    {
+      "front": "Go",
+      "back": "Ir",
+      "content": "Mover-se para um lugar"
+    },
+    {
+      "front": "Come",
+      "back": "Vir",
+      "content": "Mover-se para o local do falante"
+    },
+    {
+      "front": "See",
+      "back": "Ver",
+      "content": "Perceber com os olhos"
+    },
+    {
+      "front": "Hear",
+      "back": "Ouvir",
+      "content": "Perceber com os ouvidos"
+    },
+    {
+      "front": "Time",
+      "back": "Tempo",
+      "content": "Medida de duração"
+    },
+    {
+      "front": "Day",
+      "back": "Dia",
+      "content": "Período de 24 horas"
+    },
+    {
+      "front": "Week",
+      "back": "Semana",
+      "content": "Período de 7 dias"
+    },
+    {
+      "front": "Month",
+      "back": "Mês",
+      "content": "Divisão do ano"
+    },
+    {
+      "front": "Year",
+      "back": "Ano",
+      "content": "Período de 12 meses"
+    },
+    {
+      "front": "Sun",
+      "back": "Sol",
+      "content": "Estrela que ilumina a Terra"
+    },
+    {
+      "front": "Moon",
+      "back": "Lua",
+      "content": "Satélite natural da Terra"
+    },
+    {
+      "front": "Sky",
+      "back": "Céu",
+      "content": "Espaço acima da Terra"
+    },
+    {
+      "front": "Rain",
+      "back": "Chuva",
+      "content": "Água que cai do céu"
+    },
+    {
+      "front": "Wind",
+      "back": "Vento",
+      "content": "Movimento do ar"
+    },
+    {
+      "front": "Tree",
+      "back": "Árvore",
+      "content": "Planta de grande porte"
+    },
+    {
+      "front": "Flower",
+      "back": "Flor",
+      "content": "Parte colorida de uma planta"
+    },
+    {
+      "front": "Good",
+      "back": "Bom",
+      "content": "Descreve algo de qualidade"
+    },
+    {
+      "front": "Bad",
+      "back": "Ruim",
+      "content": "Descreve algo de baixa qualidade"
+    }
+  ]
+}

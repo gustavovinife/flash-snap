@@ -101,27 +101,51 @@ export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Ele
       <hr className="my-6 border-gray-200" />
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-medium text-gray-800">{t('deckList.title')}</h2>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsAddingDeck(true)}
-          leftIcon={
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3 w-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-          }
-        >
-          {t('common.add')}
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsAddingDeck(true)}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          >
+            {t('common.add')}
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => navigate('/templates')}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            }
+          >
+            {t('common.addTemplate')}
+          </Button>
+        </div>
       </div>
 
       {isAddingDeck && (

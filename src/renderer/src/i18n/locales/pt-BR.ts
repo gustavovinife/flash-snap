@@ -25,7 +25,20 @@ const ptBR = {
     lastReviewed: 'Última revisão: {{date}}',
     neverReviewed: 'Nunca revisado',
     deleteConfirm: 'Tem certeza que deseja excluir este {{item}}?',
-    optional: 'Opcional'
+    optional: 'Opcional',
+    addTemplate: 'Adicionar Template',
+    language: 'Idioma',
+    knowledge: 'Conhecimento'
+  },
+
+  // Templates page
+  templates: {
+    title: 'Biblioteca de Templates',
+    availableTemplates: 'templates disponíveis',
+    searchTemplates: 'Buscar templates...',
+    previewCards: 'Pré-visualização dos Cartões',
+    andMore: 'e mais {{count}} cartões',
+    install: 'Instalar Template'
   },
 
   // DeckList component

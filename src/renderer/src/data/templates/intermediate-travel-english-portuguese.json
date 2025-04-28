@@ -1,0 +1,540 @@
+{
+  "name": "Intermediate Travel English",
+  "description": "Frases de conversação intermediária relacionadas a viagens, incluindo transporte, hospedagem, visitação e experiências culturais",
+  "type": "language",
+  "language": "english",
+  "emoji": "🚗",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "Can you recommend a good hotel?",
+      "back": "Você pode recomendar um bom hotel?",
+      "content": "Pergunta por sugestões de hospedagem"
+    },
+    {
+      "front": "This hotel has excellent reviews.",
+      "back": "Este hotel tem ótimas avaliações.",
+      "content": "Expressa confiança na qualidade de um hotel"
+    },
+    {
+      "front": "Is there a shuttle to the airport?",
+      "back": "Tem um traslado para o aeroporto?",
+      "content": "Pergunta sobre transporte do hotel para o aeroporto"
+    },
+    {
+      "front": "The shuttle runs every 30 minutes.",
+      "back": "O traslado passa a cada 30 minutos.",
+      "content": "Confirma a disponibilidade e frequência do transporte"
+    },
+    {
+      "front": "Where can I buy a train ticket?",
+      "back": "Onde posso comprar uma passagem de trem?",
+      "content": "Pergunta sobre a compra de passagens de trem"
+    },
+    {
+      "front": "You can get tickets at the station.",
+      "back": "Você pode comprar passagens na estação.",
+      "content": "Indica onde adquirir passagens de trem"
+    },
+    {
+      "front": "What time is the next flight?",
+      "back": "Que horas é o próximo voo?",
+      "content": "Pergunta sobre o horário do próximo voo"
+    },
+    {
+      "front": "The next flight departs at 3 PM.",
+      "back": "O próximo voo parte às 15 horas.",
+      "content": "Fornece o horário de partida do voo"
+    },
+    {
+      "front": "Can I check in online?",
+      "back": "Posso fazer check-in online?",
+      "content": "Pergunta sobre a possibilidade de check-in pela internet"
+    },
+    {
+      "front": "Yes, online check-in is available.",
+      "back": "Sim, o check-in online está disponível.",
+      "content": "Confirma a opção de check-in online"
+    },
+    {
+      "front": "Where is the nearest bus stop?",
+      "back": "Onde fica o ponto de ônibus mais próximo?",
+      "content": "Pergunta sobre a localização de um ponto de ônibus"
+    },
+    {
+      "front": "It’s just around the corner.",
+      "back": "Fica logo ali na esquina.",
+      "content": "Indica a proximidade de um ponto de ônibus"
+    },
+    {
+      "front": "How much is a taxi to downtown?",
+      "back": "Quanto custa um táxi para o centro?",
+      "content": "Pergunta sobre o custo de uma corrida de táxi"
+    },
+    {
+      "front": "It’s about $20 to downtown.",
+      "back": "Custa cerca de $20 para o centro.",
+      "content": "Estima o preço de uma corrida de táxi"
+    },
+    {
+      "front": "Is this a direct flight?",
+      "back": "Este é um voo direto?",
+      "content": "Pergunta se o voo não tem escalas"
+    },
+    {
+      "front": "Yes, it’s a non-stop flight.",
+      "back": "Sim, é um voo sem escalas.",
+      "content": "Confirma que o voo é direto"
+    },
+    {
+      "front": "Can you help me with my luggage?",
+      "back": "Você pode me ajudar com minha bagagem?",
+      "content": "Solicita assistência com malas"
+    },
+    {
+      "front": "I’ll take care of your bags.",
+      "back": "Vou cuidar das suas malas.",
+      "content": "Oferece ajuda com a bagagem"
+    },
+    {
+      "front": "What’s the check-in time?",
+      "back": "Qual é o horário de check-in?",
+      "content": "Pergunta sobre o horário de entrada no hotel"
+    },
+    {
+      "front": "Check-in starts at 2 PM.",
+      "back": "O check-in começa às 14 horas.",
+      "content": "Especifica o horário de check-in"
+    },
+    {
+      "front": "Is breakfast included?",
+      "back": "O café da manhã está incluído?",
+      "content": "Pergunta se o café da manhã faz parte da hospedagem"
+    },
+    {
+      "front": "Yes, breakfast is complimentary.",
+      "back": "Sim, o café da manhã é cortesia.",
+      "content": "Confirma que o café da manhã está incluso"
+    },
+    {
+      "front": "Where’s the tourist information center?",
+      "back": "Onde fica o centro de informações turísticas?",
+      "content": "Pergunta sobre a localização de ajuda para turistas"
+    },
+    {
+      "front": "It’s near the main square.",
+      "back": "Fica perto da praça principal.",
+      "content": "Indica onde encontrar informações turísticas"
+    },
+    {
+      "front": "Can I get a city map?",
+      "back": "Posso pegar um mapa da cidade?",
+      "content": "Solicita um mapa para navegação"
+    },
+    {
+      "front": "Here’s a free map for you.",
+      "back": "Aqui está um mapa grátis para você.",
+      "content": "Oferece um mapa da cidade"
+    },
+    {
+      "front": "What’s a must-see attraction here?",
+      "back": "Qual é uma atração imperdível aqui?",
+      "content": "Pergunta sobre pontos turísticos principais"
+    },
+    {
+      "front": "You have to visit the old castle!",
+      "back": "Você precisa visitar o castelo antigo!",
+      "content": "Recomenda uma atração popular"
+    },
+    {
+      "front": "How far is the beach from here?",
+      "back": "A que distância fica a praia daqui?",
+      "content": "Pergunta sobre a distância de um local específico"
+    },
+    {
+      "front": "It’s about a 10-minute walk.",
+      "back": "É cerca de 10 minutos a pé.",
+      "content": "Estima o tempo para chegar à praia"
+    },
+    {
+      "front": "Is there a guided tour available?",
+      "back": "Tem algum tour guiado disponível?",
+      "content": "Pergunta sobre opções de passeios com guia"
+    },
+    {
+      "front": "Tours start every hour.",
+      "back": "Os tours começam a cada hora.",
+      "content": "Confirma a disponibilidade de tours guiados"
+    },
+    {
+      "front": "Can I rent a car nearby?",
+      "back": "Posso alugar um carro por aqui?",
+      "content": "Pergunta sobre serviços de aluguel de carros"
+    },
+    {
+      "front": "There’s a rental agency down the street.",
+      "back": "Há uma agência de aluguel na rua.",
+      "content": "Indica a localização de uma agência de aluguel"
+    },
+    {
+      "front": "What’s the local currency?",
+      "back": "Qual é a moeda local?",
+      "content": "Pergunta sobre a moeda usada no destino"
+    },
+    {
+      "front": "The local currency is the euro.",
+      "back": "A moeda local é o euro.",
+      "content": "Especifica a moeda do local"
+    },
+    {
+      "front": "Where can I exchange money?",
+      "back": "Onde posso trocar dinheiro?",
+      "content": "Pergunta sobre locais para câmbio de moedas"
+    },
+    {
+      "front": "There’s a bank across the street.",
+      "back": "Há um banco do outro lado da rua.",
+      "content": "Indica onde fazer câmbio"
+    },
+    {
+      "front": "Do you accept credit cards?",
+      "back": "Vocês aceitam cartões de crédito?",
+      "content": "Pergunta sobre formas de pagamento"
+    },
+    {
+      "front": "Yes, we accept all major cards.",
+      "back": "Sim, aceitamos todos os cartões principais.",
+      "content": "Confirma aceitação de cartões"
+    },
+    {
+      "front": "Is there free Wi-Fi here?",
+      "back": "Tem Wi-Fi grátis aqui?",
+      "content": "Pergunta sobre acesso à internet"
+    },
+    {
+      "front": "Wi-Fi is available for guests.",
+      "back": "Wi-Fi está disponível para hóspedes.",
+      "content": "Confirma disponibilidade de Wi-Fi"
+    },
+    {
+      "front": "What’s the best way to get around?",
+      "back": "Qual é a melhor forma de se locomover?",
+      "content": "Pergunta sobre opções de transporte local"
+    },
+    {
+      "front": "The subway is fast and reliable.",
+      "back": "O metrô é rápido e confiável.",
+      "content": "Recomenda um meio de transporte"
+    },
+    {
+      "front": "Can I get a ticket for the museum?",
+      "back": "Posso comprar um ingresso para o museu?",
+      "content": "Solicita ingressos para uma atração"
+    },
+    {
+      "front": "Tickets are sold at the entrance.",
+      "back": "Os ingressos são vendidos na entrada.",
+      "content": "Indica onde comprar ingressos"
+    },
+    {
+      "front": "Is this area safe at night?",
+      "back": "Esta área é segura à noite?",
+      "content": "Pergunta sobre a segurança de um local"
+    },
+    {
+      "front": "It’s generally safe around here.",
+      "back": "É geralmente seguro por aqui.",
+      "content": "Reassegura sobre a segurança"
+    },
+    {
+      "front": "What’s a good local restaurant?",
+      "back": "Qual é um bom restaurante local?",
+      "content": "Pergunta por recomendações de restaurantes"
+    },
+    {
+      "front": "Try the bistro on Main Street.",
+      "back": "Experimente o bistrô na Rua Principal.",
+      "content": "Sugere um restaurante local"
+    },
+    {
+      "front": "Can I book a tour for tomorrow?",
+      "back": "Posso reservar um tour para amanhã?",
+      "content": "Solicita reserva de um passeio"
+    },
+    {
+      "front": "I’ll confirm your booking.",
+      "back": "Vou confirmar sua reserva.",
+      "content": "Confirma a organização do tour"
+    },
+    {
+      "front": "What’s the weather like today?",
+      "back": "Como está o tempo hoje?",
+      "content": "Pergunta sobre as condições climáticas"
+    },
+    {
+      "front": "It’s sunny and warm today.",
+      "back": "Está ensolarado e quente hoje.",
+      "content": "Descreve o clima atual"
+    },
+    {
+      "front": "Where can I find a pharmacy?",
+      "back": "Onde posso encontrar uma farmácia?",
+      "content": "Pergunta sobre a localização de uma farmácia"
+    },
+    {
+      "front": "There’s one two blocks away.",
+      "back": "Tem uma a duas quadras daqui.",
+      "content": "Indica a localização de uma farmácia"
+    },
+    {
+      "front": "Can I take photos here?",
+      "back": "Posso tirar fotos aqui?",
+      "content": "Pergunta sobre permissão para fotografar"
+    },
+    {
+      "front": "Photography is allowed.",
+      "back": "Fotografia é permitida.",
+      "content": "Confirma que fotos são permitidas"
+    },
+    {
+      "front": "How long is the flight?",
+      "back": "Quanto tempo dura o voo?",
+      "content": "Pergunta sobre a duração de um voo"
+    },
+    {
+      "front": "It’s a 3-hour flight.",
+      "back": "É um voo de 3 horas.",
+      "content": "Especifica a duração do voo"
+    },
+    {
+      "front": "Is there a luggage storage facility?",
+      "back": "Tem um local para guardar bagagem?",
+      "content": "Pergunta sobre armazenamento de malas"
+    },
+    {
+      "front": "Storage is available at the station.",
+      "back": "Há armazenamento na estação.",
+      "content": "Confirma a disponibilidade de guarda-volumes"
+    },
+    {
+      "front": "What’s the departure gate?",
+      "back": "Qual é o portão de embarque?",
+      "content": "Pergunta sobre o local de embarque no aeroporto"
+    },
+    {
+      "front": "Your flight leaves from Gate 12.",
+      "back": "Seu voo sai do Portão 12.",
+      "content": "Indica o portão de embarque"
+    },
+    {
+      "front": "Can I get a window seat?",
+      "back": "Posso conseguir um assento na janela?",
+      "content": "Solicita um assento específico no avião"
+    },
+    {
+      "front": "I’ll check for available window seats.",
+      "back": "Vou verificar assentos na janela disponíveis.",
+      "content": "Confirma tentativa de atender à solicitação"
+    },
+    {
+      "front": "What’s a traditional dish to try?",
+      "back": "Qual é um prato tradicional para experimentar?",
+      "content": "Pergunta sobre culinária local"
+    },
+    {
+      "front": "You should try the local paella.",
+      "back": "Você deveria experimentar a paella local.",
+      "content": "Recomenda um prato tradicional"
+    },
+    {
+      "front": "Is there a market nearby?",
+      "back": "Tem um mercado por perto?",
+      "content": "Pergunta sobre a localização de mercados"
+    },
+    {
+      "front": "The market is open until 6 PM.",
+      "back": "O mercado fica aberto até as 18 horas.",
+      "content": "Fornece informações sobre o mercado"
+    },
+    {
+      "front": "Can you call a taxi for me?",
+      "back": "Você pode chamar um táxi para mim?",
+      "content": "Solicita ajuda para organizar um táxi"
+    },
+    {
+      "front": "A taxi will be here in 5 minutes.",
+      "back": "Um táxi estará aqui em 5 minutos.",
+      "content": "Confirma a chegada de um táxi"
+    },
+    {
+      "front": "What’s the best time to visit?",
+      "back": "Qual é a melhor época para visitar?",
+      "content": "Pergunta sobre a temporada ideal para viajar"
+    },
+    {
+      "front": "Spring is perfect for sightseeing.",
+      "back": "A primavera é perfeita para passeios.",
+      "content": "Sugere uma época ideal para visitar"
+    },
+    {
+      "front": "Is this train on time?",
+      "back": "Este trem está no horário?",
+      "content": "Pergunta sobre a pontualidade do trem"
+    },
+    {
+      "front": "The train is running on schedule.",
+      "back": "O trem está no horário.",
+      "content": "Confirma que o trem está pontual"
+    },
+    {
+      "front": "Can I get a refund for this ticket?",
+      "back": "Posso obter um reembolso para esta passagem?",
+      "content": "Pergunta sobre a política de reembolso"
+    },
+    {
+      "front": "Refunds are available within 24 hours.",
+      "back": "Reembolsos estão disponíveis em 24 horas.",
+      "content": "Explica as condições de reembolso"
+    },
+    {
+      "front": "Where’s the lost and found?",
+      "back": "Onde fica o achados e perdidos?",
+      "content": "Pergunta sobre o local para itens perdidos"
+    },
+    {
+      "front": "Lost and found is near the main entrance.",
+      "back": "Achados e perdidos fica perto da entrada principal.",
+      "content": "Indica a localização do setor de achados e perdidos"
+    },
+    {
+      "front": "Can I change my flight date?",
+      "back": "Posso mudar a data do meu voo?",
+      "content": "Solicita alteração de uma reserva de voo"
+    },
+    {
+      "front": "I’ll check for available dates.",
+      "back": "Vou verificar datas disponíveis.",
+      "content": "Confirma tentativa de alterar a reserva"
+    },
+    {
+      "front": "What’s a local festival to check out?",
+      "back": "Qual é um festival local para conhecer?",
+      "content": "Pergunta sobre eventos culturais locais"
+    },
+    {
+      "front": "The summer festival is a blast!",
+      "back": "O festival de verão é incrível!",
+      "content": "Recomenda um evento cultural"
+    },
+    {
+      "front": "Is there a bike rental nearby?",
+      "back": "Tem aluguel de bicicletas por perto?",
+      "content": "Pergunta sobre aluguel de bicicletas"
+    },
+    {
+      "front": "There’s a bike shop two streets over.",
+      "back": "Tem uma loja de bicicletas a duas ruas daqui.",
+      "content": "Indica onde alugar bicicletas"
+    },
+    {
+      "front": "Can I get directions to the station?",
+      "back": "Posso obter direções para a estação?",
+      "content": "Solicita orientação para um local"
+    },
+    {
+      "front": "Turn left and it’s straight ahead.",
+      "back": "Vire à esquerda e siga em frente.",
+      "content": "Fornece direções simples"
+    },
+    {
+      "front": "Is there a gym in the hotel?",
+      "back": "Tem academia no hotel?",
+      "content": "Pergunta sobre instalações do hotel"
+    },
+    {
+      "front": "The gym is open 24 hours.",
+      "back": "A academia fica aberta 24 horas.",
+      "content": "Confirma a disponibilidade de uma academia"
+    },
+    {
+      "front": "What’s a good souvenir to buy?",
+      "back": "Qual é uma boa lembrança para comprar?",
+      "content": "Pergunta sobre itens típicos para levar"
+    },
+    {
+      "front": "Handmade crafts are popular here.",
+      "back": "Artesanatos são populares aqui.",
+      "content": "Sugere um souvenir local"
+    },
+    {
+      "front": "Can I get a late check-out?",
+      "back": "Posso fazer check-out tardio?",
+      "content": "Solicita saída tardia do hotel"
+    },
+    {
+      "front": "Late check-out is available until 1 PM.",
+      "back": "Check-out tardio está disponível até as 13 horas.",
+      "content": "Confirma a possibilidade de check-out tardio"
+    },
+    {
+      "front": "Where can I park my car?",
+      "back": "Onde posso estacionar meu carro?",
+      "content": "Pergunta sobre estacionamento"
+    },
+    {
+      "front": "Parking is available in the garage.",
+      "back": "O estacionamento fica na garagem.",
+      "content": "Indica onde estacionar"
+    },
+    {
+      "front": "Is this a round-trip ticket?",
+      "back": "Esta é uma passagem de ida e volta?",
+      "content": "Pergunta sobre o tipo de passagem"
+    },
+    {
+      "front": "Yes, it’s a return ticket.",
+      "back": "Sim, é uma passagem de ida e volta.",
+      "content": "Confirma que a passagem inclui retorno"
+    },
+    {
+      "front": "Can I get a travel guidebook?",
+      "back": "Posso conseguir um guia de viagem?",
+      "content": "Solicita um livro ou material de viagem"
+    },
+    {
+      "front": "Guidebooks are sold at the kiosk.",
+      "back": "Guias de viagem são vendidos no quiosque.",
+      "content": "Indica onde comprar um guia"
+    },
+    {
+      "front": "What’s the local time zone?",
+      "back": "Qual é o fuso horário local?",
+      "content": "Pergunta sobre a diferença de horário"
+    },
+    {
+      "front": "We’re in Central European Time.",
+      "back": "Estamos no horário da Europa Central.",
+      "content": "Especifica o fuso horário local"
+    },
+    {
+      "front": "Can I get a wake-up call?",
+      "back": "Posso receber uma chamada de despertar?",
+      "content": "Solicita serviço de despertador no hotel"
+    },
+    {
+      "front": "I’ll set a wake-up call for 7 AM.",
+      "back": "Vou programar uma chamada para as 7 da manhã.",
+      "content": "Confirma o agendamento de uma chamada"
+    },
+    {
+      "front": "Is there a laundry service?",
+      "back": "Tem serviço de lavanderia?",
+      "content": "Pergunta sobre serviços de lavagem de roupas"
+    },
+    {
+      "front": "Laundry service is available daily.",
+      "back": "O serviço de lavanderia está disponível diariamente.",
+      "content": "Confirma a disponibilidade de lavanderia"
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{
+  "name": "Intermediate American Expressions",
+  "description": "Expressões americanas comuns e idiomáticas para nível intermediário, úteis em conversas cotidianas",
+  "type": "language",
+  "language": "english",
+  "emoji": "🇺🇸",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "Break the ice",
+      "back": "Quebrar o gelo",
+      "content": "Iniciar uma conversa ou aliviar a tensão em uma situação social"
+    },
+    {
+      "front": "Bite the bullet",
+      "back": "Engolir o sapo",
+      "content": "Enfrentar uma situação difícil ou desagradável com coragem"
+    },
+    {
+      "front": "Hit the nail on the head",
+      "back": "Acertar em cheio",
+      "content": "Descrever algo com precisão ou identificar o problema corretamente"
+    },
+    {
+      "front": "Let the cat out of the bag",
+      "back": "Deixar o gato sair do saco",
+      "content": "Revelar um segredo ou informação confidencial"
+    },
+    {
+      "front": "Under the weather",
+      "back": "Meio indisposto",
+      "content": "Sentir-se mal ou não estar em plena forma"
+    },
+    {
+      "front": "Kick the bucket",
+      "back": "Bater as botas",
+      "content": "Morrer, usado de forma informal ou humorística"
+    },
+    {
+      "front": "Spill the beans",
+      "back": "Entregar o ouro",
+      "content": "Revelar algo que deveria ser mantido em segredo"
+    },
+    {
+      "front": "Bark up the wrong tree",
+      "back": "Latir para a árvore errada",
+      "content": "Cometer um erro sobre quem ou o que abordar"
+    },
+    {
+      "front": "The ball is in your court",
+      "back": "A bola está com você",
+      "content": "É sua vez de tomar uma decisão ou agir"
+    },
+    {
+      "front": "Beat around the bush",
+      "back": "Ficar enrolando",
+      "content": "Evitar falar diretamente sobre algo"
+    },
+    {
+      "front": "Cut to the chase",
+      "back": "Ir direto ao ponto",
+      "content": "Falar ou agir de forma direta, sem rodeios"
+    },
+    {
+      "front": "A dime a dozen",
+      "back": "Muito comum",
+      "content": "Algo que é muito comum e de pouco valor"
+    },
+    {
+      "front": "On the fence",
+      "back": "Em cima do muro",
+      "content": "Indeciso sobre uma escolha ou opinião"
+    },
+    {
+      "front": "Burn the midnight oil",
+      "back": "Trabalhar até tarde",
+      "content": "Trabalhar ou estudar até altas horas da noite"
+    },
+    {
+      "front": "Caught red-handed",
+      "back": "Pego com a mão na massa",
+      "content": "Ser flagrado fazendo algo errado"
+    },
+    {
+      "front": "Piece of cake",
+      "back": "Moleza",
+      "content": "Algo muito fácil de fazer"
+    },
+    {
+      "front": "Through thick and thin",
+      "back": "Na alegria e na tristeza",
+      "content": "Apoiar alguém em todas as circunstâncias"
+    },
+    {
+      "front": "Jump the gun",
+      "back": "Queimar a largada",
+      "content": "Agir prematuramente ou antes do momento certo"
+    },
+    {
+      "front": "On cloud nine",
+      "back": "Nas nuvens",
+      "content": "Estar extremamente feliz ou eufórico"
+    },
+    {
+      "front": "Call it a day",
+      "back": "Encerrar o dia",
+      "content": "Decidir parar de trabalhar ou terminar uma atividade"
+    },
+    {
+      "front": "In the heat of the moment",
+      "back": "No calor do momento",
+      "content": "Agir impulsivamente devido a fortes emoções"
+    },
+    {
+      "front": "Keep your fingers crossed",
+      "back": "Cruzar os dedos",
+      "content": "Desejar boa sorte"
+    },
+    {
+      "front": "Out of the blue",
+      "back": "Do nada",
+      "content": "Algo que acontece de forma inesperada"
+    },
+    {
+      "front": "Rain on someone’s parade",
+      "back": "Estragar a festa de alguém",
+      "content": "Arruinar os planos ou entusiasmo de alguém"
+    },
+    {
+      "front": "Take it with a grain of salt",
+      "back": "Levar com um pé atrás",
+      "content": "Não acreditar completamente em algo"
+    },
+    {
+      "front": "When pigs fly",
+      "back": "Quando os porcos voarem",
+      "content": "Expressa que algo é impossível ou improvável"
+    },
+    {
+      "front": "Wear your heart on your sleeve",
+      "back": "Mostrar os sentimentos",
+      "content": "Expressar emoções abertamente"
+    },
+    {
+      "front": "Blow off steam",
+      "back": "Desabafar",
+      "content": "Liberar energia ou frustração de forma saudável"
+    },
+    {
+      "front": "In the same boat",
+      "back": "No mesmo barco",
+      "content": "Estar na mesma situação que outra pessoa"
+    },
+    {
+      "front": "Hold your horses",
+      "back": "Calma aí",
+      "content": "Pedir para alguém esperar ou desacelerar"
+    },
+    {
+      "front": "Go the extra mile",
+      "back": "Fazer um esforço extra",
+      "content": "Fazer mais do que o esperado"
+    },
+    {
+      "front": "A blessing in disguise",
+      "back": "Uma bênção disfarçada",
+      "content": "Algo que parece ruim, mas acaba sendo positivo"
+    },
+    {
+      "front": "Give someone the benefit of the doubt",
+      "back": "Dar o benefício da dúvida",
+      "content": "Confiar em alguém apesar de incertezas"
+    },
+    {
+      "front": "Get cold feet",
+      "back": "Ficar com medo",
+      "content": "Sentir nervosismo ou hesitação antes de algo importante"
+    },
+    {
+      "front": "Let sleeping dogs lie",
+      "back": "Não mexer em time que está ganhando",
+      "content": "Evitar reacender problemas antigos"
+    },
+    {
+      "front": "Play it by ear",
+      "back": "Improvisar",
+      "content": "Agir sem um plano fixo, dependendo da situação"
+    },
+    {
+      "front": "The early bird catches the worm",
+      "back": "O pássaro madrugador pega a minhoca",
+      "content": "Quem age cedo tem vantagem"
+    },
+    {
+      "front": "Don’t count your chickens before they hatch",
+      "back": "Não conte com os ovos antes da galinha botar",
+      "content": "Não presuma resultados antes de confirmados"
+    },
+    {
+      "front": "A drop in the bucket",
+      "back": "Uma gota no balde",
+      "content": "Algo insignificante em relação ao total"
+    },
+    {
+      "front": "Fish out of water",
+      "back": "Peixe fora d’água",
+      "content": "Sentir-se desconfortável ou fora de lugar"
+    },
+    {
+      "front": "Hit the ground running",
+      "back": "Começar com tudo",
+      "content": "Iniciar algo com energia e rapidez"
+    },
+    {
+      "front": "Burn bridges",
+      "back": "Queimar pontes",
+      "content": "Arruinar relacionamentos ou oportunidades"
+    },
+    {
+      "front": "Keep an eye on",
+      "back": "Ficar de olho",
+      "content": "Monitorar ou observar algo cuidadosamente"
+    },
+    {
+      "front": "Once in a blue moon",
+      "back": "Raramente",
+      "content": "Algo que acontece muito raramente"
+    },
+    {
+      "front": "Put all your eggs in one basket",
+      "back": "Colocar todos os ovos na mesma cesta",
+      "content": "Arriscar tudo em uma única opção"
+    },
+    {
+      "front": "Steal someone’s thunder",
+      "back": "Roubar a cena",
+      "content": "Tirar a atenção ou crédito de outra pessoa"
+    },
+    {
+      "front": "Up in the air",
+      "back": "No ar",
+      "content": "Algo que ainda não está decidido"
+    },
+    {
+      "front": "Back to the drawing board",
+      "back": "Voltar à estaca zero",
+      "content": "Recomeçar algo após um fracasso"
+    },
+    {
+      "front": "Bite off more than you can chew",
+      "back": "Dar um passo maior que a perna",
+      "content": "Assumir mais responsabilidades do que pode lidar"
+    },
+    {
+      "front": "Break a leg",
+      "back": "Boa sorte",
+      "content": "Desejar boa sorte, especialmente em apresentações"
+    },
+    {
+      "front": "Don’t judge a book by its cover",
+      "back": "Não julgue um livro pela capa",
+      "content": "Não julgar algo ou alguém pela aparência"
+    },
+    {
+      "front": "Get the ball rolling",
+      "back": "Começar algo",
+      "content": "Iniciar uma atividade ou projeto"
+    },
+    {
+      "front": "In hot water",
+      "back": "Em apuros",
+      "content": "Estar em uma situação problemática"
+    },
+    {
+      "front": "Miss the boat",
+      "back": "Perder a chance",
+      "content": "Perder uma oportunidade"
+    },
+    {
+      "front": "On the same page",
+      "back": "Na mesma sintonia",
+      "content": "Estar em acordo com outra pessoa"
+    },
+    {
+      "front": "Sit on the fence",
+      "back": "Ficar em cima do muro",
+      "content": "Evitar tomar partido em uma discussão"
+    },
+    {
+      "front": "Take the bull by the horns",
+      "back": "Pegar o touro pelos chifres",
+      "content": "Enfrentar um problema diretamente"
+    },
+    {
+      "front": "Throw in the towel",
+      "back": "Jogar a toalha",
+      "content": "Desistir de algo após tentar"
+    }
+  ]
+}

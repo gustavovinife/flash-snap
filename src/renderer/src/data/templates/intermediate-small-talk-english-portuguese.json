@@ -1,0 +1,500 @@
+{
+  "name": "Intermediate Small Talk",
+  "description": "Frases de pequena conversação em inglês/português, construindo sobre habilidades de conversação básicas",
+  "type": "language",
+  "language": "english",
+  "emoji": "💬",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "How’s everything going?",
+      "back": "Como está tudo indo?",
+      "content": "Pergunta geral sobre a situação de alguém"
+    },
+    {
+      "front": "It’s been a while!",
+      "back": "Faz um tempo!",
+      "content": "Comentário ao reencontrar alguém após um período"
+    },
+    {
+      "front": "What have you been up to?",
+      "back": "O que você tem feito?",
+      "content": "Pergunta sobre atividades recentes"
+    },
+    {
+      "front": "Any big plans for the weekend?",
+      "back": "Algum plano grande para o fim de semana?",
+      "content": "Pergunta sobre planos futuros"
+    },
+    {
+      "front": "I’m looking forward to it!",
+      "back": "Estou ansioso por isso!",
+      "content": "Expressa entusiasmo por algo futuro"
+    },
+    {
+      "front": "What do you do for fun?",
+      "back": "O que você faz para se divertir?",
+      "content": "Pergunta sobre hobbies ou atividades de lazer"
+    },
+    {
+      "front": "Have you been anywhere exciting lately?",
+      "back": "Você esteve em algum lugar interessante ultimamente?",
+      "content": "Pergunta sobre viagens recentes"
+    },
+    {
+      "front": "That sounds amazing!",
+      "back": "Isso parece incrível!",
+      "content": "Expressa entusiasmo sobre algo que foi compartilhado"
+    },
+    {
+      "front": "How do you like your job?",
+      "back": "O que acha do seu trabalho?",
+      "content": "Pergunta sobre satisfação profissional"
+    },
+    {
+      "front": "It’s challenging but rewarding!",
+      "back": "É desafiador, mas gratificante!",
+      "content": "Resposta equilibrada sobre o trabalho"
+    },
+    {
+      "front": "What’s the best thing about your city?",
+      "back": "Qual é a melhor coisa da sua cidade?",
+      "content": "Pergunta sobre aspectos positivos de um lugar"
+    },
+    {
+      "front": "Have you seen any good movies lately?",
+      "back": "Você viu algum filme bom ultimamente?",
+      "content": "Pergunta sobre experiências recentes com filmes"
+    },
+    {
+      "front": "I highly recommend it!",
+      "back": "Eu recomendo muito!",
+      "content": "Expressa uma sugestão entusiástica"
+    },
+    {
+      "front": "What kind of music are you into?",
+      "back": "Que tipo de música você curte?",
+      "content": "Pergunta sobre preferências musicais"
+    },
+    {
+      "front": "I’m a big fan of jazz!",
+      "back": "Sou muito fã de jazz!",
+      "content": "Expressa uma preferência musical"
+    },
+    {
+      "front": "How do you usually spend your evenings?",
+      "back": "Como você costuma passar suas noites?",
+      "content": "Pergunta sobre rotinas noturnas"
+    },
+    {
+      "front": "What’s something new you’ve tried recently?",
+      "back": "O que é algo novo que você experimentou recentemente?",
+      "content": "Pergunta sobre novas experiências"
+    },
+    {
+      "front": "It was a fun experience!",
+      "back": "Foi uma experiência divertida!",
+      "content": "Resposta positiva sobre uma experiência"
+    },
+    {
+      "front": "Do you follow any sports?",
+      "back": "Você acompanha algum esporte?",
+      "content": "Pergunta sobre interesse em esportes"
+    },
+    {
+      "front": "Who’s your favorite team?",
+      "back": "Qual é o seu time favorito?",
+      "content": "Pergunta sobre preferência esportiva"
+    },
+    {
+      "front": "What’s the vibe like there?",
+      "back": "Qual é o clima lá?",
+      "content": "Pergunta sobre a atmosfera de um lugar"
+    },
+    {
+      "front": "It’s super lively!",
+      "back": "É super animado!",
+      "content": "Descreve um ambiente vibrante"
+    },
+    {
+      "front": "Have you been to any concerts recently?",
+      "back": "Você foi a algum show recentemente?",
+      "content": "Pergunta sobre experiências musicais ao vivo"
+    },
+    {
+      "front": "It was an unforgettable night!",
+      "back": "Foi uma noite inesquecível!",
+      "content": "Descreve uma experiência memorável"
+    },
+    {
+      "front": "What’s your go-to restaurant?",
+      "back": "Qual é o seu restaurante favorito?",
+      "content": "Pergunta sobre preferências gastronômicas"
+    },
+    {
+      "front": "The food there is fantastic!",
+      "back": "A comida lá é fantástica!",
+      "content": "Elogio a um restaurante"
+    },
+    {
+      "front": "How do you stay active?",
+      "back": "Como você se mantém ativo?",
+      "content": "Pergunta sobre atividades físicas"
+    },
+    {
+      "front": "I’ve been getting into yoga!",
+      "back": "Tenho me dedicado ao yoga!",
+      "content": "Descreve um novo interesse em uma atividade"
+    },
+    {
+      "front": "What’s the last book you read?",
+      "back": "Qual foi o último livro que você leu?",
+      "content": "Pergunta sobre hábitos de leitura"
+    },
+    {
+      "front": "I couldn’t put it down!",
+      "back": "Não consegui parar de ler!",
+      "content": "Expressa entusiasmo por um livro"
+    },
+    {
+      "front": "What’s something you’re passionate about?",
+      "back": "Qual é algo pelo qual você é apaixonado?",
+      "content": "Pergunta sobre interesses profundos"
+    },
+    {
+      "front": "I love volunteering!",
+      "back": "Eu amo fazer trabalho voluntário!",
+      "content": "Expressa paixão por uma atividade"
+    },
+    {
+      "front": "How’s your family doing?",
+      "back": "Como está a sua família?",
+      "content": "Pergunta sobre o bem-estar da família"
+    },
+    {
+      "front": "Everyone’s doing well!",
+      "back": "Todos estão bem!",
+      "content": "Resposta positiva sobre a família"
+    },
+    {
+      "front": "What’s your favorite season?",
+      "back": "Qual é a sua estação favorita?",
+      "content": "Pergunta sobre preferência climática"
+    },
+    {
+      "front": "I love the fall colors!",
+      "back": "Eu amo as cores do outono!",
+      "content": "Expressa preferência por uma estação"
+    },
+    {
+      "front": "Have you tried any new hobbies?",
+      "back": "Você experimentou algum hobby novo?",
+      "content": "Pergunta sobre novos interesses"
+    },
+    {
+      "front": "It’s been a game-changer!",
+      "back": "Foi uma virada de jogo!",
+      "content": "Descreve um impacto positivo"
+    },
+    {
+      "front": "What’s the best trip you’ve ever taken?",
+      "back": "Qual foi a melhor viagem que você já fez?",
+      "content": "Pergunta sobre experiências de viagem"
+    },
+    {
+      "front": "It was a dream come true!",
+      "back": "Foi um sonho realizado!",
+      "content": "Descreve uma experiência incrível"
+    },
+    {
+      "front": "What’s something you’d love to learn?",
+      "back": "O que é algo que você gostaria de aprender?",
+      "content": "Pergunta sobre aspirações de aprendizado"
+    },
+    {
+      "front": "I’m thinking about learning to cook!",
+      "back": "Estou pensando em aprender a cozinhar!",
+      "content": "Expressa interesse em uma nova habilidade"
+    },
+    {
+      "front": "How do you unwind after a long day?",
+      "back": "Como você relaxa após um dia longo?",
+      "content": "Pergunta sobre hábitos de relaxamento"
+    },
+    {
+      "front": "I like to watch a good show!",
+      "back": "Gosto de assistir a um bom programa!",
+      "content": "Descreve uma forma de relaxar"
+    },
+    {
+      "front": "What’s the best advice you’ve ever gotten?",
+      "back": "Qual é o melhor conselho que você já recebeu?",
+      "content": "Pergunta sobre lições de vida"
+    },
+    {
+      "front": "It really stuck with me!",
+      "back": "Realmente ficou comigo!",
+      "content": "Indica que algo foi memorável"
+    },
+    {
+      "front": "What’s your favorite way to stay motivated?",
+      "back": "Qual é a sua maneira favorita de se manter motivado?",
+      "content": "Pergunta sobre estratégias de motivação"
+    },
+    {
+      "front": "I set small goals!",
+      "back": "Eu estabeleço metas pequenas!",
+      "content": "Descreve uma técnica de motivação"
+    },
+    {
+      "front": "Have you been to any cool events lately?",
+      "back": "Você foi a algum evento legal ultimamente?",
+      "content": "Pergunta sobre participação em eventos"
+    },
+    {
+      "front": "It was such a blast!",
+      "back": "Foi muito divertido!",
+      "content": "Descreve uma experiência animada"
+    },
+    {
+      "front": "What’s your favorite holiday?",
+      "back": "Qual é o seu feriado favorito?",
+      "content": "Pergunta sobre preferências de feriados"
+    },
+    {
+      "front": "I love the festive vibe!",
+      "back": "Eu amo o clima festivo!",
+      "content": "Expressa entusiasmo por um feriado"
+    },
+    {
+      "front": "What’s the most interesting place you’ve visited?",
+      "back": "Qual é o lugar mais interessante que você visitou?",
+      "content": "Pergunta sobre experiências de viagem"
+    },
+    {
+      "front": "It blew my mind!",
+      "back": "Foi alucinante!",
+      "content": "Descreve uma experiência impressionante"
+    },
+    {
+      "front": "What’s a skill you’re proud of?",
+      "back": "Qual é uma habilidade da qual você se orgulha?",
+      "content": "Pergunta sobre conquistas pessoais"
+    },
+    {
+      "front": "I worked hard to master it!",
+      "back": "Trabalhei duro para dominá-la!",
+      "content": "Expressa orgulho por uma conquista"
+    },
+    {
+      "front": "What’s something you’re looking forward to?",
+      "back": "O que é algo que você está ansioso para?",
+      "content": "Pergunta sobre planos ou eventos futuros"
+    },
+    {
+      "front": "I can’t wait!",
+      "back": "Mal posso esperar!",
+      "content": "Expressa animação por algo futuro"
+    },
+    {
+      "front": "What’s your favorite thing to chat about?",
+      "back": "Qual é a sua coisa favorita para conversar?",
+      "content": "Pergunta sobre tópicos de conversa preferidos"
+    },
+    {
+      "front": "I could talk about it all day!",
+      "back": "Eu poderia falar sobre isso o dia todo!",
+      "content": "Expressa entusiasmo por um tópico"
+    },
+    {
+      "front": "What’s the best meal you’ve had recently?",
+      "back": "Qual foi a melhor refeição que você teve recentemente?",
+      "content": "Pergunta sobre experiências gastronômicas"
+    },
+    {
+      "front": "It was out of this world!",
+      "back": "Foi fora de série!",
+      "content": "Descreve uma refeição excepcional"
+    },
+    {
+      "front": "What’s a fun fact about you?",
+      "back": "Qual é um fato divertido sobre você?",
+      "content": "Pergunta para conhecer algo único"
+    },
+    {
+      "front": "Not many people know that!",
+      "back": "Poucas pessoas sabem disso!",
+      "content": "Resposta a um fato pessoal"
+    },
+    {
+      "front": "What’s the coolest thing you’ve learned recently?",
+      "back": "Qual é a coisa mais legal que você aprendeu recentemente?",
+      "content": "Pergunta sobre novos conhecimentos"
+    },
+    {
+      "front": "It totally changed my perspective!",
+      "back": "Mudou totalmente minha perspectiva!",
+      "content": "Descreve um aprendizado impactante"
+    },
+    {
+      "front": "What’s your favorite way to spend a day off?",
+      "back": "Qual é a sua maneira favorita de passar um dia de folga?",
+      "content": "Pergunta sobre preferências de lazer"
+    },
+    {
+      "front": "It’s the perfect way to recharge!",
+      "back": "É a maneira perfeita de recarregar!",
+      "content": "Descreve uma atividade relaxante"
+    },
+    {
+      "front": "Have you tried anything new in the kitchen?",
+      "back": "Você experimentou algo novo na cozinha?",
+      "content": "Pergunta sobre experiências culinárias"
+    },
+    {
+      "front": "It turned out surprisingly well!",
+      "back": "Ficou surpreendentemente bom!",
+      "content": "Descreve um sucesso culinário"
+    },
+    {
+      "front": "What’s your favorite app or game right now?",
+      "back": "Qual é o seu aplicativo ou jogo favorito no momento?",
+      "content": "Pergunta sobre entretenimento digital"
+    },
+    {
+      "front": "I’m totally hooked!",
+      "back": "Estou totalmente viciado!",
+      "content": "Expressa entusiasmo por algo digital"
+    },
+    {
+      "front": "What’s a place you’d love to visit?",
+      "back": "Qual é um lugar que você gostaria de visitar?",
+      "content": "Pergunta sobre destinos de viagem desejados"
+    },
+    {
+      "front": "It’s on my bucket list!",
+      "back": "Está na minha lista de desejos!",
+      "content": "Indica um objetivo de viagem"
+    },
+    {
+      "front": "What’s something you’ve always wanted to try?",
+      "back": "O que é algo que você sempre quis experimentar?",
+      "content": "Pergunta sobre aspirações"
+    },
+    {
+      "front": "I’m hoping to do it soon!",
+      "back": "Espero fazer isso em breve!",
+      "content": "Expressa intenção de tentar algo"
+    },
+    {
+      "front": "What’s your favorite memory from this year?",
+      "back": "Qual é a sua memória favorita deste ano?",
+      "content": "Pergunta sobre momentos marcantes"
+    },
+    {
+      "front": "It was such a special moment!",
+      "back": "Foi um momento muito especial!",
+      "content": "Descreve uma memória querida"
+    },
+    {
+      "front": "What’s a goal you’re working toward?",
+      "back": "Qual é um objetivo que você está buscando?",
+      "content": "Pergunta sobre ambições pessoais"
+    },
+    {
+      "front": "I’m making progress!",
+      "back": "Estou progredindo!",
+      "content": "Indica avanço em direção a um objetivo"
+    },
+    {
+      "front": "What’s the best show you’ve watched lately?",
+      "back": "Qual é o melhor programa que você assistiu recentemente?",
+      "content": "Pergunta sobre séries ou programas de TV"
+    },
+    {
+      "front": "I binged it in one weekend!",
+      "back": "Assisti tudo em um fim de semana!",
+      "content": "Descreve entusiasmo por uma série"
+    },
+    {
+      "front": "What’s a tradition you love?",
+      "back": "Qual é uma tradição que você ama?",
+      "content": "Pergunta sobre costumes pessoais ou culturais"
+    },
+    {
+      "front": "It’s so meaningful to me!",
+      "back": "É muito significativo para mim!",
+      "content": "Expressa apego por uma tradição"
+    },
+    {
+      "front": "What’s your favorite thing about your job?",
+      "back": "Qual é a sua coisa favorita no seu trabalho?",
+      "content": "Pergunta sobre aspectos positivos do trabalho"
+    },
+    {
+      "front": "It makes every day exciting!",
+      "back": "Torna todos os dias empolgantes!",
+      "content": "Descreve um aspecto positivo do trabalho"
+    },
+    {
+      "front": "What’s something you’re really good at?",
+      "back": "Qual é algo em que você é realmente bom?",
+      "content": "Pergunta sobre talentos ou habilidades"
+    },
+    {
+      "front": "I’ve been practicing for years!",
+      "back": "Venho praticando há anos!",
+      "content": "Indica dedicação a uma habilidade"
+    },
+    {
+      "front": "What’s the best part of your week?",
+      "back": "Qual é a melhor parte da sua semana?",
+      "content": "Pergunta sobre momentos favoritos"
+    },
+    {
+      "front": "It’s always a highlight!",
+      "back": "É sempre um destaque!",
+      "content": "Descreve algo que se destaca"
+    },
+    {
+      "front": "Have you been working on anything exciting?",
+      "back": "Você tem trabalhado em algo empolgante?",
+      "content": "Pergunta sobre projetos ou tarefas atuais"
+    },
+    {
+      "front": "It’s keeping me busy!",
+      "back": "Está me mantendo ocupado!",
+      "content": "Indica envolvimento em algo interessante"
+    },
+    {
+      "front": "What’s a dream you have?",
+      "back": "Qual é um sonho que você tem?",
+      "content": "Pergunta sobre aspirações de longo prazo"
+    },
+    {
+      "front": "I’m working toward it!",
+      "back": "Estou trabalhando para isso!",
+      "content": "Indica esforço para realizar um sonho"
+    },
+    {
+      "front": "What’s something that inspires you?",
+      "back": "O que é algo que te inspira?",
+      "content": "Pergunta sobre fontes de inspiração"
+    },
+    {
+      "front": "It really motivates me!",
+      "back": "Realmente me motiva!",
+      "content": "Descreve uma fonte de motivação"
+    },
+    {
+      "front": "What’s the best thing you’ve eaten lately?",
+      "back": "Qual é a melhor coisa que você comeu recentemente?",
+      "content": "Pergunta sobre experiências gastronômicas"
+    },
+    {
+      "front": "I’m still thinking about it!",
+      "back": "Ainda estou pensando nisso!",
+      "content": "Indica que algo foi memorável"
+    }
+  ]
+}

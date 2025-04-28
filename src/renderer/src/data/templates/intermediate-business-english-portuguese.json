@@ -1,0 +1,510 @@
+{
+  "name": "Intermediate Business Conversation",
+  "description": "Frases de conversação de negócios em inglês/português, focadas em interações profissionais e comunicação no ambiente de trabalho",
+  "type": "language",
+  "language": "english",
+  "emoji": "💼",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "Can we schedule a meeting to discuss this?",
+      "back": "Podemos agendar uma reunião para discutir isso?",
+      "content": "Solicita uma reunião formal para abordar um tópico"
+    },
+    {
+      "front": "I appreciate your feedback.",
+      "back": "Aprecio seu feedback.",
+      "content": "Expressa gratidão por sugestões ou comentários"
+    },
+    {
+      "front": "What’s the timeline for this project?",
+      "back": "Qual é o cronograma para este projeto?",
+      "content": "Pergunta sobre prazos de um projeto"
+    },
+    {
+      "front": "We’re on track to meet the deadline.",
+      "back": "Estamos no caminho para cumprir o prazo.",
+      "content": "Confirma progresso dentro do cronograma"
+    },
+    {
+      "front": "Could you share the latest updates?",
+      "back": "Você poderia compartilhar as últimas atualizações?",
+      "content": "Solicita informações recentes sobre um assunto"
+    },
+    {
+      "front": "I’ll follow up on that.",
+      "back": "Vou acompanhar isso.",
+      "content": "Indica intenção de verificar ou dar continuidade"
+    },
+    {
+      "front": "What are the key priorities right now?",
+      "back": "Quais são as principais prioridades no momento?",
+      "content": "Pergunta sobre as tarefas mais importantes"
+    },
+    {
+      "front": "Let’s focus on these deliverables.",
+      "back": "Vamos focar nesses entregáveis.",
+      "content": "Sugere priorizar itens específicos"
+    },
+    {
+      "front": "Can you clarify this point?",
+      "back": "Você pode esclarecer este ponto?",
+      "content": "Solicita explicação adicional sobre algo"
+    },
+    {
+      "front": "I’d be happy to explain further.",
+      "back": "Fico feliz em explicar mais.",
+      "content": "Oferece mais detalhes em resposta a uma dúvida"
+    },
+    {
+      "front": "What’s your take on this strategy?",
+      "back": "Qual é a sua opinião sobre essa estratégia?",
+      "content": "Pergunta sobre a perspectiva de alguém"
+    },
+    {
+      "front": "I think it has strong potential.",
+      "back": "Acho que tem grande potencial.",
+      "content": "Expressa uma opinião positiva"
+    },
+    {
+      "front": "How can we streamline this process?",
+      "back": "Como podemos otimizar este processo?",
+      "content": "Pergunta sobre formas de melhorar eficiência"
+    },
+    {
+      "front": "We could automate some steps.",
+      "back": "Poderíamos automatizar algumas etapas.",
+      "content": "Propõe uma solução para eficiência"
+    },
+    {
+      "front": "Who’s responsible for this task?",
+      "back": "Quem é responsável por essa tarefa?",
+      "content": "Pergunta sobre atribuição de responsabilidades"
+    },
+    {
+      "front": "I’ll take ownership of it.",
+      "back": "Vou assumir a responsabilidade por isso.",
+      "content": "Voluntaria-se para uma tarefa"
+    },
+    {
+      "front": "Can we review the budget?",
+      "back": "Podemos revisar o orçamento?",
+      "content": "Solicita análise dos recursos financeiros"
+    },
+    {
+      "front": "It’s within our allocated funds.",
+      "back": "Está dentro dos fundos alocados.",
+      "content": "Confirma conformidade com o orçamento"
+    },
+    {
+      "front": "What are the next steps?",
+      "back": "Quais são os próximos passos?",
+      "content": "Pergunta sobre o plano de ação futuro"
+    },
+    {
+      "front": "I’ll draft an action plan.",
+      "back": "Vou elaborar um plano de ação.",
+      "content": "Propõe criar um plano detalhado"
+    },
+    {
+      "front": "How’s the team’s progress?",
+      "back": "Como está o progresso da equipe?",
+      "content": "Pergunta sobre o desempenho coletivo"
+    },
+    {
+      "front": "We’re making steady progress.",
+      "back": "Estamos progredindo de forma constante.",
+      "content": "Indica avanço contínuo"
+    },
+    {
+      "front": "Can you provide an overview?",
+      "back": "Você pode fornecer uma visão geral?",
+      "content": "Solicita um resumo de um projeto ou situação"
+    },
+    {
+      "front": "Here’s a quick summary.",
+      "back": "Aqui está um resumo rápido.",
+      "content": "Introduz uma visão geral concisa"
+    },
+    {
+      "front": "What challenges are we facing?",
+      "back": "Quais desafios estamos enfrentando?",
+      "content": "Pergunta sobre obstáculos no projeto"
+    },
+    {
+      "front": "We’re addressing a few bottlenecks.",
+      "back": "Estamos lidando com alguns gargalos.",
+      "content": "Reconhece desafios e esforços para resolvê-los"
+    },
+    {
+      "front": "Could we brainstorm some ideas?",
+      "back": "Poderíamos fazer um brainstorming de ideias?",
+      "content": "Sugere uma sessão colaborativa de criatividade"
+    },
+    {
+      "front": "I have a few suggestions to share.",
+      "back": "Tenho algumas sugestões para compartilhar.",
+      "content": "Oferece ideias para discussão"
+    },
+    {
+      "front": "What’s the client’s feedback so far?",
+      "back": "Qual é o feedback do cliente até agora?",
+      "content": "Pergunta sobre a opinião do cliente"
+    },
+    {
+      "front": "They’re pleased with our progress.",
+      "back": "Eles estão satisfeitos com nosso progresso.",
+      "content": "Indica feedback positivo do cliente"
+    },
+    {
+      "front": "Can we align on the objectives?",
+      "back": "Podemos alinhar os objetivos?",
+      "content": "Solicita concordância sobre metas"
+    },
+    {
+      "front": "We’re all on the same page.",
+      "back": "Estamos todos na mesma página.",
+      "content": "Confirma alinhamento entre a equipe"
+    },
+    {
+      "front": "How can I support the team?",
+      "back": "Como posso apoiar a equipe?",
+      "content": "Oferece assistência aos colegas"
+    },
+    {
+      "front": "Your input would be valuable.",
+      "back": "Sua contribuição seria valiosa.",
+      "content": "Reconhece a importância da ajuda oferecida"
+    },
+    {
+      "front": "What’s the expected outcome?",
+      "back": "Qual é o resultado esperado?",
+      "content": "Pergunta sobre os objetivos finais"
+    },
+    {
+      "front": "We’re aiming for a high-impact result.",
+      "back": "Estamos buscando um resultado de alto impacto.",
+      "content": "Descreve a meta ambiciosa"
+    },
+    {
+      "front": "Can we discuss resource allocation?",
+      "back": "Podemos discutir a alocação de recursos?",
+      "content": "Solicita conversa sobre uso de recursos"
+    },
+    {
+      "front": "We’ve optimized our resources.",
+      "back": "Otimizamos nossos recursos.",
+      "content": "Indica eficiência na gestão de recursos"
+    },
+    {
+      "front": "What’s the status of the deliverables?",
+      "back": "Qual é o status dos entregáveis?",
+      "content": "Pergunta sobre o progresso de itens específicos"
+    },
+    {
+      "front": "Most are in the final stages.",
+      "back": "A maioria está nas etapas finais.",
+      "content": "Atualiza sobre o progresso dos entregáveis"
+    },
+    {
+      "front": "Can you confirm the meeting time?",
+      "back": "Você pode confirmar o horário da reunião?",
+      "content": "Solicita verificação de detalhes logísticos"
+    },
+    {
+      "front": "It’s set for 2 PM tomorrow.",
+      "back": "Está marcado para as 14h de amanhã.",
+      "content": "Confirma detalhes de agendamento"
+    },
+    {
+      "front": "What metrics are we tracking?",
+      "back": "Quais métricas estamos acompanhando?",
+      "content": "Pergunta sobre indicadores de desempenho"
+    },
+    {
+      "front": "We’re monitoring key performance indicators.",
+      "back": "Estamos monitorando indicadores-chave de desempenho.",
+      "content": "Explica o foco em métricas específicas"
+    },
+    {
+      "front": "How can we improve collaboration?",
+      "back": "Como podemos melhorar a colaboração?",
+      "content": "Pergunta sobre maneiras de fortalecer o trabalho em equipe"
+    },
+    {
+      "front": "Regular check-ins could help.",
+      "back": "Reuniões regulares poderiam ajudar.",
+      "content": "Sugere uma solução para colaboração"
+    },
+    {
+      "front": "What’s the scope of this initiative?",
+      "back": "Qual é o escopo desta iniciativa?",
+      "content": "Pergunta sobre os limites de um projeto"
+    },
+    {
+      "front": "It covers several key areas.",
+      "back": "Abrange várias áreas-chave.",
+      "content": "Descreve a extensão do projeto"
+    },
+    {
+      "front": "Can we prioritize this issue?",
+      "back": "Podemos priorizar essa questão?",
+      "content": "Sugere focar em um problema específico"
+    },
+    {
+      "front": "It’s now at the top of our list.",
+      "back": "Agora está no topo da nossa lista.",
+      "content": "Confirma a nova prioridade"
+    },
+    {
+      "front": "What’s the best way to move forward?",
+      "back": "Qual é a melhor forma de prosseguir?",
+      "content": "Pergunta sobre a estratégia ideal"
+    },
+    {
+      "front": "Let’s proceed with this approach.",
+      "back": "Vamos prosseguir com essa abordagem.",
+      "content": "Propõe um plano de ação"
+    },
+    {
+      "front": "Can we finalize the proposal?",
+      "back": "Podemos finalizar a proposta?",
+      "content": "Solicita conclusão de um documento"
+    },
+    {
+      "front": "It’s ready for review.",
+      "back": "Está pronto para revisão.",
+      "content": "Indica que um documento está concluído"
+    },
+    {
+      "front": "What’s the stakeholder’s perspective?",
+      "back": "Qual é a perspectiva das partes interessadas?",
+      "content": "Pergunta sobre opiniões de envolvidos"
+    },
+    {
+      "front": "They’re supportive of our direction.",
+      "back": "Eles apoiam nossa direção.",
+      "content": "Indica aprovação das partes interessadas"
+    },
+    {
+      "front": "Can we mitigate these risks?",
+      "back": "Podemos mitigar esses riscos?",
+      "content": "Pergunta sobre gerenciamento de riscos"
+    },
+    {
+      "front": "We’ve put measures in place.",
+      "back": "Implementamos medidas.",
+      "content": "Confirma ações para reduzir riscos"
+    },
+    {
+      "front": "How’s the client relationship going?",
+      "back": "Como está o relacionamento com o cliente?",
+      "content": "Pergunta sobre a dinâmica com o cliente"
+    },
+    {
+      "front": "It’s stronger than ever.",
+      "back": "Está mais forte do que nunca.",
+      "content": "Indica uma relação positiva com o cliente"
+    },
+    {
+      "front": "What’s the agenda for the meeting?",
+      "back": "Qual é a pauta da reunião?",
+      "content": "Pergunta sobre os tópicos a serem discutidos"
+    },
+    {
+      "front": "I’ll circulate the agenda soon.",
+      "back": "Vou compartilhar a pauta em breve.",
+      "content": "Confirma ação para compartilhar detalhes"
+    },
+    {
+      "front": "Can we explore new opportunities?",
+      "back": "Podemos explorar novas oportunidades?",
+      "content": "Sugere investigar possibilidades de crescimento"
+    },
+    {
+      "front": "I’ve identified a few prospects.",
+      "back": "Identifiquei algumas possibilidades.",
+      "content": "Indica progresso na busca por oportunidades"
+    },
+    {
+      "front": "What’s the team’s bandwidth like?",
+      "back": "Como está a capacidade da equipe?",
+      "content": "Pergunta sobre disponibilidade de recursos humanos"
+    },
+    {
+      "front": "We’re stretched but managing.",
+      "back": "Estamos sobrecarregados, mas gerenciando.",
+      "content": "Descreve a situação atual da equipe"
+    },
+    {
+      "front": "Can we escalate this issue?",
+      "back": "Podemos escalar essa questão?",
+      "content": "Solicita atenção urgente para um problema"
+    },
+    {
+      "front": "I’ll bring it to leadership’s attention.",
+      "back": "Vou levar isso à atenção da liderança.",
+      "content": "Confirma ação para escalar um problema"
+    },
+    {
+      "front": "What’s the competitive landscape like?",
+      "back": "Como é o cenário competitivo?",
+      "content": "Pergunta sobre a posição no mercado"
+    },
+    {
+      "front": "We’re holding a strong position.",
+      "back": "Estamos mantendo uma posição forte.",
+      "content": "Indica confiança na competitividade"
+    },
+    {
+      "front": "Can we refine our approach?",
+      "back": "Podemos refinar nossa abordagem?",
+      "content": "Sugere melhorias em uma estratégia"
+    },
+    {
+      "front": "I’ve made some adjustments.",
+      "back": "Fiz alguns ajustes.",
+      "content": "Confirma mudanças na abordagem"
+    },
+    {
+      "front": "What’s the impact of this decision?",
+      "back": "Qual é o impacto dessa decisão?",
+      "content": "Pergunta sobre as consequências de uma escolha"
+    },
+    {
+      "front": "It’ll drive significant growth.",
+      "back": "Vai impulsionar um crescimento significativo.",
+      "content": "Preveem resultados positivos"
+    },
+    {
+      "front": "Can we leverage this opportunity?",
+      "back": "Podemos aproveitar essa oportunidade?",
+      "content": "Pergunta sobre capitalizar uma possibilidade"
+    },
+    {
+      "front": "It’s a perfect fit for our goals.",
+      "back": "É perfeito para nossos objetivos.",
+      "content": "Indica alinhamento com metas"
+    },
+    {
+      "front": "What’s the plan for onboarding?",
+      "back": "Qual é o plano para integração?",
+      "content": "Pergunta sobre o processo de inclusão de novos membros"
+    },
+    {
+      "front": "We’ve streamlined the process.",
+      "back": "Otimizamos o processo.",
+      "content": "Descreve melhorias na integração"
+    },
+    {
+      "front": "Can we address this concern?",
+      "back": "Podemos abordar essa preocupação?",
+      "content": "Solicita atenção a um problema específico"
+    },
+    {
+      "front": "I’ll ensure it’s resolved quickly.",
+      "back": "Vou garantir que seja resolvido rapidamente.",
+      "content": "Promete ação rápida para uma solução"
+    },
+    {
+      "front": "What’s the market feedback?",
+      "back": "Qual é o feedback do mercado?",
+      "content": "Pergunta sobre a recepção de um produto ou serviço"
+    },
+    {
+      "front": "It’s been overwhelmingly positive.",
+      "back": "Tem sido extremamente positivo.",
+      "content": "Indica sucesso no mercado"
+    },
+    {
+      "front": "Can we scale this initiative?",
+      "back": "Podemos escalar essa iniciativa?",
+      "content": "Pergunta sobre expandir um projeto"
+    },
+    {
+      "front": "We’re ready to take it to the next level.",
+      "back": "Estamos prontos para levar ao próximo nível.",
+      "content": "Confirma preparo para expansão"
+    },
+    {
+      "front": "What’s the team’s morale like?",
+      "back": "Como está o moral da equipe?",
+      "content": "Pergunta sobre o clima emocional da equipe"
+    },
+    {
+      "front": "Everyone’s highly motivated.",
+      "back": "Todos estão muito motivados.",
+      "content": "Indica um ambiente de trabalho positivo"
+    },
+    {
+      "front": "Can we coordinate with the other department?",
+      "back": "Podemos coordenar com o outro departamento?",
+      "content": "Solicita colaboração interdepartamental"
+    },
+    {
+      "front": "I’ll reach out to their lead.",
+      "back": "Vou entrar em contato com o líder deles.",
+      "content": "Confirma ação para iniciar colaboração"
+    },
+    {
+      "front": "What’s the ROI on this project?",
+      "back": "Qual é o retorno sobre investimento deste projeto?",
+      "content": "Pergunta sobre o retorno financeiro"
+    },
+    {
+      "front": "It’s exceeding our expectations.",
+      "back": "Está superando nossas expectativas.",
+      "content": "Indica um retorno financeiro positivo"
+    },
+    {
+      "front": "Can we schedule a performance review?",
+      "back": "Podemos agendar uma revisão de desempenho?",
+      "content": "Solicita uma avaliação formal"
+    },
+    {
+      "front": "I’ll set it up for next week.",
+      "back": "Vou agendar para a próxima semana.",
+      "content": "Confirma organização de uma revisão"
+    },
+    {
+      "front": "What’s the vision for this campaign?",
+      "back": "Qual é a visão para essa campanha?",
+      "content": "Pergunta sobre os objetivos de uma iniciativa"
+    },
+    {
+      "front": "We’re aiming for bold impact.",
+      "back": "Estamos buscando um impacto ousado.",
+      "content": "Descreve uma meta ambiciosa"
+    },
+    {
+      "front": "Can we revisit the timeline?",
+      "back": "Podemos revisar o cronograma?",
+      "content": "Solicita reavaliação dos prazos"
+    },
+    {
+      "front": "I’ll propose some adjustments.",
+      "back": "Vou propor alguns ajustes.",
+      "content": "Oferece revisar o cronograma"
+    },
+    {
+      "front": "What’s the feedback from the team?",
+      "back": "Qual é o feedback da equipe?",
+      "content": "Pergunta sobre as opiniões dos colegas"
+    },
+    {
+      "front": "They’re optimistic about the direction.",
+      "back": "Eles estão otimistas sobre a direção.",
+      "content": "Indica confiança da equipe"
+    },
+    {
+      "front": "Can we ensure alignment on this?",
+      "back": "Podemos garantir o alinhamento nisso?",
+      "content": "Solicita confirmação de concordância"
+    },
+    {
+      "front": "We’re fully aligned.",
+      "back": "Estamos totalmente alinhados.",
+      "content": "Confirma consenso entre envolvidos"
+    }
+  ]
+}

@@ -1,0 +1,420 @@
+{
+  "name": "Advanced Small Talk",
+  "description": "Frases de pequena conversação em inglês/português, adequadas para nível avançado, estimulando conversas mais profundas e nuances",
+  "type": "language",
+  "language": "english",
+  "emoji": "💬",
+  "nationality": "🇧🇷🇺🇸",
+  "cards": [
+    {
+      "front": "What's been inspiring you lately?",
+      "back": "O que tem te inspirado ultimamente?",
+      "content": "Pergunta sobre fontes recentes de inspiração"
+    },
+    {
+      "front": "It's really sparked my creativity!",
+      "back": "Realmente despertou minha criatividade!",
+      "content": "Expressa um impacto positivo na criatividade"
+    },
+    {
+      "front": "How do you balance work and life?",
+      "back": "Como você equilibra trabalho e vida pessoal?",
+      "content": "Pergunta sobre gerenciamento de prioridades"
+    },
+    {
+      "front": "It's a juggling act, but I manage!",
+      "back": "É um malabarismo, mas eu consigo!",
+      "content": "Descreve o esforço para equilibrar responsabilidades"
+    },
+    {
+      "front": "What's the most thought-provoking book you've read?",
+      "back": "Qual foi o livro mais instigante que você leu?",
+      "content": "Pergunta sobre leituras impactantes"
+    },
+    {
+      "front": "It completely shifted my perspective!",
+      "back": "Mudou completamente minha perspectiva!",
+      "content": "Indica um impacto profundo de um livro"
+    },
+    {
+      "front": "What's a project you're particularly proud of?",
+      "back": "Qual é um projeto do qual você está particularmente orgulhoso?",
+      "content": "Pergunta sobre conquistas significativas"
+    },
+    {
+      "front": "It was a labor of love!",
+      "back": "Foi um trabalho de amor!",
+      "content": "Descreve dedicação a um projeto"
+    },
+    {
+      "front": "How do you stay motivated during tough times?",
+      "back": "Como você se mantém motivado em tempos difíceis?",
+      "content": "Pergunta sobre resiliência e motivação"
+    },
+    {
+      "front": "I focus on the bigger picture!",
+      "back": "Eu me concentro no quadro geral!",
+      "content": "Descreve uma estratégia para superar desafios"
+    },
+    {
+      "front": "What's a destination that left a lasting impression?",
+      "back": "Qual foi um destino que deixou uma impressão duradoura?",
+      "content": "Pergunta sobre viagens memoráveis"
+    },
+    {
+      "front": "It was a transformative experience!",
+      "back": "Foi uma experiência transformadora!",
+      "content": "Descreve uma viagem impactante"
+    },
+    {
+      "front": "What's a cultural event you've enjoyed recently?",
+      "back": "Qual foi um evento cultural que você curtiu recentemente?",
+      "content": "Pergunta sobre experiências culturais"
+    },
+    {
+      "front": "It was absolutely enriching!",
+      "back": "Foi absolutamente enriquecedor!",
+      "content": "Descreve uma experiência cultural significativa"
+    },
+    {
+      "front": "What's a cause you're passionate about?",
+      "back": "Qual é uma causa pela qual você é apaixonado?",
+      "content": "Pergunta sobre valores e engajamento social"
+    },
+    {
+      "front": "It's something I deeply care about!",
+      "back": "É algo que eu realmente valorizo!",
+      "content": "Expressa compromisso com uma causa"
+    },
+    {
+      "front": "How do you approach personal growth?",
+      "back": "Como você aborda o crescimento pessoal?",
+      "content": "Pergunta sobre desenvolvimento pessoal"
+    },
+    {
+      "front": "I'm always seeking self-improvement!",
+      "back": "Estou sempre buscando autodesenvolvimento!",
+      "content": "Descreve um compromisso com o crescimento"
+    },
+    {
+      "front": "What's a piece of art that's moved you?",
+      "back": "Qual é uma obra de arte que te emocionou?",
+      "content": "Pergunta sobre experiências artísticas"
+    },
+    {
+      "front": "It spoke to me on so many levels!",
+      "back": "Falou comigo em tantos níveis!",
+      "content": "Descreve uma conexão profunda com a arte"
+    },
+    {
+      "front": "What's a trend you've noticed lately?",
+      "back": "Qual é uma tendência que você notou ultimamente?",
+      "content": "Pergunta sobre observações sociais ou culturais"
+    },
+    {
+      "front": "It's fascinating to watch unfold!",
+      "back": "É fascinante ver se desenrolar!",
+      "content": "Expressa interesse em uma tendência"
+    },
+    {
+      "front": "What's a lesson life has taught you recently?",
+      "back": "Qual é uma lição que a vida te ensinou recentemente?",
+      "content": "Pergunta sobre aprendizados recentes"
+    },
+    {
+      "front": "It really put things into perspective!",
+      "back": "Realmente colocou as coisas em perspectiva!",
+      "content": "Descreve um aprendizado impactante"
+    },
+    {
+      "front": "What's a goal you're chasing right now?",
+      "back": "Qual é um objetivo que você está perseguindo agora?",
+      "content": "Pergunta sobre ambições atuais"
+    },
+    {
+      "front": "I'm fully committed to it!",
+      "back": "Estou totalmente comprometido com isso!",
+      "content": "Expressa dedicação a um objetivo"
+    },
+    {
+      "front": "What's a unique tradition you follow?",
+      "back": "Qual é uma tradição única que você segue?",
+      "content": "Pergunta sobre costumes pessoais ou familiares"
+    },
+    {
+      "front": "It's a cherished part of my life!",
+      "back": "É uma parte preciosa da minha vida!",
+      "content": "Descreve apego por uma tradição"
+    },
+    {
+      "front": "How do you handle stress effectively?",
+      "back": "Como você lida com o estresse de forma eficaz?",
+      "content": "Pergunta sobre estratégias de gerenciamento de estresse"
+    },
+    {
+      "front": "I've found mindfulness really helps!",
+      "back": "Descobri que a atenção plena realmente ajuda!",
+      "content": "Descreve uma técnica para lidar com estresse"
+    },
+    {
+      "front": "What's a documentary you'd recommend?",
+      "back": "Qual é um documentário que você recomendaria?",
+      "content": "Pergunta sobre recomendações de mídia"
+    },
+    {
+      "front": "It was incredibly eye-opening!",
+      "back": "Foi incrivelmente revelador!",
+      "content": "Descreve um documentário impactante"
+    },
+    {
+      "front": "What's a skill you've recently honed?",
+      "back": "Qual é uma habilidade que você aprimorou recentemente?",
+      "content": "Pergunta sobre desenvolvimento de habilidades"
+    },
+    {
+      "front": "It's been a rewarding journey!",
+      "back": "Tem sido uma jornada gratificante!",
+      "content": "Descreve o progresso em uma habilidade"
+    },
+    {
+      "front": "What's a global issue you're concerned about?",
+      "back": "Qual é uma questão global que te preocupa?",
+      "content": "Pergunta sobre conscientização social"
+    },
+    {
+      "front": "It's a topic I follow closely!",
+      "back": "É um tema que acompanho de perto!",
+      "content": "Expressa interesse em uma questão"
+    },
+    {
+      "front": "What's a place that feels like home to you?",
+      "back": "Qual é um lugar que parece um lar para você?",
+      "content": "Pergunta sobre conexões emocionais com lugares"
+    },
+    {
+      "front": "It holds a special place in my heart!",
+      "back": "Tem um lugar especial no meu coração!",
+      "content": "Descreve apego por um lugar"
+    },
+    {
+      "front": "What's a conversation that stuck with you?",
+      "back": "Qual foi uma conversa que ficou com você?",
+      "content": "Pergunta sobre interações memoráveis"
+    },
+    {
+      "front": "It really made me think!",
+      "back": "Realmente me fez pensar!",
+      "content": "Descreve uma conversa impactante"
+    },
+    {
+      "front": "What's a hobby you'd love to dive deeper into?",
+      "back": "Qual é um hobby que você gostaria de explorar mais?",
+      "content": "Pergunta sobre interesses pessoais"
+    },
+    {
+      "front": "I'm excited to explore it further!",
+      "back": "Estou animado para explorar mais!",
+      "content": "Expressa entusiasmo por um hobby"
+    },
+    {
+      "front": "What's a quote that resonates with you?",
+      "back": "Qual é uma citação que ressoa com você?",
+      "content": "Pergunta sobre inspirações filosóficas"
+    },
+    {
+      "front": "It's guided me through tough times!",
+      "back": "Me guiou em tempos difíceis!",
+      "content": "Descreve o impacto de uma citação"
+    },
+    {
+      "front": "What's a cuisine you've been exploring?",
+      "back": "Qual é uma culinária que você tem explorado?",
+      "content": "Pergunta sobre experiências gastronômicas"
+    },
+    {
+      "front": "It's been a delicious adventure!",
+      "back": "Tem sido uma aventura deliciosa!",
+      "content": "Descreve entusiasmo por uma culinária"
+    },
+    {
+      "front": "What's a value you hold dear?",
+      "back": "Qual é um valor que você preza?",
+      "content": "Pergunta sobre princípios pessoais"
+    },
+    {
+      "front": "It shapes who I am!",
+      "back": "Molda quem eu sou!",
+      "content": "Expressa a importância de um valor"
+    },
+    {
+      "front": "What's a challenge you've overcome recently?",
+      "back": "Qual foi um desafio que você superou recentemente?",
+      "content": "Pergunta sobre resiliência"
+    },
+    {
+      "front": "It made me stronger!",
+      "back": "Me tornou mais forte!",
+      "content": "Descreve crescimento após um desafio"
+    },
+    {
+      "front": "What's a technology you're excited about?",
+      "back": "Qual é uma tecnologia que te empolga?",
+      "content": "Pergunta sobre inovações tecnológicas"
+    },
+    {
+      "front": "It's going to change everything!",
+      "back": "Vai mudar tudo!",
+      "content": "Expressa entusiasmo por uma tecnologia"
+    },
+    {
+      "front": "What's a memory that always makes you smile?",
+      "back": "Qual é uma memória que sempre te faz sorrir?",
+      "content": "Pergunta sobre momentos felizes"
+    },
+    {
+      "front": "It never fails to lift my spirits!",
+      "back": "Nunca falha em me animar!",
+      "content": "Descreve uma memória alegre"
+    },
+    {
+      "front": "What's a topic you love debating?",
+      "back": "Qual é um tópico que você ama debater?",
+      "content": "Pergunta sobre interesses intelectuais"
+    },
+    {
+      "front": "I could argue about it for hours!",
+      "back": "Eu poderia discutir sobre isso por horas!",
+      "content": "Expressa paixão por um debate"
+    },
+    {
+      "front": "What's a festival you'd love to attend?",
+      "back": "Qual é um festival que você gostaria de participar?",
+      "content": "Pergunta sobre eventos culturais desejados"
+    },
+    {
+      "front": "It sounds like a blast!",
+      "back": "Parece ser incrível!",
+      "content": "Expressa entusiasmo por um evento"
+    },
+    {
+      "front": "What's a habit you've built that's changed your life?",
+      "back": "Qual é um hábito que você desenvolveu que mudou sua vida?",
+      "content": "Pergunta sobre mudanças positivas"
+    },
+    {
+      "front": "It's been a total game-changer!",
+      "back": "Foi uma mudança total!",
+      "content": "Descreve o impacto de um hábito"
+    },
+    {
+      "front": "What's a place you'd recommend visiting?",
+      "back": "Qual é um lugar que você recomendaria visitar?",
+      "content": "Pergunta sobre recomendações de viagem"
+    },
+    {
+      "front": "You won't be disappointed!",
+      "back": "Você não vai se decepcionar!",
+      "content": "Garante uma boa experiência"
+    },
+    {
+      "front": "What's a goal that's pushing you out of your comfort zone?",
+      "back": "Qual é um objetivo que está te tirando da zona de conforto?",
+      "content": "Pergunta sobre crescimento pessoal"
+    },
+    {
+      "front": "It's both scary and exciting!",
+      "back": "É assustador e empolgante ao mesmo tempo!",
+      "content": "Descreve um desafio emocionante"
+    },
+    {
+      "front": "What's a story that's shaped who you are?",
+      "back": "Qual é uma história que moldou quem você é?",
+      "content": "Pergunta sobre experiências formativas"
+    },
+    {
+      "front": "It's a defining moment for me!",
+      "back": "É um momento definidor para mim!",
+      "content": "Descreve uma experiência marcante"
+    },
+    {
+      "front": "What's a podcast you're hooked on?",
+      "back": "Qual é um podcast que você está viciado?",
+      "content": "Pergunta sobre preferências de mídia"
+    },
+    {
+      "front": "Every episode is a gem!",
+      "back": "Cada episódio é uma joia!",
+      "content": "Expressa entusiasmo por um podcast"
+    },
+    {
+      "front": "What's a dream you're determined to achieve?",
+      "back": "Qual é um sonho que você está determinado a realizar?",
+      "content": "Pergunta sobre ambições de longo prazo"
+    },
+    {
+      "front": "I'm all in on making it happen!",
+      "back": "Estou totalmente focado em fazer isso acontecer!",
+      "content": "Expressa determinação por um sonho"
+    },
+    {
+      "front": "What's a topic you're curious to learn more about?",
+      "back": "Qual é um tópico que você está curioso para aprender mais?",
+      "content": "Pergunta sobre interesses intelectuais"
+    },
+    {
+      "front": "I'm diving into it right now!",
+      "back": "Estou mergulhando nisso agora!",
+      "content": "Descreve entusiasmo por aprendizado"
+    },
+    {
+      "front": "What's a life hack you swear by?",
+      "back": "Qual é um truque de vida que você jura que funciona?",
+      "content": "Pergunta sobre dicas práticas"
+    },
+    {
+      "front": "It's saved me so much time!",
+      "back": "Me economizou muito tempo!",
+      "content": "Descreve a eficácia de uma dica"
+    },
+    {
+      "front": "What's a moment that made you feel truly alive?",
+      "back": "Qual foi um momento que te fez sentir verdadeiramente vivo?",
+      "content": "Pergunta sobre experiências intensas"
+    },
+    {
+      "front": "It was pure magic!",
+      "back": "Foi pura magia!",
+      "content": "Descreve uma experiência vibrante"
+    },
+    {
+      "front": "What's a change you've noticed in yourself recently?",
+      "back": "Qual é uma mudança que você notou em si mesmo recentemente?",
+      "content": "Pergunta sobre autodescoberta"
+    },
+    {
+      "front": "I'm proud of how I've grown!",
+      "back": "Estou orgulhoso de como cresci!",
+      "content": "Expressa satisfação com o crescimento pessoal"
+    },
+    {
+      "front": "What's a vision you have for the future?",
+      "back": "Qual é uma visão que você tem para o futuro?",
+      "content": "Pergunta sobre aspirações de longo prazo"
+    },
+    {
+      "front": "I'm working to make it a reality!",
+      "back": "Estou trabalhando para torná-la realidade!",
+      "content": "Descreve esforços para um objetivo futuro"
+    },
+    {
+      "front": "What's a connection you've made recently that's meaningful?",
+      "back": "Qual é uma conexão que você fez recentemente que é significativa?",
+      "content": "Pergunta sobre relacionamentos interpessoais"
+    },
+    {
+      "front": "It's been incredibly fulfilling!",
+      "back": "Tem sido incrivelmente gratificante!",
+      "content": "Descreve uma conexão valiosa"
+    }
+  ]
+}

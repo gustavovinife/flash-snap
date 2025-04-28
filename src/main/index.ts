@@ -55,6 +55,20 @@ function showReviewNotification(message = 'Time for your daily review!'): void {
   }).show()
 }
 
+// Function to hide dock icon (macOS only)
+function hideDockIcon(): void {
+  if (process.platform === 'darwin') {
+    app.dock?.hide()
+  }
+}
+
+// Function to show dock icon (macOS only)
+function showDockIcon(): void {
+  if (process.platform === 'darwin') {
+    app.dock?.show()
+  }
+}
+
 function checkReviewTime(): void {
   if (!mainWindow) return
 
@@ -132,6 +146,21 @@ function createWindow(): void {
     if (!isQuiting) {
       event.preventDefault()
       mainWindow?.hide()
+      if (process.platform === 'darwin') {
+        hideDockIcon()
+      }
+    }
+  })
+
+  mainWindow.on('show', () => {
+    if (process.platform === 'darwin') {
+      showDockIcon()
+    }
+  })
+
+  mainWindow.on('hide', () => {
+    if (process.platform === 'darwin') {
+      hideDockIcon()
     }
   })
 
@@ -170,7 +199,11 @@ function createTray(): void {
   tray.setContextMenu(contextMenu)
 
   tray.on('click', () => {
-    mainWindow?.isVisible() ? mainWindow.hide() : mainWindow?.show()
+    if (mainWindow?.isVisible()) {
+      mainWindow.hide()
+    } else {
+      mainWindow?.show()
+    }
   })
 }
 
@@ -193,8 +226,11 @@ function registerGlobalShortcut(): void {
       if (clipboardText?.trim()) {
         console.log('🔤 Text captured:', clipboardText)
 
-        // Garante que a janela vai abrir e receber foco
+        // Ensure window is visible and has focus
         if (mainWindow) {
+          if (process.platform === 'darwin') {
+            showDockIcon()
+          }
           mainWindow.show()
           mainWindow.focus()
         }
@@ -240,6 +276,11 @@ app.whenReady().then(() => {
   createTray()
   registerGlobalShortcut()
 
+  // Hide dock icon on macOS initially
+  if (process.platform === 'darwin') {
+    hideDockIcon()
+  }
+
   // Run the first check for review time
   setTimeout(() => {
     if (mainWindow && mainWindow.webContents.isLoading() === false) {
@@ -254,6 +295,10 @@ app.whenReady().then(() => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  else {
+    // If the app is already running but hidden, show it
+    mainWindow?.show()
+  }
 })
 
 app.on('will-quit', () => {

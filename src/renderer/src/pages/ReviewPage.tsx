@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getDueCards, updateCardAfterReview } from '../services/reviewService'
 import { Card } from '../types'
+import { playPronunciation } from '../services/translationService'
+import { getDecks } from '../services/storageService'
 
 const ReviewPage: React.FC = () => {
   const { t } = useTranslation()
@@ -14,6 +16,7 @@ const ReviewPage: React.FC = () => {
   const [reviewComplete, setReviewComplete] = useState(false)
   const [cardsReviewed, setCardsReviewed] = useState(0)
   const [showCardStats, setShowCardStats] = useState(false)
+  const [isDeckLanguage, setIsDeckLanguage] = useState(false)
 
   const currentReview = dueCards[currentCardIndex]
   const currentCard = currentReview?.card
@@ -23,6 +26,13 @@ const ReviewPage: React.FC = () => {
   const loadDueCards = useCallback(() => {
     const cards = getDueCards(id)
     setDueCards(cards)
+
+    // Check if the current deck is a language deck
+    if (id) {
+      const decks = getDecks()
+      const deck = decks.find((d) => d.id === id)
+      setIsDeckLanguage(deck?.type === 'language')
+    }
   }, [id])
 
   useEffect(() => {
@@ -32,6 +42,13 @@ const ReviewPage: React.FC = () => {
   const handleBack = (): unknown => navigate(id ? `/deck/${id}` : '/')
   const handleShowAnswer = (): void => setShowAnswer(true)
   const toggleCardStats = (): void => setShowCardStats((prev) => !prev)
+
+  const handlePlayAudio = (e: React.MouseEvent): void => {
+    e.stopPropagation()
+    if (currentCard?.front) {
+      playPronunciation(currentCard.front)
+    }
+  }
 
   const handleGrade = (grade: number): void => {
     if (!currentCard || !currentDeckId) return
@@ -182,7 +199,32 @@ const ReviewPage: React.FC = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex flex-col items-center">
           <div className="w-full min-h-[100px] flex flex-col items-center justify-center mb-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="text-sm text-gray-500 mb-2">{t('review.front')}</h3>
+            <div className="flex items-center">
+              <h3 className="text-sm text-gray-500 mb-2 mr-2">{t('review.front')}</h3>
+              {isDeckLanguage && currentCard?.front && (
+                <button
+                  type="button"
+                  onClick={handlePlayAudio}
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors mb-2"
+                  aria-label={t('review.playPronunciation')}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                    />
+                  </svg>
+                </button>
+              )}
+            </div>
             <p className="text-xl text-center font-medium">{currentCard?.front}</p>
           </div>
           {showAnswer ? (

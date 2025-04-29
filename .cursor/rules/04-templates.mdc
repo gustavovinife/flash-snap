@@ -1,0 +1,42 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Pre-built Templates System
+
+Templates are stored in `/src/renderer/src/data/templates` and provide ready-to-use card collections.
+
+## Template Categories
+Initial release includes 12 templates with 500+ cards:
+- Beginner Words
+- Small Talk
+- Travel English
+- Business English
+- Advanced Vocabulary
+- TOEFL Vocabulary
+- Phrasal Verbs
+- Idioms and Expressions
+- Grammar Quick Tips
+- Daily Routine Words
+- Food & Restaurants
+- Emergency English
+
+## Template Structure
+- Templates are JSON files containing deck data
+- Each template follows the Deck interface structure
+- Templates include metadata for categorization and display
+
+## Template Guidelines
+1. Maintain high-quality, curated content
+2. Include clear context and examples
+3. Follow consistent formatting
+4. Support i18n where applicable
+5. Version templates for updates
+
+## Future Considerations
+- Community-driven template marketplace
+- Server-side template storage
+- Template rating and reviews
+- Custom template creation tools
+

@@ -1,0 +1,57 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Services Architecture
+
+Core services are located in `/src/renderer/src/services` and handle key application functionality:
+
+## Core Services
+
+### Review Service
+- Implements SM-2 spaced repetition algorithm
+- Manages card review scheduling
+- Handles ease factor and interval calculations
+
+### Storage Service
+- Manages localStorage operations
+- Handles card and deck persistence
+- Future: Will support PostgreSQL sync
+
+### Clipboard Service
+- Manages text selection and copying
+- Handles global shortcut (Ctrl + Shift + X)
+- Facilitates quick card creation
+
+## Service Guidelines
+1. Services should be singleton instances
+2. Use TypeScript interfaces for data models
+3. Implement error handling and logging
+4. Keep services focused and single-responsibility
+5. Document public APIs and interfaces
+
+## Data Models
+```typescript
+interface Card {
+  id: string
+  front: string
+  back: string
+  context?: string
+  dueDate?: Date
+  interval?: number
+  easeFactor?: number
+  repetition?: number
+  nextReview?: Date
+}
+
+interface Deck {
+  id: string
+  name: string
+  cards: Card[]
+  createdAt: Date
+  lastReviewed?: Date
+  type: 'language' | 'knowledge'
+}
+```
+

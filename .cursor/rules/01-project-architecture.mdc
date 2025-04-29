@@ -1,0 +1,31 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Project Architecture
+
+This Electron application uses Vite and follows a specific structure for organization:
+
+## Core Configuration Files
+- [electron.vite.config.ts](mdc:electron.vite.config.ts) - Main Vite configuration
+- [package.json](mdc:package.json) - Dependencies and scripts
+- [tsconfig.json](mdc:tsconfig.json) - TypeScript configuration
+
+## Main Application Structure
+- `/src/main` - Electron main process code
+- `/src/preload` - Preload scripts for secure IPC
+- `/src/renderer` - Frontend UI code
+  - `/src/renderer/src/components` - Reusable React components
+  - `/src/renderer/src/pages` - Application pages/routes
+  - `/src/renderer/src/services` - Core services (review, storage, clipboard)
+  - `/src/renderer/src/ui` - UI component library
+  - `/src/renderer/src/data/templates` - Pre-built card templates
+
+## Key Features
+- Global shortcut (Ctrl + Shift + X) for quick card creation
+- LocalStorage-based data persistence (future PostgreSQL sync planned)
+- Internationalization support under `/src/renderer/src/i18n`
+- TailwindCSS for styling
+- Electron auto-updates via GitHub releases
+

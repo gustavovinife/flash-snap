@@ -2,14 +2,14 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const LanguageSwitcher: React.FC = () => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const changeLanguage = (lng: string): void => {
     i18n.changeLanguage(lng)
   }
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2" title={t('auth.selectLanguage')}>
       <button
         onClick={() => changeLanguage('en-US')}
         className={`px-2 py-1 text-xs rounded-md transition-colors ${
@@ -18,6 +18,7 @@ const LanguageSwitcher: React.FC = () => {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
         aria-label="Switch to English"
+        title="English"
       >
         EN
       </button>
@@ -29,6 +30,7 @@ const LanguageSwitcher: React.FC = () => {
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         }`}
         aria-label="Mudar para Português"
+        title="Português"
       >
         PT
       </button>

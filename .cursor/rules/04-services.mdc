@@ -1,0 +1,27 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Application Services
+
+Flash Snap implements a service-oriented architecture with specialized services for different functionality:
+
+## Core Services
+- **reviewService**: Implements the SM-2 spaced repetition algorithm for scheduling card reviews
+- **clipboardService**: Manages clipboard interactions for card creation from selected text
+- **storageService**: Handles localStorage operations for cards and decks persistence
+
+## Integration Services
+- **External APIs**: Integration with Supabase Edge Functions for:
+  - Google Translate API for translations
+  - Google Text-to-Speech for pronunciation
+
+## Future Services (Planned)
+- **syncService**: For synchronizing user data with PostgreSQL backend
+- **notificationService**: For managing review reminders
+- **settingsService**: For handling user preferences and configuration
+
+Services are located in the [src/renderer/src/services](mdc:src/renderer/src/services) directory and follow a consistent interface pattern.
+
+

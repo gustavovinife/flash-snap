@@ -7,6 +7,34 @@ const ptBR = {
     copyright: '© 2025 FlashSnap por -'
   },
 
+  // Authentication pages
+  auth: {
+    loginTitle: 'Entre na sua conta',
+    registerTitle: 'Crie sua conta',
+    email: 'Endereço de email',
+    password: 'Senha',
+    confirmPassword: 'Confirmar Senha',
+    fullName: 'Nome Completo',
+    signIn: 'Entrar',
+    signingIn: 'Entrando...',
+    createAccount: 'Criar conta',
+    creatingAccount: 'Criando conta...',
+    alreadyHaveAccount: 'Já tem uma conta? Entre',
+    dontHaveAccount: 'Não tem uma conta? Registre-se',
+    orContinueWith: 'Ou continue com',
+    google: 'Google',
+    emailRequired: 'Email e senha são obrigatórios',
+    allFieldsRequired: 'Todos os campos são obrigatórios',
+    passwordsDoNotMatch: 'As senhas não coincidem',
+    passwordMinLength: 'A senha deve ter pelo menos 6 caracteres',
+    registrationSuccess:
+      'Registro bem-sucedido! Por favor, verifique seu email para confirmar sua conta.',
+    emailAlreadyRegistered: 'Este email já está registrado. Tente entrar em vez disso.',
+    unexpectedError: 'Ocorreu um erro inesperado',
+    language: 'Idioma',
+    selectLanguage: 'Selecione seu idioma preferido'
+  },
+
   // Common terms
   common: {
     back: 'Voltar',

@@ -34,8 +34,8 @@ export const saveSettings = (settings: Settings): void => {
     }
 
     // Notify main process that settings have changed
-    if (window.api && window.api.notifySettingsUpdated) {
-      window.api.notifySettingsUpdated()
+    if ((window.api as any)?.notifySettingsUpdated) {
+      ;(window.api as any).notifySettingsUpdated()
     }
   } catch (error) {
     console.error('Error saving settings:', error)

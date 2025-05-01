@@ -1,9 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Logo from './Logo'
 import { useNavigate } from 'react-router-dom'
 import Versions from './Versions'
-
+import { useSession } from '../context/SessionContext'
+import UserProfile from './UserProfile'
+import FlashIcon from '../../../../resources/flashsnap.png'
 interface LayoutProps {
   children: React.ReactNode
 }
@@ -11,9 +12,15 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { signOut } = useSession()
 
   const handleSettingsClick = (): void => {
     navigate('/settings')
+  }
+
+  const handleLogout = async (): Promise<void> => {
+    await signOut()
+    navigate('/login')
   }
 
   return (
@@ -22,14 +29,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <header className="mb-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Logo size={32} />
-              <div>
-                <h1 className="text-2xl font-medium text-gray-800">{t('layout.appName')}</h1>
-                <p className="text-sm text-gray-400 mt-1">{t('layout.appDescription')}</p>
-              </div>
+              <img src={FlashIcon} alt="Flash Snap" width={100} />
             </div>
 
             <div className="flex items-center space-x-4">
+              <UserProfile />
               <button
                 onClick={handleSettingsClick}
                 className="p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
@@ -54,6 +58,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     strokeLinejoin="round"
                     strokeWidth={2}
                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
+                aria-label={t('layout.logout') || 'Logout'}
+                title={t('layout.logout') || 'Logout'}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                   />
                 </svg>
               </button>

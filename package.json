@@ -1,6 +1,6 @@
 {
   "name": "flash-snap",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Flash Snap",
   "main": "./out/main/index.js",
   "author": "example.com",

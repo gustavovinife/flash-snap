@@ -7,6 +7,34 @@ const enUS = {
     copyright: '© 2025 FlashSnap by -'
   },
 
+  // Authentication pages
+  auth: {
+    loginTitle: 'Sign in to your account',
+    registerTitle: 'Create your account',
+    email: 'Email address',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    fullName: 'Full Name',
+    signIn: 'Sign in',
+    signingIn: 'Signing in...',
+    createAccount: 'Create account',
+    creatingAccount: 'Creating account...',
+    alreadyHaveAccount: 'Already have an account? Sign in',
+    dontHaveAccount: "Don't have an account? Register",
+    orContinueWith: 'Or continue with',
+    google: 'Google',
+    emailRequired: 'Email and password are required',
+    allFieldsRequired: 'All fields are required',
+    passwordsDoNotMatch: 'Passwords do not match',
+    passwordMinLength: 'Password must be at least 6 characters',
+    registrationSuccess:
+      'Registration successful! Please check your email to confirm your account.',
+    emailAlreadyRegistered: 'This email is already registered. Try signing in instead.',
+    unexpectedError: 'An unexpected error occurred',
+    language: 'Language',
+    selectLanguage: 'Select your preferred language'
+  },
+
   // Common terms
   common: {
     back: 'Back',

@@ -15,6 +15,24 @@ const api = {
   // Check for app updates
   checkForUpdates: (): void => {
     ipcRenderer.send('check-for-updates')
+  },
+
+  // Handle auth callback from the main process
+  onAuthCallback: (callback: (url: string) => void): void => {
+    ipcRenderer.on('auth-callback', (_event, url) => callback(url))
+  }
+}
+
+// Extend the electronAPI with our custom functions
+const extendedElectronAPI = {
+  ...electronAPI,
+  openExternal: (url: string): void => {
+    // Use IPC to safely open external URLs
+    ipcRenderer.send('open-external-url', url)
+  },
+  showApp: (): void => {
+    // Send a message to show the app window
+    ipcRenderer.send('show-app')
   }
 }
 
@@ -23,14 +41,14 @@ const api = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('electron', extendedElectronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
   // @ts-ignore (define in dts)
-  window.electron = electronAPI
+  window.electron = extendedElectronAPI
   // @ts-ignore (define in dts)
   window.api = api
 }

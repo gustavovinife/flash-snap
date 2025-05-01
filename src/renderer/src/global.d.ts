@@ -1,18 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-interface Window {
-  electron: {
-    ipcRenderer: any
-    process?: {
-      versions: {
-        electron: string
-        chrome: string
-        node: string
+declare global {
+  interface Window {
+    electron: {
+      ipcRenderer: unknown
+      openExternal: (url: string) => void
+      showApp: () => void
+      process?: {
+        versions: {
+          electron: string
+          chrome: string
+          node: string
+        }
       }
     }
-  }
-  api: {
-    onTextCaptured: (callback: (text: string) => void) => void
-    notifySettingsUpdated: () => void
-    checkForUpdates: () => void
+    api: {
+      onTextCaptured: (callback: (text: string) => void) => void
+      notifySettingsUpdated: () => void
+      checkForUpdates: () => void
+      onAuthCallback: (callback: (url: string) => void) => void
+    }
   }
 }
+
+export {}

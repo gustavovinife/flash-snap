@@ -2,7 +2,7 @@ import { useState } from 'react'
 import packageJson from '../../../../package.json'
 function Versions(): React.JSX.Element {
   const [versions] = useState(
-    window.electron?.process?.versions || {
+    (window.electron as any)?.process?.versions || {
       electron: '',
       chrome: '',
       node: ''

@@ -1,0 +1,50 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Core Data Models
+
+Flash Snap is built around two primary data models:
+
+## Card
+```typescript
+interface Card {
+  id: string
+  front: string
+  back: string
+  context?: string
+  dueDate?: Date
+  interval?: number
+  easeFactor?: number
+  repetition?: number
+  nextReview?: Date
+}
+```
+
+The Card model represents an individual flashcard with:
+- `front` & `back`: The primary content on each side of the card
+- `context`: Optional additional context information
+- Spaced repetition metadata: `interval`, `easeFactor`, `repetition`, etc.
+
+## Deck
+```typescript
+interface Deck {
+  id: string
+  name: string
+  cards: Card[]
+  createdAt: Date
+  lastReviewed?: Date
+  type: 'language' | 'knowledge'
+}
+```
+
+The Deck model represents a collection of related cards with:
+- `name`: The deck's title
+- `cards`: Array of contained Card objects
+- `type`: Categorization of the deck ('language' or 'knowledge')
+- Timestamp metadata for creation and review
+
+These models are central to the application's storage and business logic.
+
+

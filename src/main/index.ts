@@ -6,7 +6,8 @@ import {
   globalShortcut,
   Tray,
   Menu,
-  Notification
+  Notification,
+  autoUpdater
 } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -328,5 +329,133 @@ ipcMain.on('settings-updated', () => {
   // Run a check immediately in case the time is now
   if (mainWindow && mainWindow.webContents.isLoading() === false) {
     checkReviewTime()
+  }
+})
+
+autoUpdater.on('update-available', () => {
+  new Notification({
+    title: 'Flash Snap',
+    body: 'A new update is available. Please restart the app to apply it.'
+  }).show()
+})
+
+autoUpdater.on('update-downloaded', () => {
+  new Notification({
+    title: 'Flash Snap',
+    body: 'The update has been downloaded. Please restart the app to apply it.'
+  }).show()
+})
+
+// Remove the protocol handler setup since we're not using custom protocols
+// and replace with proper Electron auth handling
+app.on('web-contents-created', (_, contents) => {
+  // Allow navigation to auth providers and redirect URLs
+  contents.on('will-navigate', (event, navigationUrl) => {
+    const parsedUrl = new URL(navigationUrl)
+    const allowedDomains = ['accounts.google.com', 'ndkwgtcfvfrsagghsujx.supabase.co', 'localhost']
+
+    // Allow navigation only to specific domains
+    if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
+      console.log('Allowing navigation to:', navigationUrl)
+    } else {
+      console.log('Blocking navigation to:', navigationUrl)
+      event.preventDefault()
+      shell.openExternal(navigationUrl)
+    }
+  })
+
+  // Open external links in default browser
+  contents.setWindowOpenHandler(({ url }) => {
+    console.log('Window open request for URL:', url)
+    const parsedUrl = new URL(url)
+    const allowedDomains = ['accounts.google.com', 'ndkwgtcfvfrsagghsujx.supabase.co']
+
+    if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
+      console.log('Allowing window open for URL:', url)
+      return { action: 'allow' }
+    }
+
+    console.log('Opening URL in external browser:', url)
+    shell.openExternal(url)
+    return { action: 'deny' }
+  })
+})
+
+// Add an IPC handler for opening external URLs
+ipcMain.on('open-external-url', (_event, url) => {
+  shell.openExternal(url).catch(() => {
+    // Silently handle errors
+  })
+})
+
+// Register the app as a protocol handler
+app.setAsDefaultProtocolClient('flash-snap')
+
+// Handle the protocol. In this case, we choose to show the window and process the auth URL
+function processDeepLink(url: string): void {
+  if (!url) return
+
+  // Show the window if it exists
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.show()
+    mainWindow.focus()
+
+    // Process the URL - if it's an auth callback, send it to the renderer
+    if (url.includes('access_token') || url.includes('refresh_token') || url.includes('code=')) {
+      mainWindow.webContents.send('auth-callback', url)
+    }
+  }
+}
+
+// Handle deep linking on macOS
+app.on('open-url', (event, url) => {
+  event.preventDefault()
+  processDeepLink(url)
+})
+
+// Handle deep linking on Windows
+if (process.platform === 'win32') {
+  // Keep only the first instance
+  const gotTheLock = app.requestSingleInstanceLock()
+
+  if (!gotTheLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (_, commandLine) => {
+      // Someone tried to run a second instance, we should focus our window
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
+      }
+
+      // Extract deep link URL from second instance (Windows)
+      const deepLinkUrl = commandLine.find((arg) => arg.startsWith('flash-snap://'))
+      if (deepLinkUrl) {
+        processDeepLink(deepLinkUrl)
+      }
+    })
+  }
+}
+
+// Process any deep link URLs that are part of the process.argv (Windows)
+if (process.platform === 'win32') {
+  const deepLinkUrl = process.argv.find((arg) => arg.startsWith('flash-snap://'))
+  if (deepLinkUrl) {
+    processDeepLink(deepLinkUrl)
+  }
+}
+
+// Add an IPC handler for showing the app window
+ipcMain.on('show-app', () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.show()
+    mainWindow.focus()
+
+    // Show dock icon on macOS when the app is active
+    if (process.platform === 'darwin') {
+      showDockIcon()
+    }
   }
 })

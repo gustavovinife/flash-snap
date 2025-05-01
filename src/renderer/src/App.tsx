@@ -4,26 +4,14 @@ import AddCard from './components/AddCard'
 import Layout from './components/Layout'
 import { getDecks } from './services/storageService'
 
-// Define window API types
-declare global {
-  interface Window {
-    api: {
-      onTextCaptured: (callback: (text: string) => void) => void
-      notifySettingsUpdated: () => void
-      checkForUpdates: () => void
-    }
-  }
-}
-
 function App(): React.JSX.Element {
   const [capturedText, setCapturedText] = useState<string | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
     // Listen for text captured from main process
-    if (window.api?.onTextCaptured) {
-      window.api.onTextCaptured((text) => {
-        console.log('Text captured in renderer:', text)
+    if ((window.api as any)?.onTextCaptured) {
+      ;(window.api as any).onTextCaptured((text: string) => {
         setCapturedText(text)
       })
     }

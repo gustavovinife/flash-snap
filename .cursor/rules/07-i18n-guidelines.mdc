@@ -1,0 +1,64 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Internationalization (i18n) Guidelines
+
+Flash Snap implements full internationalization (i18n) using i18next and react-i18next. All user-facing text must be internationalized to support multiple languages.
+
+## Core Principles
+- **NO hardcoded text**: Never use static strings directly in components
+- **Always use translation keys**: All text must use the `t()` function from react-i18next
+- **Follow the nested structure**: Follow the established organization in locale files
+
+## Implementation
+```typescript
+// Import the hook at the top of your component
+import { useTranslation } from 'react-i18next'
+
+// Use it within your component
+const ExampleComponent = () => {
+  const { t } = useTranslation()
+
+  return (
+    <div>
+      <h1>{t('section.title')}</h1>
+      <p>{t('section.description')}</p>
+
+      {/* For dynamic content */}
+      <span>{t('common.itemCount', { count: items.length })}</span>
+
+      {/* For text with HTML */}
+      <div dangerouslySetInnerHTML={{ __html: t('section.htmlContent') }} />
+    </div>
+  )
+}
+```
+
+## Locale Structure
+Translations are organized hierarchically in the locale files:
+- [src/renderer/src/i18n/locales/en-US.ts](mdc:src/renderer/src/i18n/locales/en-US.ts)
+- [src/renderer/src/i18n/locales/pt-BR.ts](mdc:src/renderer/src/i18n/locales/pt-BR.ts)
+
+Follow this structure when adding new texts:
+1. Group related translations by feature/component
+2. Use descriptive keys that indicate the text's purpose
+3. Add the same keys to ALL locale files
+4. Use common.* namespace for shared/reused texts
+
+## Adding New Translations
+When adding new features:
+1. First add all keys to the primary locale (en-US)
+2. Then add the same keys to all other locales
+3. Run the app and check all supported languages
+
+## Pluralization
+Use the `count` parameter for pluralized content:
+```typescript
+t('common.card', { count: 1 }) // "card"
+t('common.card', { count: 5 }) // "cards"
+```
+
+Remember that all user-facing text must be internationalized to maintain a consistent experience across all supported languages.
+

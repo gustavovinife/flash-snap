@@ -30,6 +30,7 @@ mac:
     - LSUIElement: true
   notarize: false
   identity: null
+  icon: build/icon.icns
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
@@ -43,6 +44,7 @@ linux:
     - AppImage
     - deb
   executableName: flash-snap
+  icon: build/icon.png
   desktop:
     Name: Flash Snap
     Comment: Text capture utility

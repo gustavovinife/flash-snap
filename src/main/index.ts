@@ -12,6 +12,7 @@ import {
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayIcon from '../../resources/trayIcon.png?asset'
+import icon from '../../resources/icon.png?asset'
 import AutoLaunch from 'auto-launch'
 import { updateElectronApp } from 'update-electron-app'
 import {
@@ -119,7 +120,7 @@ function createWindow(): void {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon: trayIcon } : {}),
+    icon: icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -270,6 +271,7 @@ function setupAutoLaunch(): void {
 }
 
 app.whenReady().then(() => {
+  autoUpdater.checkForUpdates()
   electronApp.setAppUserModelId('com.electron')
 
   setupAutoLaunch()

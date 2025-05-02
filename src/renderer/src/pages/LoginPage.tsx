@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
 import LanguageSwitcher from '../components/LanguageSwitcher'
+import Logo from '../../../../resources/flashsnap.png'
 
 const LoginPage = (): React.ReactNode => {
   const [isRegistering, setIsRegistering] = useState(false)
@@ -22,7 +23,6 @@ const LoginPage = (): React.ReactNode => {
     setMessage(successMessage)
   }
 
-  // If already logged in, redirect to home
   if (session) {
     navigate('/')
     return <></>
@@ -32,7 +32,7 @@ const LoginPage = (): React.ReactNode => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">{t('layout.appName')}</h1>
+          <img src={Logo} alt="Logo" width={120} />
           <LanguageSwitcher />
         </div>
 

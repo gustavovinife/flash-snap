@@ -10,7 +10,7 @@ Flash Snap is an Electron desktop application designed for spaced repetition lea
 ## Core Technologies
 - **Framework**: Electron with Vite 3.1.0
 - **UI**: React with TailwindCSS
-- **State Management**: Local storage (with future PostgreSQL integration planned)
+- **State Management**: Supabase (PostgreSQL) for cards and decks, localStorage for settings
 - **Updates**: Using `update-electron-app` with GitHub releases
 
 ## Key Features
@@ -20,6 +20,12 @@ Flash Snap is an Electron desktop application designed for spaced repetition lea
 - Text-to-Speech integration via Supabase Edge Functions
 
 The application follows a modular architecture with services for different functionalities and reusable UI components.
+
+## Main Configuration Files
+- [package.json](mdc:package.json) - Dependencies and scripts
+- [electron.vite.config.ts](mdc:electron.vite.config.ts) - Vite configuration
+- [electron-builder.yml](mdc:electron-builder.yml) - Build configuration
+- [tailwind.config.js](mdc:tailwind.config.js) - TailwindCSS configuration
 
 
 

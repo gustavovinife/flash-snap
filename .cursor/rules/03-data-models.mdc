@@ -14,18 +14,21 @@ interface Card {
   front: string
   back: string
   context?: string
-  dueDate?: Date
+  due_date?: Date
   interval?: number
-  easeFactor?: number
+  ease_factor?: number
   repetition?: number
-  nextReview?: Date
+  next_review?: Date
+  created_at?: Date
+  deck_id?: string
 }
 ```
 
 The Card model represents an individual flashcard with:
 - `front` & `back`: The primary content on each side of the card
 - `context`: Optional additional context information
-- Spaced repetition metadata: `interval`, `easeFactor`, `repetition`, etc.
+- Spaced repetition metadata: `interval`, `ease_factor`, `repetition`, etc.
+- Database information: `created_at`, `deck_id` for relationships
 
 ## Deck
 ```typescript
@@ -33,8 +36,8 @@ interface Deck {
   id: string
   name: string
   cards: Card[]
-  createdAt: Date
-  lastReviewed?: Date
+  created_at: Date
+  last_reviewed?: Date
   type: 'language' | 'knowledge'
 }
 ```
@@ -45,6 +48,6 @@ The Deck model represents a collection of related cards with:
 - `type`: Categorization of the deck ('language' or 'knowledge')
 - Timestamp metadata for creation and review
 
-These models are central to the application's storage and business logic.
+These models are defined in [src/renderer/src/types/index.ts](mdc:src/renderer/src/types/index.ts) and are central to the application's storage and business logic.
 
 

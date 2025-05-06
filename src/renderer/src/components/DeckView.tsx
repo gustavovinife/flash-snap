@@ -1,26 +1,21 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Deck, Card } from '../types'
+import { Deck } from '../types'
 import { Button, Input } from '../ui/common'
-import { updateDeck } from '../services/storageService'
 import { playPronunciation } from '../services/translationService'
 import { useNavigate } from 'react-router-dom'
+import { useCards } from '@renderer/hooks/useCards'
 
 interface DeckViewProps {
   deck: Deck
-  onBack: () => void
-  onDeckUpdated: (updatedDeck: Deck) => void
 }
 
-export default function DeckView({
-  deck,
-  onBack,
-  onDeckUpdated
-}: DeckViewProps): React.JSX.Element {
+export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
   const { t } = useTranslation()
+  const { createCard, deleteCard } = useCards()
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(null)
   const [isAddingCard, setIsAddingCard] = useState(false)
   const [newCardFront, setNewCardFront] = useState('')
   const [newCardBack, setNewCardBack] = useState('')
@@ -31,26 +26,20 @@ export default function DeckView({
       card.back.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const handleAddCard = (): void => {
+  const handleAddCard = async (): Promise<void> => {
     if (newCardFront.trim() && newCardBack.trim()) {
       const front = newCardFront.trim()
       const back = newCardBack.trim()
       const context = newCardContext.trim()
 
-      const newCard: Card = {
-        id: Date.now().toString(),
+      const newCard = {
         front,
         back,
-        context
+        context,
+        deck_id: deck.id
       }
 
-      const updatedDeck = {
-        ...deck,
-        cards: [...deck.cards, newCard]
-      }
-
-      updateDeck(updatedDeck)
-      onDeckUpdated(updatedDeck)
+      await createCard.mutateAsync(newCard)
 
       // Reset form
       setNewCardFront('')
@@ -60,19 +49,13 @@ export default function DeckView({
     }
   }
 
-  const handleDeleteCard = (cardId: string): void => {
+  const handleDeleteCard = async (cardId: number): Promise<void> => {
     if (confirm(t('common.deleteConfirm', { item: t('common.card') }))) {
-      const updatedDeck = {
-        ...deck,
-        cards: deck.cards.filter((card) => card.id !== cardId)
-      }
-
-      updateDeck(updatedDeck)
-      onDeckUpdated(updatedDeck)
+      await deleteCard.mutateAsync(cardId)
     }
   }
 
-  const handleCardClick = (cardId: string): void => {
+  const handleCardClick = (cardId: number): void => {
     setExpandedCardId(expandedCardId === cardId ? null : cardId)
   }
 
@@ -102,7 +85,7 @@ export default function DeckView({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <button
-            onClick={onBack}
+            onClick={() => navigate('/')}
             className="inline-flex items-center text-gray-500 hover:text-gray-700 mb-2"
           >
             <svg

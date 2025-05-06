@@ -4,13 +4,14 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getDueCards, updateCardAfterReview } from '../services/reviewService'
 import { Card } from '../types'
 import { playPronunciation } from '../services/translationService'
-import { getDecks } from '../services/storageService'
+import { useDecks } from '../hooks/useDecks'
+import { useCards } from '../hooks/useCards'
 
 const ReviewPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [dueCards, setDueCards] = useState<{ card: Card; deckId: string; deckName: string }[]>([])
+  const [dueCards, setDueCards] = useState<{ card: Card; deckId: number; deckName: string }[]>([])
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
   const [reviewComplete, setReviewComplete] = useState(false)
@@ -18,22 +19,24 @@ const ReviewPage: React.FC = () => {
   const [showCardStats, setShowCardStats] = useState(false)
   const [isDeckLanguage, setIsDeckLanguage] = useState(false)
 
+  const { decks, updateDeck } = useDecks()
+  const { updateCard } = useCards()
+
   const currentReview = dueCards[currentCardIndex]
   const currentCard = currentReview?.card
   const currentDeckId = currentReview?.deckId
   const currentDeckName = currentReview?.deckName
 
-  const loadDueCards = useCallback(() => {
-    const cards = getDueCards(id)
+  const loadDueCards = useCallback(async (): Promise<void> => {
+    const cards = await getDueCards(decks, Number(id))
     setDueCards(cards)
 
     // Check if the current deck is a language deck
     if (id) {
-      const decks = getDecks()
-      const deck = decks.find((d) => d.id === id)
+      const deck = decks.find((d) => d.id === Number(id))
       setIsDeckLanguage(deck?.type === 'language')
     }
-  }, [id])
+  }, [id, decks])
 
   useEffect(() => {
     loadDueCards()
@@ -53,7 +56,14 @@ const ReviewPage: React.FC = () => {
   const handleGrade = (grade: number): void => {
     if (!currentCard || !currentDeckId) return
 
-    updateCardAfterReview(currentDeckId, currentCard, grade)
+    const deck = decks.find((d) => d.id === currentDeckId)
+
+    if (!deck) {
+      console.error(`Deck with ID "${currentDeckId}" not found.`)
+      return
+    }
+
+    updateCardAfterReview(deck, currentCard, grade, updateCard, updateDeck)
     setCardsReviewed((prev) => prev + 1)
 
     if (currentCardIndex < dueCards.length - 1) {
@@ -90,13 +100,13 @@ const ReviewPage: React.FC = () => {
         </div>
         <div>
           <span className="text-gray-500">{t('review.easeFactor')}:</span>
-          <span className="ml-2 text-gray-700">{card.easeFactor?.toFixed(2) || 2.5}</span>
+          <span className="ml-2 text-gray-700">{card.ease_factor?.toFixed(2) || 2.5}</span>
         </div>
         <div>
           <span className="text-gray-500">{t('review.nextReview')}:</span>
           <span className="ml-2 text-gray-700">
-            {card.nextReview
-              ? new Date(card.nextReview).toLocaleDateString()
+            {card.next_review
+              ? new Date(card.next_review).toLocaleDateString()
               : t('review.notScheduled')}
           </span>
         </div>

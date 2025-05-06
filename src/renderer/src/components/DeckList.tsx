@@ -1,66 +1,60 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Deck } from '../types'
-import { getDecks, deleteDeck, addDeck } from '../services/storageService'
 import { Button, Input, Select } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { getDueCards } from '../services/reviewService'
 import { calculateDeckProgress } from '../services/reportingService'
 import { Info } from 'lucide-react'
-interface DeckListProps {
-  onDeckSelect: (deck: Deck) => void
-}
+import { useDecks } from '../hooks/useDecks'
+import { useSession } from '@renderer/context/SessionContext'
 
-export default function DeckList({ onDeckSelect }: DeckListProps): React.JSX.Element {
+export default function DeckList(): React.JSX.Element {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const [decks, setDecks] = useState<Deck[]>([])
+  const { user } = useSession()
+
   const [newDeckName, setNewDeckName] = useState('')
   const [isAddingDeck, setIsAddingDeck] = useState(false)
   const [dueCardCount, setDueCardCount] = useState(0)
   const [newDeckType, setNewDeckType] = useState<'language' | 'knowledge'>('language')
 
+  const { decks, createDeck, deleteDeck } = useDecks()
+
   useEffect(() => {
-    loadDecks()
+    async function fetchDueCards(): Promise<void> {
+      // Count due cards
+      const dueCards = await getDueCards(decks)
+      setDueCardCount(dueCards.length)
+    }
 
-    // Count due cards
-    const dueCards = getDueCards()
-    setDueCardCount(dueCards.length)
-  }, [])
+    fetchDueCards()
+  }, [decks])
 
-  const loadDecks = (): void => {
-    const decks = getDecks()
-
-    setDecks(decks)
-  }
-
-  const handleDeleteDeck = (e: React.MouseEvent, deckId: string): void => {
+  const handleDeleteDeck = async (e: React.MouseEvent, deckId: string): Promise<void> => {
     e.stopPropagation() // Prevent triggering the deck click
     if (confirm(t('common.deleteConfirm', { item: t('common.deck') }))) {
-      deleteDeck(deckId)
-      loadDecks()
+      await deleteDeck.mutateAsync(deckId)
     }
   }
 
-  const handleAddDeck = (): void => {
+  const handleAddDeck = async (): Promise<void> => {
+    if (!user) return
+
     if (newDeckName.trim()) {
-      const newDeck: Deck = {
-        id: Date.now().toString(),
+      await createDeck.mutateAsync({
         name: newDeckName.trim(),
-        cards: [],
-        createdAt: new Date(),
-        type: newDeckType
-      }
-      addDeck(newDeck)
+        type: newDeckType,
+        user_id: user.id
+      })
       setNewDeckName('')
       setIsAddingDeck(false)
-      loadDecks()
     }
   }
 
   const handleDeckClick = (deck: Deck): void => {
-    onDeckSelect(deck)
+    navigate(`/deck/${deck.id}`)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {

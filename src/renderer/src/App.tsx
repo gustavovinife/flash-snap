@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import AddCard from './components/AddCard'
 import Layout from './components/Layout'
-import { getDecks } from './services/storageService'
+import { useDecks } from './hooks/useDecks'
 
 function App(): React.JSX.Element {
+  const { decks } = useDecks()
   const [capturedText, setCapturedText] = useState<string | null>(null)
   const navigate = useNavigate()
 
@@ -21,9 +22,8 @@ function App(): React.JSX.Element {
     setCapturedText(null)
   }
 
-  const handleCardAdded = (deckId: string): void => {
+  const handleCardAdded = (deckId: number): void => {
     // Find and select the deck that the card was added to
-    const decks = getDecks()
     const updatedDeck = decks.find((deck) => deck.id === deckId)
     if (updatedDeck) {
       navigate(`/deck/${deckId}`)

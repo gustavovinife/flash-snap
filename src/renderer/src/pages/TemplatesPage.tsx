@@ -3,10 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { Button, Input } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { Template, getTemplates, installTemplate } from '../services/templateService'
-
+import { useDecks } from '../hooks/useDecks'
+import { useCards } from '../hooks/useCards'
+import { useSession } from '@renderer/context/SessionContext'
 export default function TemplatesPage(): React.JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { createDeck } = useDecks()
+  const { createManyCards } = useCards()
+
+  const { user } = useSession()
+
   const [templates, setTemplates] = useState<Template[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -46,11 +53,16 @@ export default function TemplatesPage(): React.JSX.Element {
     setSelectedTemplate(template)
   }
 
-  const handleInstallTemplate = (): void => {
+  const handleInstallTemplate = async (): Promise<void> => {
     if (!selectedTemplate) return
 
     // Install the template
-    const newDeckId = installTemplate(selectedTemplate)
+    const newDeckId = await installTemplate(
+      selectedTemplate,
+      createDeck,
+      createManyCards,
+      user?.id ?? ''
+    )
 
     // Navigate to the deck view
     navigate(`/deck/${newDeckId}`)

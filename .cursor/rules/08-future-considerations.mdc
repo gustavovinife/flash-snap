@@ -1,0 +1,37 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Future Considerations
+
+Based on the Architecture Decision Record, the following enhancements are planned for future releases:
+
+## Offline Support
+- Implement offline mode with local caching when Supabase is unavailable
+- Provide seamless synchronization when connection is restored
+- Consider IndexedDB or similar browser storage solution for offline data
+
+## Template Improvements
+- Allow template downloading from a server rather than bundling them with the app
+- Reduce initial app size by moving templates to on-demand downloads
+- Create versioning system for templates to support updates
+- Implement a community-driven template marketplace or sharing platform
+
+## User Experience Enhancements
+- Implement customizable global shortcut settings on the Settings Page
+- Allow users to configure their preferred review times
+- Add notification system for review reminders
+- Support for different learning algorithms beyond SM-2
+
+## Technical Improvements
+- Expand the reusable component library under `/ui` for better developer velocity
+- Improve test coverage with unit and integration tests
+- Consider migration to newer Electron versions as they become available
+- Optimize bundle size for faster startup and better performance
+
+## Additional Features
+- Multi-device synchronization through Supabase
+- Advanced statistics and learning analytics
+- Collaboration features for shared decks
+- Mobile companion app

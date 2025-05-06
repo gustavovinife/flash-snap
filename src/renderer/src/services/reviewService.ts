@@ -1,5 +1,4 @@
-import { Card } from '../types'
-import { getDecks, updateDeck } from './storageService'
+import { Card, Deck } from '../types'
 
 const INITIAL_EASE_FACTOR = 2.5
 const MIN_EASE_FACTOR = 1.3
@@ -12,7 +11,7 @@ const MIN_EASE_FACTOR = 1.3
  * @returns Updated scheduling properties for the card
  */
 export function sm2(card: Card, grade: number): Partial<Card> {
-  let { interval = 0, repetition = 0, easeFactor = INITIAL_EASE_FACTOR } = card
+  let { interval = 0, repetition = 0, ease_factor = INITIAL_EASE_FACTOR } = card
 
   if (grade < 3) {
     // Poor recall: reset repetition and set minimal interval
@@ -20,18 +19,18 @@ export function sm2(card: Card, grade: number): Partial<Card> {
     interval = 1
   } else {
     // Good recall: increase interval based on repetition count
-    interval = repetition === 0 ? 1 : repetition === 1 ? 6 : Math.round(interval * easeFactor)
+    interval = repetition === 0 ? 1 : repetition === 1 ? 6 : Math.round(interval * ease_factor)
     repetition += 1
   }
 
   // Adjust ease factor (EF)
-  easeFactor += 0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02)
-  easeFactor = Math.max(easeFactor, MIN_EASE_FACTOR)
+  ease_factor += 0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02)
+  ease_factor = Math.max(ease_factor, MIN_EASE_FACTOR)
 
-  const nextReview = new Date()
-  nextReview.setDate(nextReview.getDate() + interval)
+  const next_review = new Date()
+  next_review.setDate(next_review.getDate() + interval)
 
-  return { interval, repetition, easeFactor, nextReview }
+  return { interval, repetition, ease_factor, next_review }
 }
 
 /**
@@ -40,20 +39,21 @@ export function sm2(card: Card, grade: number): Partial<Card> {
  * @param deckId Optional: only return cards from a specific deck
  * @returns List of due cards with their deck context
  */
-export function getDueCards(deckId?: string): { card: Card; deckId: string; deckName: string }[] {
-  const decks = getDecks()
-
+export async function getDueCards(
+  decks: Deck[],
+  deckId?: number
+): Promise<{ card: Card; deckId: number; deckName: string }[]> {
   const now = new Date()
 
   // Normalize "today" to ignore time component
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
   const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
-  const dueCards: { card: Card; deckId: string; deckName: string }[] = []
+  const dueCards: { card: Card; deckId: number; deckName: string }[] = []
 
   for (const deck of decksToCheck) {
     for (const card of deck.cards) {
-      const reviewDate = card.nextReview ? new Date(card.nextReview) : null
+      const reviewDate = card.next_review ? new Date(card.next_review) : null
       const reviewDateWithNoTime = reviewDate
         ? new Date(reviewDate.getFullYear(), reviewDate.getMonth(), reviewDate.getDate())
         : null
@@ -71,30 +71,28 @@ export function getDueCards(deckId?: string): { card: Card; deckId: string; deck
 /**
  * Updates a card after a review session and saves it back to its deck.
  *
- * @param deckId The ID of the deck containing the card
+ * @param deck The deck containing the card
  * @param card The card being reviewed
  * @param grade The recall grade (0–5)
  */
-export function updateCardAfterReview(deckId: string, card: Card, grade: number): void {
+export async function updateCardAfterReview(
+  deck: Deck,
+  card: Card,
+  grade: number,
+  updateCard: any,
+  updateDeck: any
+): Promise<void> {
   const updatedCard = { ...card, ...sm2(card, grade) }
 
-  const decks = getDecks()
-  const deck = decks.find((d) => d.id === deckId)
+  // Update card in the database
+  await updateCard.mutateAsync(updatedCard)
 
   if (!deck) {
-    console.error(`Deck with ID "${deckId}" not found.`)
+    console.error(`Deck  not found.`)
     return
   }
 
-  const cardIndex = deck.cards.findIndex((c) => c.id === card.id)
-
-  if (cardIndex === -1) {
-    console.error(`Card with ID "${card.id}" not found in deck "${deckId}".`)
-    return
-  }
-
-  deck.cards[cardIndex] = updatedCard
-  deck.lastReviewed = new Date()
-
-  updateDeck(deck)
+  // Update the deck's last reviewed timestamp
+  deck.last_reviewed = new Date()
+  await updateDeck.mutateAsync(deck)
 }

@@ -1,6 +1,3 @@
-import { Deck } from '../types'
-import { addDeck } from './storageService'
-
 export interface Template {
   name: string
   description: string
@@ -29,25 +26,37 @@ export const getTemplates = async (): Promise<Template[]> => {
 }
 
 // Function to install a template as a new deck
-export const installTemplate = (template: Template): string => {
+export const installTemplate = async (
+  template: Template,
+  addDeck: any,
+  createManyCards: any,
+  user_id: string
+): Promise<string> => {
+  if (!user_id) {
+    throw new Error('User ID is required')
+  }
   // Create a new deck from the template
-  const newDeck: Deck = {
-    id: Date.now().toString(),
+  const newDeck = {
     name: template.name,
-    cards: template.cards.map((card) => ({
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      front: card.front,
-      back: card.back,
-      context: card.content || ''
-    })),
-    createdAt: new Date(),
+    user_id: user_id,
+    created_at: new Date(),
     type: template.type
   }
 
   // Add the deck
-  addDeck(newDeck)
+  const response = await addDeck.mutateAsync(newDeck)
+
+  // Add the cards
+  await createManyCards.mutateAsync(
+    template.cards.map((card) => ({
+      front: card.front,
+      back: card.back,
+      context: card.content || '',
+      deck_id: response.id
+    }))
+  )
 
   //notify the user
   alert(`Template ${template.name} installed successfully`)
-  return newDeck.id
+  return response.id
 }

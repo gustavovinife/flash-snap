@@ -4,7 +4,9 @@ import { Card, Deck } from '../types'
 export function calculateDeckProgress(deck: Deck): number {
   if (!deck.cards.length) return 0
 
-  const masteredCards = deck.cards.filter((card) => card.easeFactor && card.easeFactor > 2.5).length
+  const masteredCards = deck.cards.filter(
+    (card) => card.ease_factor && card.ease_factor > 2.5
+  ).length
   return Math.round((masteredCards / deck.cards.length) * 100)
 }
 
@@ -15,11 +17,11 @@ export function getCardsByDifficulty(cards: Card[]): {
   hard: Card[]
 } {
   return {
-    easy: cards.filter((card) => card.easeFactor && card.easeFactor > 2.5),
+    easy: cards.filter((card) => card.ease_factor && card.ease_factor > 2.5),
     medium: cards.filter(
-      (card) => card.easeFactor && card.easeFactor >= 1.8 && card.easeFactor <= 2.5
+      (card) => card.ease_factor && card.ease_factor >= 1.8 && card.ease_factor <= 2.5
     ),
-    hard: cards.filter((card) => card.easeFactor && card.easeFactor < 1.8)
+    hard: cards.filter((card) => card.ease_factor && card.ease_factor < 1.8)
   }
 }
 
@@ -27,7 +29,7 @@ export function getCardsByDifficulty(cards: Card[]): {
 export function calculateAverageEaseFactor(cards: Card[]): number {
   if (!cards.length) return 0
 
-  const total = cards.reduce((sum, card) => sum + (card.easeFactor || 2.5), 0)
+  const total = cards.reduce((sum, card) => sum + (card.ease_factor || 2.5), 0)
   return parseFloat((total / cards.length).toFixed(2))
 }
 
@@ -40,7 +42,7 @@ export function calculateRetentionRate(cards: Card[]): number {
 
   // Cards with ease factor > 1.3 likely had mostly correct responses
   const goodResponses = cardsWithHistory.filter(
-    (card) => card.easeFactor && card.easeFactor > 1.3
+    (card) => card.ease_factor && card.ease_factor > 1.3
   ).length
   return Math.round((goodResponses / cardsWithHistory.length) * 100)
 }
@@ -69,8 +71,8 @@ export function getReviewForecast(cards: Card[]): { date: string; count: number 
 
   // Count cards due on each date
   cards.forEach((card) => {
-    if (card.nextReview) {
-      const nextReview = new Date(card.nextReview)
+    if (card.next_review) {
+      const nextReview = new Date(card.next_review)
       const reviewDate = nextReview.toISOString().split('T')[0]
 
       if (forecast[reviewDate] !== undefined) {

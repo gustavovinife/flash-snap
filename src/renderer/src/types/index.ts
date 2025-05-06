@@ -1,20 +1,22 @@
 export interface Card {
-  id: string
+  id: number
   front: string
   back: string
   context?: string
-  dueDate?: Date
+  due_date?: Date
   interval?: number
-  easeFactor?: number
+  ease_factor?: number
   repetition?: number
-  nextReview?: Date
+  next_review?: Date
+  created_at?: Date
+  deck_id?: number
 }
 
 export interface Deck {
-  id: string
+  id: number
   name: string
   cards: Card[]
-  createdAt: Date
-  lastReviewed?: Date
+  created_at: Date
+  last_reviewed?: Date
   type: 'language' | 'knowledge'
 }

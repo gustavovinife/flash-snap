@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Deck, Card } from '../types'
-import { getDecks } from '../services/storageService'
 import { Button } from '../ui/common'
 import {
   calculateAverageEaseFactor,
@@ -10,7 +9,7 @@ import {
   calculateReviewEfficiency,
   getCardsByDifficulty
 } from '../services/reportingService'
-
+import { useDecks } from '../hooks/useDecks'
 // Categories of cards based on performance
 interface CardStats {
   total: number
@@ -44,6 +43,9 @@ const ReportsPage: React.FC = () => {
   const [averageEaseFactor, setAverageEaseFactor] = useState(0)
   const [retentionRate, setRetentionRate] = useState(0)
   const [reviewEfficiency, setReviewEfficiency] = useState(0)
+
+  const { decks } = useDecks()
+
   const [cardsByDifficulty, setCardsByDifficulty] = useState<{
     easy: Card[]
     medium: Card[]
@@ -52,8 +54,7 @@ const ReportsPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const decks = getDecks()
-      const foundDeck = decks.find((d) => d.id === id)
+      const foundDeck = decks.find((d) => d.id === Number(id))
 
       if (foundDeck) {
         setDeck(foundDeck)
@@ -70,7 +71,7 @@ const ReportsPage: React.FC = () => {
 
       setLoading(false)
     }
-  }, [id, navigate])
+  }, [decks, id, navigate])
 
   const calculateCardStats = (cards: Card[]): void => {
     const today = new Date()
@@ -103,19 +104,19 @@ const ReportsPage: React.FC = () => {
         stats.new++
       } else if (card.repetition < 3) {
         stats.learning++
-      } else if (card.easeFactor && card.easeFactor > 2.5) {
+      } else if (card.ease_factor && card.ease_factor > 2.5) {
         stats.mastered++
       } else {
         stats.review++
       }
 
       // Count cards due soon
-      if (card.nextReview && card.nextReview <= oneWeekFromNow) {
+      if (card.next_review && card.next_review <= oneWeekFromNow) {
         stats.dueSoon++
       }
 
       // Categorize by ease factor
-      const ef = card.easeFactor || 2.5
+      const ef = card.ease_factor || 2.5
       if (ef < 1.5) {
         easeFactors['<1.5']++
       } else if (ef < 2.0) {
@@ -175,8 +176,8 @@ const ReportsPage: React.FC = () => {
           {t('reports.title', { deckName: deck.name })}
         </h2>
         <p className="text-sm text-gray-400 mt-1">
-          {deck.lastReviewed
-            ? t('common.lastReviewed', { date: new Date(deck.lastReviewed).toLocaleDateString() })
+          {deck.last_reviewed
+            ? t('common.lastReviewed', { date: new Date(deck.last_reviewed).toLocaleDateString() })
             : t('common.neverReviewed')}
         </p>
       </div>

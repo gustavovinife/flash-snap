@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Deck, Card } from '../types'
+import { Card } from '../types'
 import { Button, Input, Select } from '../ui/common'
-import { getDecks, updateDeck } from '../services/storageService'
+import { useDecks } from '../hooks/useDecks'
+import { useCards } from '../hooks/useCards'
 
 interface AddCardProps {
   capturedText: string
   onClose: () => void
-  onCardAdded: (deckId: string) => void
+  onCardAdded: (deckId: number) => void
 }
 
 export default function AddCard({
@@ -16,48 +17,44 @@ export default function AddCard({
   onCardAdded
 }: AddCardProps): React.JSX.Element {
   const { t } = useTranslation()
-  const [decks, setDecks] = useState<Deck[]>([])
+  const { decks } = useDecks()
+
+  const { createCard } = useCards()
   const [selectedDeckId, setSelectedDeckId] = useState<string>('')
   const [cardFront, setCardFront] = useState(capturedText)
   const [cardBack, setCardBack] = useState('')
   const [cardContext, setCardContext] = useState('')
+
   useEffect(() => {
-    // Load decks
-    const availableDecks = getDecks()
-    setDecks(availableDecks)
-
     // Set first deck as default if available
-    if (availableDecks.length > 0) {
-      setSelectedDeckId(availableDecks[0].id)
+    if (decks.length > 0) {
+      setSelectedDeckId(decks[0].id.toString())
     }
-  }, [])
+  }, [decks])
 
-  const handleAddCard = (): void => {
+  const handleAddCard = async (): Promise<void> => {
     if (!cardFront.trim() || !selectedDeckId) return
 
     // Find the selected deck
-    const targetDeck = decks.find((deck) => deck.id === selectedDeckId)
+    const targetDeck = decks.find((deck) => deck.id === Number(selectedDeckId))
     if (!targetDeck) return
 
     // Create new card
     const newCard: Card = {
-      id: Date.now().toString(),
+      id: Date.now(),
       front: cardFront.trim(),
       back: cardBack.trim(),
       context: cardContext
     }
 
-    // Add card to deck
-    const updatedDeck = {
-      ...targetDeck,
-      cards: [...targetDeck.cards, newCard]
-    }
-
     // Save to storage
-    updateDeck(updatedDeck)
+    await createCard.mutateAsync({
+      ...newCard,
+      deck_id: Number(selectedDeckId)
+    })
 
     // Notify parent
-    onCardAdded(selectedDeckId)
+    onCardAdded(Number(selectedDeckId))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
@@ -87,7 +84,7 @@ export default function AddCard({
               onChange={(e) => setSelectedDeckId(e.target.value)}
               options={decks.map((deck) => ({
                 label: deck.name,
-                value: deck.id
+                value: deck.id.toString()
               }))}
             />
           </div>

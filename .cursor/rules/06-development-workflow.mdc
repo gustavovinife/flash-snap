@@ -13,7 +13,7 @@ This document outlines the development workflow and important configuration file
 - [electron-builder.yml](mdc:electron-builder.yml) - Electron build configuration
 - [tailwind.config.js](mdc:tailwind.config.js) - TailwindCSS configuration
 - [tsconfig.json](mdc:tsconfig.json) - TypeScript configuration
-- [.env.example](mdc:.env.example) - Example environment variables
+- [.env.example](mdc:.env.example) - Example environment variables for Supabase connection
 
 ## Build Process
 Flash Snap uses Electron Builder to package the application for different platforms:

@@ -41,7 +41,10 @@ export const useCards = (): IUseCards => {
       })
       queryClient.setQueryData<Deck[]>(['decks'], (oldData) => {
         return oldData?.map((deck) => {
-          return { ...deck, cards: [newCard, ...deck.cards] }
+          if (deck.id === newCard.deck_id) {
+            return { ...deck, cards: [newCard, ...deck.cards] }
+          }
+          return deck
         })
       })
     }

@@ -354,7 +354,7 @@ app.on('web-contents-created', (_, contents) => {
   // Allow navigation to auth providers and redirect URLs
   contents.on('will-navigate', (event, navigationUrl) => {
     const parsedUrl = new URL(navigationUrl)
-    const allowedDomains = ['accounts.google.com', 'ndkwgtcfvfrsagghsujx.supabase.co', 'localhost']
+    const allowedDomains = ['accounts.google.com', 'svufbwjdrbmiyvhimutm.supabase.co', 'localhost']
 
     // Allow navigation only to specific domains
     if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
@@ -370,7 +370,7 @@ app.on('web-contents-created', (_, contents) => {
   contents.setWindowOpenHandler(({ url }) => {
     console.log('Window open request for URL:', url)
     const parsedUrl = new URL(url)
-    const allowedDomains = ['accounts.google.com', 'ndkwgtcfvfrsagghsujx.supabase.co']
+    const allowedDomains = ['accounts.google.com', 'svufbwjdrbmiyvhimutm.supabase.co']
 
     if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
       console.log('Allowing window open for URL:', url)

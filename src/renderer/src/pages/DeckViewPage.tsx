@@ -11,7 +11,7 @@ const DeckViewPage: React.FC = () => {
   const { decks, isLoading } = useDecks()
 
   const deck = useMemo(() => {
-    return decks.find((d) => d.id === Number(id))
+    return decks.find((d) => d.id === id)
   }, [decks, id])
 
   if (isLoading) {

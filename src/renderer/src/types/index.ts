@@ -9,14 +9,15 @@ export interface Card {
   repetition?: number
   next_review?: Date
   created_at?: Date
-  deck_id?: number
+  deck_id?: string
 }
 
 export interface Deck {
-  id: number
+  id: string
   name: string
   cards: Card[]
   created_at: Date
   last_reviewed?: Date
   type: 'language' | 'knowledge'
+  user_id?: string
 }

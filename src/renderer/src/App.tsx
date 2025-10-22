@@ -22,7 +22,7 @@ function App(): React.JSX.Element {
     setCapturedText(null)
   }
 
-  const handleCardAdded = (deckId: number): void => {
+  const handleCardAdded = (deckId: string): void => {
     // Find and select the deck that the card was added to
     const updatedDeck = decks.find((deck) => deck.id === deckId)
     if (updatedDeck) {

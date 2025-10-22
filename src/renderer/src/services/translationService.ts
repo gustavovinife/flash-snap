@@ -1,15 +1,25 @@
 import axios from 'axios'
+import supabase from './supabaseService'
 
 export async function playPronunciation(text: string): Promise<void> {
   try {
+    // Get the current session to use the access token
+    const {
+      data: { session }
+    } = await supabase.auth.getSession()
+
+    if (!session) {
+      console.error('No active session for TTS request')
+      return
+    }
+
     const response = await axios.post(
-      'https://ndkwgtcfvfrsagghsujx.supabase.co/functions/v1/swift-service',
+      'https://svufbwjdrbmiyvhimutm.supabase.co/functions/v1/bright-function',
       { text },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ka3dndGNmdmZyc2FnZ2hzdWp4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NTQzMDMxOCwiZXhwIjoyMDYxMDA2MzE4fQ.6wJVsCzlMBZKfAKhGbK58hJTkP77GV5f7Woym_JpnwM'
+          Authorization: `Bearer ${session.access_token}`
         },
         responseType: 'arraybuffer' // Important: this ensures you get the binary data
       }

@@ -28,24 +28,29 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
 
   const handleAddCard = async (): Promise<void> => {
     if (newCardFront.trim() && newCardBack.trim()) {
-      const front = newCardFront.trim()
-      const back = newCardBack.trim()
-      const context = newCardContext.trim()
+      try {
+        const front = newCardFront.trim()
+        const back = newCardBack.trim()
+        const context = newCardContext.trim()
 
-      const newCard = {
-        front,
-        back,
-        context,
-        deck_id: deck.id
+        const newCard = {
+          front,
+          back,
+          context,
+          deck_id: deck.id
+        }
+
+        await createCard.mutateAsync(newCard)
+
+        // Reset form
+        setNewCardFront('')
+        setNewCardBack('')
+        setNewCardContext('')
+        setIsAddingCard(false)
+      } catch (error) {
+        console.error('Error adding card:', error)
+        // You could add a toast notification here
       }
-
-      await createCard.mutateAsync(newCard)
-
-      // Reset form
-      setNewCardFront('')
-      setNewCardBack('')
-      setNewCardContext('')
-      setIsAddingCard(false)
     }
   }
 
@@ -75,7 +80,7 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
   }
 
   const handleOnKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && newCardFront.trim() && newCardBack.trim()) {
       handleAddCard()
     }
   }

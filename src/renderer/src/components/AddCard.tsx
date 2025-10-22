@@ -8,7 +8,7 @@ import { useCards } from '../hooks/useCards'
 interface AddCardProps {
   capturedText: string
   onClose: () => void
-  onCardAdded: (deckId: number) => void
+  onCardAdded: (deckId: string) => void
 }
 
 export default function AddCard({
@@ -28,7 +28,7 @@ export default function AddCard({
   useEffect(() => {
     // Set first deck as default if available
     if (decks.length > 0) {
-      setSelectedDeckId(decks[0].id.toString())
+      setSelectedDeckId(decks[0].id)
     }
   }, [decks])
 
@@ -36,25 +36,27 @@ export default function AddCard({
     if (!cardFront.trim() || !selectedDeckId) return
 
     // Find the selected deck
-    const targetDeck = decks.find((deck) => deck.id === Number(selectedDeckId))
+    const targetDeck = decks.find((deck) => deck.id === selectedDeckId)
     if (!targetDeck) return
 
-    // Create new card
-    const newCard: Card = {
-      id: Date.now(),
-      front: cardFront.trim(),
-      back: cardBack.trim(),
-      context: cardContext
+    try {
+      // Create new card
+      const newCard = {
+        front: cardFront.trim(),
+        back: cardBack.trim(),
+        context: cardContext.trim(),
+        deck_id: selectedDeckId
+      }
+
+      // Save to storage
+      await createCard.mutateAsync(newCard)
+
+      // Notify parent
+      onCardAdded(selectedDeckId)
+    } catch (error) {
+      console.error('Error adding card:', error)
+      // You could add a toast notification here
     }
-
-    // Save to storage
-    await createCard.mutateAsync({
-      ...newCard,
-      deck_id: Number(selectedDeckId)
-    })
-
-    // Notify parent
-    onCardAdded(Number(selectedDeckId))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
@@ -84,7 +86,7 @@ export default function AddCard({
               onChange={(e) => setSelectedDeckId(e.target.value)}
               options={decks.map((deck) => ({
                 label: deck.name,
-                value: deck.id.toString()
+                value: deck.id
               }))}
             />
           </div>

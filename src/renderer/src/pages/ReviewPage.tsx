@@ -1,88 +1,126 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getDueCards, updateCardAfterReview } from '../services/reviewService'
 import { Card } from '../types'
-import { playPronunciation } from '../services/translationService'
+import { getDueCards, updateCardAfterReview } from '../services/reviewService'
 import { useDecks } from '../hooks/useDecks'
 import { useCards } from '../hooks/useCards'
+import { playPronunciation } from '../services/translationService'
 
 const ReviewPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [dueCards, setDueCards] = useState<{ card: Card; deckId: number; deckName: string }[]>([])
+  const { decks } = useDecks()
+  const { updateCard } = useCards()
+
+  const [dueCards, setDueCards] = useState<{ card: Card; deckId: string; deckName: string }[]>([])
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
   const [reviewComplete, setReviewComplete] = useState(false)
   const [cardsReviewed, setCardsReviewed] = useState(0)
   const [showCardStats, setShowCardStats] = useState(false)
-  const [isDeckLanguage, setIsDeckLanguage] = useState(false)
+  const [currentDeckName, setCurrentDeckName] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
-  const { decks, updateDeck } = useDecks()
-  const { updateCard } = useCards()
+  // Safe access to currentCard to prevent accessing undefined
+  const currentCard =
+    dueCards.length > 0 && currentCardIndex < dueCards.length
+      ? dueCards[currentCardIndex].card
+      : null
 
-  const currentReview = dueCards[currentCardIndex]
-  const currentCard = currentReview?.card
-  const currentDeckId = currentReview?.deckId
-  const currentDeckName = currentReview?.deckName
-
-  const loadDueCards = useCallback(async (): Promise<void> => {
-    const cards = await getDueCards(decks, Number(id))
-    setDueCards(cards)
-
-    // Check if the current deck is a language deck
-    if (id) {
-      const deck = decks.find((d) => d.id === Number(id))
-      setIsDeckLanguage(deck?.type === 'language')
-    }
-  }, [id, decks])
+  const isDeckLanguage =
+    currentCard && currentCard.deck_id
+      ? decks.find((d) => d.id === currentCard.deck_id)?.type === 'language'
+      : false
 
   useEffect(() => {
+    async function loadDueCards(): Promise<void> {
+      try {
+        setIsLoading(true)
+        const cards = await getDueCards(decks, id)
+
+        // Shuffle the cards to avoid always reviewing in the same order
+        const shuffledCards = [...cards].sort(() => Math.random() - 0.5)
+
+        setDueCards(shuffledCards)
+
+        if (shuffledCards.length > 0) {
+          setCurrentDeckName(shuffledCards[0].deckName)
+        }
+      } catch (error) {
+        console.error('Error loading due cards:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadDueCards()
-  }, [loadDueCards])
+  }, [decks, id])
 
-  const handleBack = (): unknown => navigate(id ? `/deck/${id}` : '/')
-  const handleShowAnswer = (): void => setShowAnswer(true)
-  const toggleCardStats = (): void => setShowCardStats((prev) => !prev)
+  const handleBack = useCallback(() => {
+    navigate(id ? `/deck/${id}` : '/')
+  }, [navigate, id])
 
-  const handlePlayAudio = (e: React.MouseEvent): void => {
-    e.stopPropagation()
-    if (currentCard?.front) {
-      playPronunciation(currentCard.front)
-    }
-  }
+  const handleShowAnswer = useCallback(() => {
+    setShowAnswer(true)
+  }, [])
 
-  const handleGrade = (grade: number): void => {
-    if (!currentCard || !currentDeckId) return
+  const handleGrade = useCallback(
+    async (grade: number) => {
+      if (!currentCard || currentCardIndex >= dueCards.length) return
 
-    const deck = decks.find((d) => d.id === currentDeckId)
+      const currentDueCard = dueCards[currentCardIndex]
+      const currentDeck = decks.find((d) => d.id === currentDueCard.deckId)
 
-    if (!deck) {
-      console.error(`Deck with ID "${currentDeckId}" not found.`)
-      return
-    }
+      if (currentDeck) {
+        try {
+          await updateCardAfterReview(
+            currentDeck,
+            currentCard,
+            grade,
+            updateCard,
+            { mutateAsync: async () => {} } // We don't need to update the deck in this case
+          )
 
-    updateCardAfterReview(deck, currentCard, grade, updateCard, updateDeck)
-    setCardsReviewed((prev) => prev + 1)
+          setCardsReviewed((prev) => prev + 1)
 
-    if (currentCardIndex < dueCards.length - 1) {
-      setCurrentCardIndex((prev) => prev + 1)
-      setShowAnswer(false)
-      setShowCardStats(false)
-    } else {
-      setReviewComplete(true)
-    }
-  }
+          // Remove the current card from dueCards since it's been reviewed
+          setDueCards((prev) => prev.filter((_, index) => index !== currentCardIndex))
 
-  const handleRestartReview = (): void => {
-    loadDueCards()
+          // If there are more cards, stay at the same index (since we removed the current card)
+          // If no more cards, mark review as complete
+          if (dueCards.length <= 1) {
+            setReviewComplete(true)
+          } else {
+            setShowAnswer(false)
+            setShowCardStats(false)
+          }
+        } catch (error) {
+          console.error('Error updating card after review:', error)
+        }
+      }
+    },
+    [currentCard, currentCardIndex, dueCards, decks, updateCard]
+  )
+
+  const toggleCardStats = useCallback(() => {
+    setShowCardStats((prev) => !prev)
+  }, [])
+
+  const handleRestartReview = useCallback(() => {
     setCurrentCardIndex(0)
     setShowAnswer(false)
     setReviewComplete(false)
     setCardsReviewed(0)
     setShowCardStats(false)
-  }
+  }, [])
+
+  const handlePlayAudio = useCallback(() => {
+    if (currentCard?.front) {
+      playPronunciation(currentCard.front)
+    }
+  }, [currentCard])
 
   const formatCardStats = (card: Card): React.ReactNode => (
     <div className="mt-4 p-4 bg-gray-50 rounded-lg text-sm">
@@ -113,6 +151,33 @@ const ReviewPage: React.FC = () => {
       </div>
     </div>
   )
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleBack}
+            className="flex items-center text-sm text-gray hover:text-primary"
+          >
+            <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            {t('common.back')}
+          </button>
+        </div>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <h2 className="text-2xl font-medium mb-6">{t('review.reviewMode')}</h2>
+          <p className="text-gray-600">{t('common.loading')}</p>
+        </div>
+      </div>
+    )
+  }
 
   if (dueCards.length === 0) {
     return (

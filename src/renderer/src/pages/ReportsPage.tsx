@@ -54,7 +54,7 @@ const ReportsPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const foundDeck = decks.find((d) => d.id === Number(id))
+      const foundDeck = decks.find((d) => d.id === id)
 
       if (foundDeck) {
         setDeck(foundDeck)

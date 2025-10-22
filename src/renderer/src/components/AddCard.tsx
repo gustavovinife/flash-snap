@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Card } from '../types'
 import { Button, Input, Select } from '../ui/common'
 import { useDecks } from '../hooks/useDecks'
 import { useCards } from '../hooks/useCards'

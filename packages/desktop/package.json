@@ -1,6 +1,6 @@
 {
   "name": "@flash-snap/desktop",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Flash Snap Desktop - Electron application for spaced repetition learning",
   "main": "./out/main/index.js",
   "author": "Gustavo Ferreira",
@@ -19,11 +19,11 @@
     "build:win": "yarn build && electron-builder --win --x64",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux --x64",
-    "publish:win": "source .env.sh && yarn build && electron-builder --win --x64 --publish always",
-    "publish:mac": "source .env.sh && yarn build && electron-builder --mac --publish always",
-    "publish:linux": "source .env.sh && yarn build && electron-builder --linux --x64 --publish always",
-    "publish": "source .env.sh && yarn build && electron-builder --mac --win --linux --x64 --publish always",
-    "publish:all": "source .env.sh && yarn build && electron-builder -mwl --x64 --publish always",
+    "publish:win": "env $(cat .env.sh) yarn build && env $(cat .env.sh) electron-builder --win --x64 --publish always",
+    "publish:mac": "env $(cat .env.sh) yarn build && env $(cat .env.sh) electron-builder --mac --publish always",
+    "publish:linux": "env $(cat .env.sh) yarn build && env $(cat .env.sh) electron-builder --linux --x64 --publish always",
+    "publish": "env $(cat .env.sh) yarn build && env $(cat .env.sh) electron-builder --mac --win --linux --x64 --publish always",
+    "publish:all": "env $(cat .env.sh) yarn build && env $(cat .env.sh) electron-builder -mwl --x64 --publish always",
     "clean": "rm -rf node_modules dist out .electron-vite"
   },
   "dependencies": {

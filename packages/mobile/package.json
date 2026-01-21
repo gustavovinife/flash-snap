@@ -1,0 +1,30 @@
+{
+  "name": "@flash-snap/mobile",
+  "version": "1.0.0",
+  "description": "Flash Snap Mobile - React Native application for spaced repetition learning",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "eslint . --ext .ts,.tsx",
+    "clean": "rm -rf node_modules .expo"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.78.0",
+    "expo": "~54.0.20",
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-url-polyfill": "^3.0.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/react": "~19.1.0",
+    "@types/styled-components": "^5.1.35",
+    "@types/styled-components-react-native": "^5.2.5",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}

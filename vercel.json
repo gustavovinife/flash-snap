@@ -1,6 +1,0 @@
-{
-  "buildCommand": "yarn workspace @flash-snap/site build",
-  "outputDirectory": "packages/site/dist",
-  "installCommand": "yarn install",
-  "framework": "vite"
-}

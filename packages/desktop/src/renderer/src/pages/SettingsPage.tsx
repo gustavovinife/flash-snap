@@ -3,12 +3,38 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { getSettings, saveSettings, getLanguages, Settings } from '../services/settingsService'
 import { Button } from '@renderer/ui/common'
+import { useSubscription } from '@renderer/hooks/useSubscription'
+import SubscriptionStatus from '@renderer/components/SubscriptionStatus'
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [settings, setSettings] = useState<Settings>(getSettings())
   const languages = getLanguages()
+  const {
+    subscription,
+    isLoading: subscriptionLoading,
+    openCheckout,
+    openPortal
+  } = useSubscription()
+
+  const handleUpgrade = async (): Promise<void> => {
+    try {
+      await openCheckout()
+    } catch (error) {
+      console.error('Failed to open checkout:', error)
+      alert(t('subscription.checkoutError'))
+    }
+  }
+
+  const handleManageSubscription = async (): Promise<void> => {
+    try {
+      await openPortal()
+    } catch (error) {
+      console.error('Failed to open portal:', error)
+      alert(t('subscription.portalError'))
+    }
+  }
 
   const handleSave = (): void => {
     // Save settings to localStorage via the service
@@ -89,6 +115,17 @@ const SettingsPage: React.FC = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Subscription Section */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-medium mb-6">{t('subscription.title')}</h2>
+        <SubscriptionStatus
+          subscription={subscription}
+          isLoading={subscriptionLoading}
+          onUpgrade={handleUpgrade}
+          onManage={handleManageSubscription}
+        />
       </div>
     </div>
   )

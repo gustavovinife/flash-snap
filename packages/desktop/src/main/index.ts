@@ -218,7 +218,7 @@ function registerGlobalShortcut(): void {
 
       if (hasPermissionError()) {
         showNotification(
-          'Permission denied. Enable it in System Preferences > Security & Privacy > Accessibility.',
+          'Could not access clipboard. Please check your system permissions.',
           'error'
         )
         resetPermissionError()
@@ -239,7 +239,15 @@ function registerGlobalShortcut(): void {
 
         mainWindow?.webContents.send('text-captured', clipboardText)
       } else {
-        console.log('⚠️ No text selected')
+        console.log('⚠️ No text in clipboard')
+        showNotification(
+          'No text found in clipboard.\n\n' +
+            'How to use:\n' +
+            '1. Select text in any app\n' +
+            '2. Copy it (Cmd+C / Ctrl+C)\n' +
+            '3. Press Cmd+Shift+X / Ctrl+Shift+X',
+          'info'
+        )
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)

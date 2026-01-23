@@ -83,7 +83,9 @@ const enUS = {
     knowledge: 'Knowledge',
     deckName: 'Deck name',
     deleteDeck: 'Delete deck',
-    commandToInsertText: 'Highlight a text and press {{key}} to insert it into the deck'
+    commandToInsertText: 'Highlight a text and press {{key}} to insert it into the deck',
+    deckLimitReached: 'Free users can only create 1 deck. Upgrade to Premium for unlimited decks.',
+    upgradeToPremium: 'Upgrade to Premium'
   },
 
   // DeckView component
@@ -197,6 +199,20 @@ const enUS = {
       label: 'Daily Review Time',
       description: 'Set a daily reminder time for your reviews. Default is 9:00 AM.'
     }
+  },
+
+  // Subscription
+  subscription: {
+    title: 'Subscription',
+    currentPlan: 'Current Plan',
+    upgrade: 'Upgrade',
+    manageSubscription: 'Manage Subscription',
+    renewsOn: 'Renews on {{date}}',
+    cancelNotice: 'Your subscription will end on {{date}}. You can reactivate anytime before then.',
+    pastDueNotice:
+      'Your payment is past due. Please update your payment method to continue your subscription.',
+    checkoutError: 'Failed to open checkout. Please try again.',
+    portalError: 'Failed to open subscription portal. Please try again.'
   }
 }
 

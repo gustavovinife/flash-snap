@@ -8,8 +8,8 @@ import {
   Globe,
   Apple,
   Monitor,
-  Github,
   Download,
+  Mail,
 } from "lucide-react";
 
 const PlatformIcon = ({ platform }: { platform: string }) => {
@@ -44,15 +44,6 @@ function App() {
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Flash Snap" className="h-12 w-auto" />
           </div>
-          <a
-            href="https://github.com/gustavowebjs/flash-snap"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-          >
-            <Github className="w-5 h-5" />
-            <span className="hidden sm:inline">GitHub</span>
-          </a>
         </nav>
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
@@ -224,21 +215,15 @@ function App() {
           </div>
           <div className="flex gap-6 text-sm text-gray-500">
             <a
-              href="https://github.com/gustavowebjs/flash-snap"
+              href="mailto:support@flashsnap.app"
               className="hover:text-white transition-colors flex items-center gap-1"
             >
-              <Github className="w-4 h-4" />
-              GitHub
-            </a>
-            <a
-              href="https://github.com/gustavowebjs/flash-snap/issues"
-              className="hover:text-white transition-colors"
-            >
-              Report Issue
+              <Mail className="w-4 h-4" />
+              Contact
             </a>
           </div>
           <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Flash Snap. Open source.
+            © {new Date().getFullYear()} Flash Snap. All rights reserved.
           </p>
         </div>
       </footer>

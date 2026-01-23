@@ -83,7 +83,10 @@ const ptBR = {
     deckType: 'Tipo de Baralho',
     language: 'Idioma',
     knowledge: 'Conhecimento',
-    commandToInsertText: 'Selecione um texto e pressione {{key}} para inserir no baralho'
+    commandToInsertText: 'Selecione um texto e pressione {{key}} para inserir no baralho',
+    deckLimitReached:
+      'Usuários Free podem criar apenas 1 baralho. Faça upgrade para Premium para baralhos ilimitados.',
+    upgradeToPremium: 'Upgrade para Premium'
   },
 
   // DeckView component
@@ -198,6 +201,21 @@ const ptBR = {
       label: 'Horário Diário de Revisão',
       description: 'Defina um horário diário para lembretes de revisão. O padrão é 9:00.'
     }
+  },
+
+  // Subscription
+  subscription: {
+    title: 'Assinatura',
+    currentPlan: 'Plano Atual',
+    upgrade: 'Upgrade',
+    manageSubscription: 'Gerenciar Assinatura',
+    renewsOn: 'Renova em {{date}}',
+    cancelNotice:
+      'Sua assinatura terminará em {{date}}. Você pode reativar a qualquer momento antes disso.',
+    pastDueNotice:
+      'Seu pagamento está atrasado. Por favor, atualize seu método de pagamento para continuar sua assinatura.',
+    checkoutError: 'Falha ao abrir o checkout. Por favor, tente novamente.',
+    portalError: 'Falha ao abrir o portal de assinatura. Por favor, tente novamente.'
   }
 }
 

@@ -8,6 +8,7 @@ import { calculateDeckProgress } from '../services/reportingService'
 import { Info } from 'lucide-react'
 import { useDecks } from '../hooks/useDecks'
 import { useSession } from '@renderer/context/SessionContext'
+import { useSubscription } from '../hooks/useSubscription'
 
 export default function DeckList(): React.JSX.Element {
   const navigate = useNavigate()
@@ -19,8 +20,10 @@ export default function DeckList(): React.JSX.Element {
   const [isAddingDeck, setIsAddingDeck] = useState(false)
   const [dueCardCount, setDueCardCount] = useState(0)
   const [newDeckType, setNewDeckType] = useState<'language' | 'knowledge'>('language')
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false)
 
   const { decks, createDeck, deleteDeck } = useDecks()
+  const { canCreateDeck, openCheckout } = useSubscription()
 
   useEffect(() => {
     async function fetchDueCards(): Promise<void> {
@@ -36,6 +39,24 @@ export default function DeckList(): React.JSX.Element {
     e.stopPropagation() // Prevent triggering the deck click
     if (confirm(t('common.deleteConfirm', { item: t('common.deck') }))) {
       await deleteDeck.mutateAsync(deckId)
+    }
+  }
+
+  const handleStartAddDeck = (): void => {
+    if (canCreateDeck(decks.length)) {
+      setIsAddingDeck(true)
+      setShowUpgradePrompt(false)
+    } else {
+      setShowUpgradePrompt(true)
+      setIsAddingDeck(false)
+    }
+  }
+
+  const handleUpgradeClick = async (): Promise<void> => {
+    try {
+      await openCheckout()
+    } catch (error) {
+      console.error('Failed to open checkout:', error)
     }
   }
 
@@ -100,7 +121,7 @@ export default function DeckList(): React.JSX.Element {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsAddingDeck(true)}
+            onClick={handleStartAddDeck}
             leftIcon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -141,6 +162,15 @@ export default function DeckList(): React.JSX.Element {
           </Button>
         </div>
       </div>
+
+      {showUpgradePrompt && (
+        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <p className="text-sm text-amber-800 mb-3">{t('deckList.deckLimitReached')}</p>
+          <Button variant="primary" size="sm" onClick={handleUpgradeClick}>
+            {t('deckList.upgradeToPremium')}
+          </Button>
+        </div>
+      )}
 
       {isAddingDeck && (
         <div className="mb-6 bg-white rounded-lg border border-gray-100 overflow-hidden">
@@ -290,7 +320,7 @@ export default function DeckList(): React.JSX.Element {
             </svg>
           </div>
           <p className="text-gray-400 text-sm mb-4">{t('deckList.noDeck')}</p>
-          <Button variant="primary" size="sm" onClick={() => setIsAddingDeck(true)}>
+          <Button variant="primary" size="sm" onClick={handleStartAddDeck}>
             {t('deckList.createFirstDeck')}
           </Button>
         </div>
@@ -300,7 +330,7 @@ export default function DeckList(): React.JSX.Element {
         <Info className="h-4 w-4" />
         <span>
           {t('deckList.commandToInsertText', {
-            key: 'Ctrl + Shift + X'
+            key: 'Cmd+C then Cmd+Shift+X'
           })}
         </span>
       </div>

@@ -21,6 +21,7 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -28,8 +29,9 @@ mac:
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
     - LSUIElement: true
-  notarize: false
-  identity: null
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  notarize: true
   icon: build/icon.icns
 dmg:
   artifactName: ${productName}-${version}.${ext}

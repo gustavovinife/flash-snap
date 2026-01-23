@@ -1,8 +1,10 @@
 appId: com.flashsnap.desktop
 productName: flash-snap
 asar: true
+
 directories:
   buildResources: build
+
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -17,32 +19,44 @@ files:
   - '!**/test/**'
   - '!**/tests/**'
   - '!**/__tests__/**'
+
 asarUnpack:
   - resources/**
+
 win:
   executableName: flash-snap
   artifactName: ${productName}-${version}-setup.${ext}
   icon: build/icon.ico
+
 nsis:
   artifactName: ${productName}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+
 mac:
-  entitlements: build/entitlements.mac.plist
-  entitlementsInherit: build/entitlements.mac.plist
-  extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-    - LSUIElement: true
+  icon: build/icon.icns
+
+  target:
+    - dmg
+
   hardenedRuntime: true
   gatekeeperAssess: false
   notarize: true
-  icon: build/icon.icns
+
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+
+  extendInfo:
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    LSUIElement: true
+
 dmg:
   artifactName: ${productName}-${version}.${ext}
+
 linux:
   category: Utility
   packageCategory: utils
@@ -50,11 +64,14 @@ linux:
   description: 'A clipboard text capture utility'
   maintainer: 'Flash Snap Team <example@example.com>'
   vendor: 'Flash Snap'
+
+  executableName: flash-snap
+  icon: build/icon.png
+
   target:
     - AppImage
     - deb
-  executableName: flash-snap
-  icon: build/icon.png
+
   desktop:
     Name: Flash Snap
     Comment: Text capture utility
@@ -62,7 +79,9 @@ linux:
     Categories: Utility;TextTools;
     Terminal: false
     Type: Application
+
   artifactName: ${productName}-${version}.${ext}
+
 deb:
   depends:
     - libgtk-3-0
@@ -74,6 +93,7 @@ deb:
     - libatspi2.0-0
     - libuuid1
     - libsecret-1-0
+
 appImage:
   artifactName: ${productName}-${version}.${ext}
   desktop:
@@ -81,10 +101,13 @@ appImage:
     Comment: Text capture utility
     Categories: Utility;TextTools;
     Terminal: false
+
 npmRebuild: false
+
 publish:
   provider: github
   owner: gustavowebjs
   repo: flash-snap
+
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

@@ -1,4 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
+import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import {
   Zap,
   Brain,
@@ -10,6 +12,10 @@ import {
   Monitor,
   Download,
   Mail,
+  Bell,
+  TrendingUp,
+  BookOpen,
+  Laptop,
 } from "lucide-react";
 
 const PlatformIcon = ({ platform }: { platform: string }) => {
@@ -26,6 +32,7 @@ const PlatformIcon = ({ platform }: { platform: string }) => {
 };
 
 function App() {
+  const { t } = useTranslation();
   const { loading, platform, downloadInfo, allDownloads } = useGitHubRelease();
 
   const handleDownload = () => {
@@ -37,34 +44,33 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Hero Section */}
-      <header className="relative overflow-hidden">
+      <header className="relative overflow-x-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-gray-950" />
 
-        <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+        <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="Flash Snap" className="h-12 w-auto" />
           </div>
+          <LanguageSwitcher />
         </nav>
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-full px-4 py-2 mb-6">
               <Zap className="w-4 h-4 text-secondary-400" />
-              <span className="text-sm text-gray-300">
-                Capture. Learn. Remember.
-              </span>
+              <span className="text-sm text-gray-300">{t("hero.badge")}</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white">
-              Turn any text into
-              <span className="text-secondary-400"> flashcards </span>
-              instantly
+              {t("hero.title")}
+              <span className="text-secondary-400">
+                {" "}
+                {t("hero.titleHighlight")}
+              </span>
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-              Select text anywhere, press a shortcut, and Flash Snap creates a
-              flashcard. Master any subject with science-backed spaced
-              repetition.
+              {t("hero.subtitle")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -74,11 +80,15 @@ function App() {
                 className="group relative inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20 hover:shadow-secondary-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
-                  <span>Loading...</span>
+                  <span>{t("hero.loading")}</span>
                 ) : (
                   <>
                     <PlatformIcon platform={platform} />
-                    <span>Download for {platformNames[platform]}</span>
+                    <span>
+                      {t("hero.downloadFor", {
+                        platform: platformNames[platform],
+                      })}
+                    </span>
                     {downloadInfo && (
                       <span className="text-sm opacity-75">
                         ({downloadInfo.size})
@@ -90,7 +100,7 @@ function App() {
 
               {downloadInfo && (
                 <span className="text-sm text-gray-500">
-                  Version {downloadInfo.version}
+                  {t("hero.version", { version: downloadInfo.version })}
                 </span>
               )}
             </div>
@@ -102,69 +112,99 @@ function App() {
       <section className="py-20 bg-gray-900/50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
-            Why Flash Snap?
+            {t("features.title")}
           </h2>
           <p className="text-gray-400 text-center mb-16 max-w-2xl mx-auto">
-            Built for learners who value their time. No friction, just results.
+            {t("features.subtitle")}
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
             <FeatureCard
-              icon={<Zap className="w-6 h-6 text-secondary-400" />}
-              title="Instant Capture"
-              description="Select any text, press Ctrl+Shift+X, and your flashcard is ready. No copy-paste, no switching apps."
+              icon={<Laptop className="w-6 h-6 text-secondary-400" />}
+              title={t("features.desktopFirst.title")}
+              description={t("features.desktopFirst.description")}
+            />
+            <FeatureCard
+              icon={<Bell className="w-6 h-6 text-secondary-400" />}
+              title={t("features.notifications.title")}
+              description={t("features.notifications.description")}
+            />
+            <FeatureCard
+              icon={<TrendingUp className="w-6 h-6 text-secondary-400" />}
+              title={t("features.progress.title")}
+              description={t("features.progress.description")}
+            />
+            <FeatureCard
+              icon={<BookOpen className="w-6 h-6 text-secondary-400" />}
+              title={t("features.templates.title")}
+              description={t("features.templates.description")}
             />
             <FeatureCard
               icon={<Brain className="w-6 h-6 text-secondary-400" />}
-              title="Smart Repetition"
-              description="SM-2 algorithm schedules reviews at the perfect time. Learn more in less time with proven science."
-            />
-            <FeatureCard
-              icon={<Target className="w-6 h-6 text-secondary-400" />}
-              title="500+ Ready Cards"
-              description="Start immediately with pre-built decks for English, TOEFL, business vocabulary, and more."
+              title={t("features.algorithm.title")}
+              description={t("features.algorithm.description")}
             />
             <FeatureCard
               icon={<Volume2 className="w-6 h-6 text-secondary-400" />}
-              title="Text-to-Speech"
-              description="Hear the pronunciation of any card. Perfect for language learning and memorizing terms."
+              title={t("features.tts.title")}
+              description={t("features.tts.description")}
             />
-            <FeatureCard
-              icon={<Cloud className="w-6 h-6 text-secondary-400" />}
-              title="Cloud Sync"
-              description="Your cards sync across devices. Start on desktop, review on the go."
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases */}
+      <section className="py-20 bg-gray-950">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+            {t("useCases.title")}
+          </h2>
+          <p className="text-gray-400 text-center mb-16 max-w-2xl mx-auto">
+            {t("useCases.subtitle")}
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            <StepCard
+              number="🌍"
+              title={t("useCases.language.title")}
+              description={t("useCases.language.description")}
             />
-            <FeatureCard
-              icon={<Globe className="w-6 h-6 text-secondary-400" />}
-              title="Multi-language"
-              description="Interface available in English and Portuguese. More languages coming soon."
+            <StepCard
+              number="📚"
+              title={t("useCases.academic.title")}
+              description={t("useCases.academic.description")}
+            />
+            <StepCard
+              number="💼"
+              title={t("useCases.professional.title")}
+              description={t("useCases.professional.description")}
             />
           </div>
         </div>
       </section>
 
       {/* How it Works */}
-      <section className="py-20 bg-gray-950">
+      <section className="py-20 bg-gray-900/50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">
-            Three steps to better learning
+            {t("howItWorks.title")}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-12">
             <StepCard
               number="1"
-              title="Capture"
-              description="Select text anywhere on your computer and press the global shortcut."
+              title={t("howItWorks.step1.title")}
+              description={t("howItWorks.step1.description")}
             />
             <StepCard
               number="2"
-              title="Review"
-              description="Flash Snap shows your cards at the optimal time for memory retention."
+              title={t("howItWorks.step2.title")}
+              description={t("howItWorks.step2.description")}
             />
             <StepCard
               number="3"
-              title="Master"
-              description="Rate your recall and watch your knowledge grow over time."
+              title={t("howItWorks.step3.title")}
+              description={t("howItWorks.step3.description")}
             />
           </div>
         </div>
@@ -174,11 +214,10 @@ function App() {
       <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-            Ready to learn smarter?
+            {t("download.title")}
           </h2>
           <p className="text-gray-400 mb-10 text-lg">
-            Download Flash Snap for free. Available for macOS, Windows, and
-            Linux.
+            {t("download.subtitle")}
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
@@ -196,7 +235,7 @@ function App() {
                   onClick={(e) => !info && e.preventDefault()}
                 >
                   <PlatformIcon platform={p} />
-                  <span>{platformNames[p]}</span>
+                  <span>{t(`download.platforms.${p}`)}</span>
                   {info && (
                     <span className="text-sm text-gray-500">({info.size})</span>
                   )}
@@ -219,11 +258,11 @@ function App() {
               className="hover:text-white transition-colors flex items-center gap-1"
             >
               <Mail className="w-4 h-4" />
-              Contact
+              {t("footer.contact")}
             </a>
           </div>
           <p className="text-sm text-gray-600">
-            © {new Date().getFullYear()} Flash Snap. All rights reserved.
+            {t("footer.copyright", { year: new Date().getFullYear() })}
           </p>
         </div>
       </footer>

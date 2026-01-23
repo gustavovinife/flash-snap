@@ -40,9 +40,10 @@ mac:
   target:
     - dmg
 
-  hardenedRuntime: true
+  identity: null
+  hardenedRuntime: false
   gatekeeperAssess: false
-  notarize: true
+  notarize: false
 
   entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.plist

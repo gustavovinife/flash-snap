@@ -41,12 +41,15 @@ jobs:
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
-          # 👇 ESTE JÁ EXISTE E É BASE64
+          # continua sendo o secret que você já tem
           APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY }}
         run: |
-          echo "Decoding Apple API key..."
+          echo "Creating Apple API key file..."
 
-          export APPLE_API_KEY="$(echo "$APPLE_API_KEY_BASE64" | base64 --decode)"
+          echo "$APPLE_API_KEY_BASE64" | base64 --decode > AuthKey.p8
+          chmod 600 AuthKey.p8
+
+          export APPLE_API_KEY_PATH="$PWD/AuthKey.p8"
 
           yarn build
           yarn electron-builder --mac --publish always

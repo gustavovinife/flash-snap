@@ -22,10 +22,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install root dependencies
-        run: yarn install --ignore-scripts
-
-      - name: Install desktop dependencies
+      - name: Install dependencies
         run: yarn install
         working-directory: packages/desktop
 
@@ -54,84 +51,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn build && npx electron-builder --win --publish always
         working-directory: packages/desktop
-
-      - name: Upload to Supabase (macOS)
-        if: matrix.os == 'macos-latest'
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          for file in packages/desktop/dist/*.dmg; do
-            if [ -f "$file" ]; then
-              FILENAME=$(basename "$file")
-              curl -X POST "$SUPABASE_URL/storage/v1/object/releases/$VERSION/$FILENAME" \
-                -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
-                -H "Content-Type: application/octet-stream" \
-                --data-binary @"$file"
-            fi
-          done
-
-      - name: Upload to Supabase (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          for file in packages/desktop/dist/*.AppImage packages/desktop/dist/*.deb; do
-            if [ -f "$file" ]; then
-              FILENAME=$(basename "$file")
-              curl -X POST "$SUPABASE_URL/storage/v1/object/releases/$VERSION/$FILENAME" \
-                -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
-                -H "Content-Type: application/octet-stream" \
-                --data-binary @"$file"
-            fi
-          done
-
-      - name: Upload to Supabase (Windows)
-        if: matrix.os == 'windows-latest'
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        shell: pwsh
-        run: |
-          $VERSION = $env:GITHUB_REF_NAME -replace '^v', ''
-          Get-ChildItem -Path "packages/desktop/dist/*.exe" | ForEach-Object {
-            $FILENAME = $_.Name
-            $headers = @{
-              "Authorization" = "Bearer $env:SUPABASE_SERVICE_KEY"
-              "Content-Type" = "application/octet-stream"
-            }
-            Invoke-RestMethod -Uri "$env:SUPABASE_URL/storage/v1/object/releases/$VERSION/$FILENAME" -Method Post -Headers $headers -InFile $_.FullName
-          }
-
-  update-latest:
-    needs: release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update latest.json
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-
-          # Create latest.json with version info
-          cat > latest.json << EOF
-          {
-            "version": "$VERSION",
-            "assets": {
-              "mac": { "filename": "Flash Snap-$VERSION.dmg" },
-              "windows": { "filename": "Flash Snap Setup $VERSION.exe" },
-              "linux": { "filename": "Flash Snap-$VERSION.AppImage" }
-            }
-          }
-          EOF
-
-          # Upload latest.json (upsert)
-          curl -X POST "$SUPABASE_URL/storage/v1/object/releases/latest.json" \
-            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
-            -H "Content-Type: application/json" \
-            -H "x-upsert: true" \
-            --data-binary @latest.json

@@ -1,17 +1,28 @@
 import { useState, useEffect } from "react";
 
+interface ReleaseAsset {
+  name: string;
+  browser_download_url: string;
+  size: number;
+}
+
+interface Release {
+  tag_name: string;
+  name: string;
+  published_at: string;
+  assets: ReleaseAsset[];
+}
+
 interface DownloadInfo {
   url: string;
   filename: string;
+  size: string;
   version: string;
-  size?: string;
 }
 
 type Platform = "mac" | "windows" | "linux" | "unknown";
 
-// Your Supabase project URL - update this
-const SUPABASE_URL = "https://your-project.supabase.co";
-const BUCKET_NAME = "releases";
+const GITHUB_REPO = "gustavowebjs/flash-snap";
 
 function detectPlatform(): Platform {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -29,11 +40,33 @@ function detectPlatform(): Platform {
   return "unknown";
 }
 
-type KnownPlatform = "mac" | "windows" | "linux";
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+}
 
-interface LatestRelease {
-  version: string;
-  assets: Partial<Record<KnownPlatform, { filename: string }>>;
+function findAssetForPlatform(
+  assets: ReleaseAsset[],
+  platform: Platform,
+): ReleaseAsset | null {
+  const patterns: Record<Platform, RegExp[]> = {
+    mac: [/\.dmg$/i, /darwin.*\.zip$/i, /mac.*\.zip$/i],
+    windows: [/\.exe$/i, /setup.*\.exe$/i],
+    linux: [/\.AppImage$/i, /\.deb$/i],
+    unknown: [],
+  };
+
+  const platformPatterns = patterns[platform];
+
+  for (const pattern of platformPatterns) {
+    const asset = assets.find((a) => pattern.test(a.name));
+    if (asset) return asset;
+  }
+
+  return null;
 }
 
 export function useGitHubRelease() {
@@ -57,16 +90,17 @@ export function useGitHubRelease() {
     async function fetchRelease() {
       try {
         const response = await fetch(
-          `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/latest.json`,
+          `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
         );
 
         if (!response.ok) {
           throw new Error("Failed to fetch release info");
         }
 
-        const release: LatestRelease = await response.json();
-        const version = release.version;
+        const release: Release = await response.json();
+        const version = release.tag_name.replace(/^v/, "");
 
+        const platforms: Platform[] = ["mac", "windows", "linux"];
         const downloads: Record<Platform, DownloadInfo | null> = {
           mac: null,
           windows: null,
@@ -74,14 +108,13 @@ export function useGitHubRelease() {
           unknown: null,
         };
 
-        const platforms: KnownPlatform[] = ["mac", "windows", "linux"];
-
         for (const p of platforms) {
-          const asset = release.assets[p];
+          const asset = findAssetForPlatform(release.assets, p);
           if (asset) {
             downloads[p] = {
-              url: `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${version}/${encodeURIComponent(asset.filename)}`,
-              filename: asset.filename,
+              url: asset.browser_download_url,
+              filename: asset.name,
+              size: formatBytes(asset.size),
               version,
             };
           }

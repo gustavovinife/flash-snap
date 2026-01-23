@@ -79,6 +79,11 @@ function App() {
                   <>
                     <PlatformIcon platform={platform} />
                     <span>Download for {platformNames[platform]}</span>
+                    {downloadInfo && (
+                      <span className="text-sm opacity-75">
+                        ({downloadInfo.size})
+                      </span>
+                    )}
                   </>
                 )}
               </button>
@@ -192,6 +197,9 @@ function App() {
                 >
                   <PlatformIcon platform={p} />
                   <span>{platformNames[p]}</span>
+                  {info && (
+                    <span className="text-sm text-gray-500">({info.size})</span>
+                  )}
                 </a>
               );
             })}

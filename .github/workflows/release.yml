@@ -22,7 +22,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        run: yarn install --ignore-scripts
+
+      - name: Install desktop dependencies
         run: yarn install
         working-directory: packages/desktop
 

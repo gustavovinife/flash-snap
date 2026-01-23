@@ -28,6 +28,7 @@ jobs:
         env:
           VERCEL: "1"
 
+      # -------------------- macOS --------------------
       - name: Build and publish (macOS)
         if: matrix.os == 'macos-latest'
         env:
@@ -36,11 +37,15 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        run: yarn build && yarn electron-builder --mac --publish always
+        run: |
+          echo "${{ secrets.APPLE_API_KEY_BASE64 }}" | base64 --decode > AuthKey.p8
+          export APPLE_API_KEY_PATH=$PWD/AuthKey.p8
+
+          yarn build
+          yarn electron-builder --mac --publish always
         working-directory: packages/desktop
 
+      # -------------------- Linux --------------------
       - name: Build and publish (Linux)
         if: matrix.os == 'ubuntu-latest'
         env:
@@ -48,6 +53,7 @@ jobs:
         run: yarn build && yarn electron-builder --linux --publish always
         working-directory: packages/desktop
 
+      # -------------------- Windows --------------------
       - name: Build and publish (Windows)
         if: matrix.os == 'windows-latest'
         env:

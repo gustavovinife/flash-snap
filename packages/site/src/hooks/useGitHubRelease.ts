@@ -4,6 +4,7 @@ interface DownloadInfo {
   url: string;
   filename: string;
   version: string;
+  size?: string;
 }
 
 type Platform = "mac" | "windows" | "linux" | "unknown";

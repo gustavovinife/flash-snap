@@ -23,12 +23,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: yarn install --ignore-scripts
+        run: yarn install
         working-directory: packages/desktop
-
-      - name: Install app deps
-        run: npx electron-builder install-app-deps
-        working-directory: packages/desktop
+        env:
+          VERCEL: "1"
 
       - name: Build and publish (macOS)
         if: matrix.os == 'macos-latest'

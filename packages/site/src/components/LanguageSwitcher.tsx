@@ -12,13 +12,13 @@ export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage =
-    languages.find((l) => l.code === i18n.language) || languages[0];
-
   const handleLanguageChange = (langCode: string) => {
     i18n.changeLanguage(langCode);
     setIsOpen(false);
   };
+
+  const currentLanguage =
+    languages.find((l) => l.code === i18n.language) || languages[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -43,7 +43,10 @@ export function LanguageSwitcher() {
         type="button"
       >
         <Globe className="w-4 h-4" />
-
+        <span className="text-sm flex items-center gap-1">
+          <span>{currentLanguage.flag}</span>
+          <span>{currentLanguage.label}</span>
+        </span>
         <ChevronDown
           className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
         />
@@ -62,6 +65,7 @@ export function LanguageSwitcher() {
                   : "text-gray-300 hover:bg-gray-700 hover:text-white"
               }`}
             >
+              <span>{lang.flag}</span>
               <span>{lang.label}</span>
             </button>
           ))}

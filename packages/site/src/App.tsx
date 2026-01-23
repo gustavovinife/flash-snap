@@ -4,10 +4,7 @@ import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import {
   Zap,
   Brain,
-  Target,
   Volume2,
-  Cloud,
-  Globe,
   Apple,
   Monitor,
   Download,

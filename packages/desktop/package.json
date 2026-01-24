@@ -1,6 +1,6 @@
 {
   "name": "@flash-snap/desktop",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Flash Snap Desktop - Electron application for spaced repetition learning",
   "main": "./out/main/index.js",
   "author": "Gustavo Ferreira",

@@ -1,5 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+  useRef,
+  useCallback
+} from 'react'
 import supabase from '../services/supabaseService'
 import { Session, User, AuthError } from '@supabase/supabase-js'
 
@@ -40,11 +48,15 @@ interface SessionContextProps {
 
 const SessionContext = createContext<SessionContextProps | undefined>(undefined)
 
+// Minimum time between session refresh attempts (5 minutes)
+const SESSION_REFRESH_THROTTLE_MS = 5 * 60 * 1000
+
 export const SessionProvider = ({ children }: { children: ReactNode }): React.ReactNode => {
   const [session, setSession] = useState<Session | null>(null)
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const previousUserIdRef = useRef<string | null>(null)
+  const lastRefreshAttemptRef = useRef<number>(0)
 
   // Helper function to clear all cached data
   const clearAllCachedData = async (): Promise<void> => {
@@ -58,6 +70,70 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
       console.error('Error clearing query cache:', err)
     }
   }
+
+  // Refresh session when app regains focus (handles users returning after hours)
+  const refreshSessionOnFocus = useCallback(async () => {
+    const now = Date.now()
+
+    // Throttle refresh attempts to avoid excessive API calls
+    if (now - lastRefreshAttemptRef.current < SESSION_REFRESH_THROTTLE_MS) {
+      return
+    }
+
+    lastRefreshAttemptRef.current = now
+
+    try {
+      // getSession() will automatically use the refresh token if access token is expired
+      const { data, error } = await supabase.auth.getSession()
+
+      if (error) {
+        console.error('Error refreshing session on focus:', error)
+        // If refresh fails (e.g., refresh token expired), sign out the user
+        if (error.message?.includes('refresh_token') || error.status === 401) {
+          console.log('Refresh token expired, signing out...')
+          await supabase.auth.signOut()
+        }
+        return
+      }
+
+      if (data.session) {
+        // Update session state if it changed
+        setSession(data.session)
+        setUser(data.session.user)
+      } else if (session) {
+        // Had a session but now it's gone - user needs to re-authenticate
+        console.log('Session expired, clearing state...')
+        await clearAllCachedData()
+        setSession(null)
+        setUser(null)
+      }
+    } catch (err) {
+      console.error('Unexpected error refreshing session:', err)
+    }
+  }, [session])
+
+  // Setup visibility change and focus listeners for session refresh
+  useEffect(() => {
+    const handleVisibilityChange = (): void => {
+      if (document.visibilityState === 'visible') {
+        refreshSessionOnFocus()
+      }
+    }
+
+    const handleFocus = (): void => {
+      refreshSessionOnFocus()
+    }
+
+    // Listen for tab/window visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    // Listen for window focus (covers Electron app focus)
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [refreshSessionOnFocus])
 
   useEffect(() => {
     const {

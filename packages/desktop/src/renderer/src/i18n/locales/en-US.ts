@@ -32,7 +32,13 @@ const enUS = {
     emailAlreadyRegistered: 'This email is already registered. Try signing in instead.',
     unexpectedError: 'An unexpected error occurred',
     language: 'Language',
-    selectLanguage: 'Select your preferred language'
+    selectLanguage: 'Select your preferred language',
+    verifyEmailTitle: 'Check your email',
+    verifyEmailMessage:
+      'We sent a confirmation link to your email address. Please click the link to verify your account.',
+    verifyEmailTip:
+      "Didn't receive the email? Check your spam folder or try signing up again with a different email.",
+    backToLogin: 'Back to Login'
   },
 
   // Common terms
@@ -66,7 +72,10 @@ const enUS = {
     searchTemplates: 'Search templates...',
     previewCards: 'Preview Cards',
     andMore: 'and {{count}} more cards',
-    install: 'Install Template'
+    install: 'Install Template',
+    installed: 'Installed',
+    alreadyInstalled: 'This template is already installed in your decks.',
+    installError: 'Failed to install template. Please try again.'
   },
 
   // DeckList component

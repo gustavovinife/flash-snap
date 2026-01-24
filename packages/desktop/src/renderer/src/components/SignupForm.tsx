@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 import { useTranslation } from 'react-i18next'
 import Input from '../ui/common/Input/Input'
@@ -6,10 +7,9 @@ import Button from '../ui/common/Button/Button'
 
 interface SignupFormProps {
   onToggleMode: () => void
-  onSignupSuccess: (message: string) => void
 }
 
-const SignupForm = ({ onToggleMode, onSignupSuccess }: SignupFormProps): React.ReactNode => {
+const SignupForm = ({ onToggleMode }: SignupFormProps): React.ReactNode => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -18,6 +18,7 @@ const SignupForm = ({ onToggleMode, onSignupSuccess }: SignupFormProps): React.R
   const [isLoading, setIsLoading] = useState(false)
   const { signUp } = useSession()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const validateForm = (): boolean => {
     if (!email || !password || !confirmPassword || !fullName) {
@@ -51,13 +52,13 @@ const SignupForm = ({ onToggleMode, onSignupSuccess }: SignupFormProps): React.R
       if (error) {
         setError(error.message)
       } else {
-        const successMessage =
-          data?.user?.identities?.length === 0
-            ? t('auth.emailAlreadyRegistered')
-            : t('auth.registrationSuccess')
-
-        onSignupSuccess(successMessage)
-        onToggleMode() // Switch back to login view
+        // Check if email is already registered
+        if (data?.user?.identities?.length === 0) {
+          setError(t('auth.emailAlreadyRegistered'))
+        } else {
+          // Redirect to verify email page
+          navigate('/verify-email')
+        }
       }
     } catch (err) {
       setError(t('auth.unexpectedError'))

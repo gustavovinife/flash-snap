@@ -32,7 +32,13 @@ const ptBR = {
     emailAlreadyRegistered: 'Este email já está registrado. Tente entrar em vez disso.',
     unexpectedError: 'Ocorreu um erro inesperado',
     language: 'Idioma',
-    selectLanguage: 'Selecione seu idioma preferido'
+    selectLanguage: 'Selecione seu idioma preferido',
+    verifyEmailTitle: 'Verifique seu email',
+    verifyEmailMessage:
+      'Enviamos um link de confirmação para seu email. Por favor, clique no link para verificar sua conta.',
+    verifyEmailTip:
+      'Não recebeu o email? Verifique sua pasta de spam ou tente se registrar novamente com outro email.',
+    backToLogin: 'Voltar para Login'
   },
 
   // Common terms
@@ -66,7 +72,10 @@ const ptBR = {
     searchTemplates: 'Buscar templates...',
     previewCards: 'Pré-visualização dos Cartões',
     andMore: 'e mais {{count}} cartões',
-    install: 'Instalar Template'
+    install: 'Instalar Template',
+    installed: 'Instalado',
+    alreadyInstalled: 'Este template já está instalado nos seus baralhos.',
+    installError: 'Falha ao instalar template. Por favor, tente novamente.'
   },
 
   // DeckList component

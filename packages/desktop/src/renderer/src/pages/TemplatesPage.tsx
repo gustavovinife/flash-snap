@@ -2,15 +2,23 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
-import { Template, getTemplates, installTemplate } from '../services/templateService'
+import {
+  Template,
+  getTemplates,
+  installTemplate,
+  isTemplateInstalled
+} from '../services/templateService'
 import { useDecks } from '../hooks/useDecks'
 import { useCards } from '../hooks/useCards'
 import { useSession } from '@renderer/context/SessionContext'
+import { useSubscription } from '../hooks/useSubscription'
+
 export default function TemplatesPage(): React.JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { createDeck } = useDecks()
+  const { createDeck, decks } = useDecks()
   const { createManyCards } = useCards()
+  const { canCreateDeck, openCheckout } = useSubscription()
 
   const { user } = useSession()
 
@@ -18,6 +26,8 @@ export default function TemplatesPage(): React.JSX.Element {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
+  const [installing, setInstalling] = useState(false)
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false)
 
   useEffect(() => {
     // Load templates on component mount
@@ -38,6 +48,7 @@ export default function TemplatesPage(): React.JSX.Element {
   const handleBack = (): void => {
     if (selectedTemplate) {
       setSelectedTemplate(null)
+      setShowUpgradePrompt(false)
     } else {
       navigate('/')
     }
@@ -51,21 +62,56 @@ export default function TemplatesPage(): React.JSX.Element {
 
   const handleSelectTemplate = (template: Template): void => {
     setSelectedTemplate(template)
+    setShowUpgradePrompt(false)
+  }
+
+  const handleUpgradeClick = async (): Promise<void> => {
+    try {
+      await openCheckout()
+    } catch (error) {
+      console.error('Failed to open checkout:', error)
+    }
   }
 
   const handleInstallTemplate = async (): Promise<void> => {
-    if (!selectedTemplate) return
+    if (!selectedTemplate || installing) return
 
-    // Install the template
-    const newDeckId = await installTemplate(
-      selectedTemplate,
-      createDeck,
-      createManyCards,
-      user?.id ?? ''
-    )
+    // Check if already installed
+    if (isTemplateInstalled(selectedTemplate, decks)) {
+      alert(t('templates.alreadyInstalled'))
+      return
+    }
 
-    // Navigate to the deck view
-    navigate(`/deck/${newDeckId}`)
+    // Check subscription limit
+    if (!canCreateDeck(decks.length)) {
+      setShowUpgradePrompt(true)
+      return
+    }
+
+    setInstalling(true)
+    try {
+      const newDeckId = await installTemplate(
+        selectedTemplate,
+        createDeck,
+        createManyCards,
+        user?.id ?? '',
+        decks
+      )
+      navigate(`/deck/${newDeckId}`)
+    } catch (error: any) {
+      if (error.message === 'TEMPLATE_ALREADY_INSTALLED') {
+        alert(t('templates.alreadyInstalled'))
+      } else {
+        console.error('Error installing template:', error)
+        alert(t('templates.installError'))
+      }
+    } finally {
+      setInstalling(false)
+    }
+  }
+
+  const checkInstalled = (template: Template): boolean => {
+    return isTemplateInstalled(template, decks)
   }
 
   return (
@@ -166,6 +212,14 @@ export default function TemplatesPage(): React.JSX.Element {
               )}
             </div>
           </div>
+          {showUpgradePrompt && (
+            <div className="mx-6 mb-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <p className="text-sm text-amber-800 mb-3">{t('deckList.deckLimitReached')}</p>
+              <Button variant="primary" size="sm" onClick={handleUpgradeClick}>
+                {t('deckList.upgradeToPremium')}
+              </Button>
+            </div>
+          )}
           <div className="px-6 py-4 bg-gray-50 flex justify-between items-center">
             <button
               onClick={() => setSelectedTemplate(null)}
@@ -173,46 +227,90 @@ export default function TemplatesPage(): React.JSX.Element {
             >
               {t('common.back')}
             </button>
-            <Button variant="primary" onClick={handleInstallTemplate}>
-              {t('templates.install')}
-            </Button>
+            {checkInstalled(selectedTemplate) ? (
+              <span className="text-green-600 font-medium flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {t('templates.installed')}
+              </span>
+            ) : (
+              <Button variant="primary" onClick={handleInstallTemplate} disabled={installing}>
+                {installing ? t('common.loading') : t('templates.install')}
+              </Button>
+            )}
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredTemplates.map((template, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-lg border border-gray-100 hover:border-gray-200 transition-all duration-200 overflow-hidden shadow-sm cursor-pointer"
-              onClick={() => handleSelectTemplate(template)}
-            >
-              <div className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  {template.emoji && <span className="text-xl">{template.emoji}</span>}
-                  <h3 className="font-medium text-gray-800">{template.name}</h3>
-                </div>
-                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{template.description}</p>
-                <div className="flex items-center gap-2 mt-3">
-                  <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
-                    {template.type === 'language' ? t('common.language') : t('common.knowledge')}
+          {filteredTemplates.map((template, idx) => {
+            const installed = checkInstalled(template)
+            return (
+              <div
+                key={idx}
+                className={`bg-white rounded-lg border transition-all duration-200 overflow-hidden shadow-sm cursor-pointer relative ${
+                  installed
+                    ? 'border-green-200 bg-green-50/30'
+                    : 'border-gray-100 hover:border-gray-200'
+                }`}
+                onClick={() => handleSelectTemplate(template)}
+              >
+                {installed && (
+                  <div className="absolute top-2 right-2">
+                    <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      {t('templates.installed')}
+                    </span>
                   </div>
-                  {template.language && (
-                    <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
-                      {template.language}
-                    </div>
-                  )}
-                  <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
-                    {template.cards.length} {t('common.cards')}
+                )}
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    {template.emoji && <span className="text-xl">{template.emoji}</span>}
+                    <h3 className="font-medium text-gray-800">{template.name}</h3>
                   </div>
-                  {template.nationality && (
+                  <p className="text-sm text-gray-500 mb-3 line-clamp-2">{template.description}</p>
+                  <div className="flex items-center gap-2 mt-3 flex-wrap">
                     <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
-                      {template.nationality}
+                      {template.type === 'language' ? t('common.language') : t('common.knowledge')}
                     </div>
-                  )}
+                    {template.language && (
+                      <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                        {template.language}
+                      </div>
+                    )}
+                    <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                      {template.cards.length} {t('common.cards')}
+                    </div>
+                    {template.nationality && (
+                      <div className="bg-gray-100 px-2 py-1 rounded-full text-xs text-gray-600">
+                        {template.nationality}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 

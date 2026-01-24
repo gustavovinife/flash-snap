@@ -9,18 +9,12 @@ import Logo from '../../../../resources/flashsnap.png'
 
 const LoginPage = (): React.ReactNode => {
   const [isRegistering, setIsRegistering] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
   const { session } = useSession()
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   const toggleMode = (): void => {
     setIsRegistering(!isRegistering)
-    setMessage(null)
-  }
-
-  const handleSignupSuccess = (successMessage: string): void => {
-    setMessage(successMessage)
   }
 
   if (session) {
@@ -42,12 +36,8 @@ const LoginPage = (): React.ReactNode => {
           </p>
         </div>
 
-        {message && (
-          <div className="p-3 text-sm text-green-800 bg-green-100 rounded-md">{message}</div>
-        )}
-
         {isRegistering ? (
-          <SignupForm onToggleMode={toggleMode} onSignupSuccess={handleSignupSuccess} />
+          <SignupForm onToggleMode={toggleMode} />
         ) : (
           <LoginForm onToggleMode={toggleMode} />
         )}

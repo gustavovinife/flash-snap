@@ -6,6 +6,7 @@ import SettingsPage from './pages/SettingsPage'
 import ReportsPage from './pages/ReportsPage'
 import TemplatesPage from './pages/TemplatesPage'
 import LoginPage from './pages/LoginPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import App from './App'
 import { SessionProvider } from './context/SessionContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -14,6 +15,10 @@ const router = createHashRouter([
   {
     path: '/login',
     element: <LoginPage />
+  },
+  {
+    path: '/verify-email',
+    element: <VerifyEmailPage />
   },
   {
     path: '/',

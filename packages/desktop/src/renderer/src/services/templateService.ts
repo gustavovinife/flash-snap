@@ -25,16 +25,31 @@ export const getTemplates = async (): Promise<Template[]> => {
   }
 }
 
+// Check if a template is already installed (by matching deck name)
+export const isTemplateInstalled = (
+  template: Template,
+  existingDecks: { name: string }[]
+): boolean => {
+  return existingDecks.some((deck) => deck.name === template.name)
+}
+
 // Function to install a template as a new deck
 export const installTemplate = async (
   template: Template,
   addDeck: any,
   createManyCards: any,
-  user_id: string
+  user_id: string,
+  existingDecks: { name: string }[] = []
 ): Promise<string> => {
   if (!user_id) {
     throw new Error('User ID is required')
   }
+
+  // Check if template is already installed
+  if (isTemplateInstalled(template, existingDecks)) {
+    throw new Error('TEMPLATE_ALREADY_INSTALLED')
+  }
+
   // Create a new deck from the template
   const newDeck = {
     name: template.name,
@@ -56,7 +71,5 @@ export const installTemplate = async (
     }))
   )
 
-  //notify the user
-  alert(`Template ${template.name} installed successfully`)
   return response.id
 }

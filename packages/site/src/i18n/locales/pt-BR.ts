@@ -102,6 +102,31 @@ const ptBR = {
     },
   },
 
+  // FAQ section
+  faq: {
+    title: "Perguntas Frequentes",
+    mobile: {
+      question: "Existe um app mobile?",
+      answer:
+        "Quase lá! Nossa equipe está trabalhando para trazer o Flash Snap para iOS e Android. Fique ligado no anúncio de lançamento que vem muito em breve.",
+    },
+    pricing: {
+      question: "O Flash Snap é gratuito?",
+      answer:
+        "Sim! O Flash Snap oferece um plano gratuito generoso que inclui todos os recursos principais. Você pode criar flashcards ilimitados, usar repetição espaçada e acessar templates básicos sem custo.",
+    },
+    languages: {
+      question: "Quais idiomas são suportados?",
+      answer:
+        "Você pode aprender qualquer idioma com o Flash Snap—crie flashcards no idioma que quiser. A interface do app está disponível atualmente em Inglês e Português (Brasil), com mais idiomas em breve.",
+    },
+    premium: {
+      question: "Como funciona o plano Premium?",
+      answer:
+        "O Premium é simples e acessível. Por uma pequena mensalidade cobrada no seu cartão de crédito, você desbloqueia recursos avançados incluindo decks de templates ilimitados, texto-para-fala prioritário, análises detalhadas e muito mais.",
+    },
+  },
+
   // Footer
   footer: {
     contact: "Contato",

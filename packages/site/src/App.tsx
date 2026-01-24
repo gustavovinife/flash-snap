@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
+import { FAQAccordion } from "./components/FAQAccordion";
 import {
   Zap,
   Brain,
@@ -204,6 +205,16 @@ function App() {
               description={t("howItWorks.step3.description")}
             />
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-950">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-white">
+            {t("faq.title")}
+          </h2>
+          <FAQAccordion />
         </div>
       </section>
 

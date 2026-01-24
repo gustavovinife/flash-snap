@@ -40,6 +40,8 @@ export function sm2(card: Card, grade: number): Partial<Card> {
 
   const next_review = new Date()
   next_review.setDate(next_review.getDate() + interval)
+  // Normalize to midnight to ensure day-based comparison (not hour-based)
+  next_review.setHours(0, 0, 0, 0)
 
   return { interval, repetition, ease_factor, next_review }
 }
@@ -72,8 +74,8 @@ function isSameDayOrEarlier(date1: Date, date2: Date): boolean {
   const d1 = getLocalMidnight(date1)
   const d2 = getLocalMidnight(date2)
 
-  // Compare the dates
-  return d1 < d2
+  // Compare the dates - card is due if its review date is on or before today
+  return d1 <= d2
 }
 
 /**

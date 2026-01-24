@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback ,useEffect} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, AlertCircle, ArrowLeft, Crown } from 'lucide-react'
@@ -11,7 +11,7 @@ import PromptPills from '../components/PromptPills'
 import CardPreviewList from '../components/CardPreviewList'
 import Button from '../ui/common/Button/Button'
 import Input from '../ui/common/Input/Input'
-
+import { usePostHog } from 'posthog-js/react'
 interface AIGeneratePageState {
   prompt: string
   isGenerating: boolean
@@ -32,6 +32,7 @@ const AIGeneratePage: React.FC = () => {
   const { decks, createDeck, isLoading: decksLoading } = useDecks()
   const { createManyCards } = useCards()
   const { canCreateDeck, isLoading: subscriptionLoading, openCheckout } = useSubscription()
+  const posthog = usePostHog()
 
   const [state, setState] = useState<AIGeneratePageState>({
     prompt: '',
@@ -48,6 +49,10 @@ const AIGeneratePage: React.FC = () => {
   const isValidPrompt = state.prompt.trim().length >= MIN_PROMPT_LENGTH
   const canGenerate = apiKeyConfigured && isValidPrompt && !state.isGenerating
   const hasGeneratedCards = state.generatedCards.length > 0
+
+  useEffect(() => {
+    posthog.capture('ai_generate_page_loaded')
+  }, [])
 
   const handleUpgrade = async (): Promise<void> => {
     try {
@@ -81,6 +86,8 @@ const AIGeneratePage: React.FC = () => {
   }, [])
 
   const handleGenerate = useCallback(async () => {
+    posthog.capture('ai_generate_clicked')
+    posthog.capture('ai_generate_prompt_entered', { prompt: state.prompt })
     const trimmedPrompt = state.prompt.trim()
 
     if (!trimmedPrompt) {
@@ -168,6 +175,8 @@ const AIGeneratePage: React.FC = () => {
       }))
 
       await createManyCards.mutateAsync(cardsToInsert)
+
+      posthog.capture('ai_generate_deck_saved', { deck_id: newDeck.id })
 
       // Navigate to the new deck
       navigate(`/deck/${newDeck.id}`)

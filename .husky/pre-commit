@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Run desktop tests before commit
+yarn workspace @flash-snap/desktop test
+clear

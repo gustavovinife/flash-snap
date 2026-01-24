@@ -28,7 +28,10 @@
     "clean:mobile": "yarn workspace @flash-snap/mobile clean",
     "install:all": "yarn install",
     "typecheck": "yarn workspaces run typecheck",
-    "format": "yarn workspaces run format"
+    "format": "yarn workspaces run format",
+    "test": "yarn workspace @flash-snap/desktop test",
+    "test:desktop": "yarn workspace @flash-snap/desktop test",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -39,5 +42,8 @@
     "url": "https://github.com/gustavowebjs/flash-snap.git"
   },
   "author": "Gustavo Ferreira",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }

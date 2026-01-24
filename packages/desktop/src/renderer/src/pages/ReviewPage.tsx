@@ -6,6 +6,7 @@ import { getDueCards, updateCardAfterReview } from '../services/reviewService'
 import { useDecks } from '../hooks/useDecks'
 import { useCards } from '../hooks/useCards'
 import { playPronunciation } from '../services/translationService'
+import { usePostHog } from 'posthog-js/react'
 
 const ReviewPage: React.FC = () => {
   const { t } = useTranslation()
@@ -23,6 +24,8 @@ const ReviewPage: React.FC = () => {
   const [currentDeckName, setCurrentDeckName] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
+  const posthog = usePostHog()
+
   // Safe access to currentCard to prevent accessing undefined
   const currentCard =
     dueCards.length > 0 && currentCardIndex < dueCards.length
@@ -35,6 +38,8 @@ const ReviewPage: React.FC = () => {
       : false
 
   useEffect(() => {
+    posthog.capture('review_page_loaded')
+
     async function loadDueCards(): Promise<void> {
       try {
         setIsLoading(true)

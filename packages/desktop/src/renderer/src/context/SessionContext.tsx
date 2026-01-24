@@ -153,6 +153,27 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
 
   const signOut = async (): Promise<{ error: AuthError | null }> => {
     const { error } = await supabase.auth.signOut()
+
+    if (!error) {
+      // Clear React Query cache
+      const { queryClient } = await import('../main')
+      queryClient.clear()
+
+      // Clear localStorage (preserve language preference)
+      const savedLanguage = localStorage.getItem('language')
+      localStorage.clear()
+      if (savedLanguage) {
+        localStorage.setItem('language', savedLanguage)
+      }
+
+      // Clear sessionStorage
+      sessionStorage.clear()
+
+      // Reset local state
+      setSession(null)
+      setUser(null)
+    }
+
     return { error }
   }
 

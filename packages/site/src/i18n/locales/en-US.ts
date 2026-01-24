@@ -1,11 +1,11 @@
 const enUS = {
   // Hero section
   hero: {
-    badge: "Capture. Learn. Remember.",
+    badge: "Learn. Review. Remember.",
     title: "Learn languages & any subject",
     titleHighlight: "while you work",
     subtitle:
-      "Desktop flashcard app that lives in your workflow. Capture text instantly, get smart notifications, track your progress, and master languages or any topic with science-backed spaced repetition.",
+      "Desktop flashcard app that lives in your workflow. Get smart notifications, track your progress, and master languages or any topic with science-backed spaced repetition.",
     downloadFor: "Download for {{platform}}",
     loading: "Loading...",
     version: "Version {{version}}",
@@ -19,7 +19,7 @@ const enUS = {
     desktopFirst: {
       title: "Desktop-First Learning",
       description:
-        "Always accessible while you work. Select text anywhere, press Ctrl+Shift+X, and create flashcards without breaking your flow.",
+        "Always accessible while you work. Create flashcards quickly and review them without breaking your flow.",
     },
     notifications: {
       title: "Smart Notifications",
@@ -45,6 +45,28 @@ const enUS = {
       title: "Text-to-Speech",
       description:
         "Perfect pronunciation for language learning. Hear any card spoken aloud to improve listening and speaking skills.",
+    },
+  },
+
+  // AI Feature section
+  aiFeature: {
+    title: "Create Flashcards with AI",
+    subtitle:
+      "Let artificial intelligence do the heavy lifting. Generate complete flashcard decks in seconds from any topic you want to learn.",
+    feature1: {
+      title: "Instant Deck Generation",
+      description:
+        "Just describe what you want to learn and AI creates a complete deck with questions and answers. No manual card creation needed.",
+    },
+    feature2: {
+      title: "Smart Content",
+      description:
+        "AI understands context and generates relevant, educational content. Perfect for languages, technical subjects, or any topic.",
+    },
+    feature3: {
+      title: "Preset Prompts",
+      description:
+        "Choose from ready-made prompts for popular topics like JavaScript, English for travel, interview prep, and more.",
     },
   },
 
@@ -74,9 +96,9 @@ const enUS = {
   howItWorks: {
     title: "How It Works",
     step1: {
-      title: "Capture Instantly",
+      title: "Create Cards",
       description:
-        "Select text anywhere on your desktop and press Ctrl+Shift+X. Your flashcard is created without switching apps.",
+        "Add flashcards manually or let AI generate complete decks for any topic you want to learn.",
     },
     step2: {
       title: "Get Notified",

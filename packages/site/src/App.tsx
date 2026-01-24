@@ -14,6 +14,9 @@ import {
   TrendingUp,
   BookOpen,
   Laptop,
+  Sparkles,
+  Wand2,
+  MessageSquare,
 } from "lucide-react";
 
 const PlatformIcon = ({ platform }: { platform: string }) => {
@@ -147,6 +150,60 @@ function App() {
               title={t("features.tts.title")}
               description={t("features.tts.description")}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* AI Feature Section */}
+      <section className="py-20 bg-gray-950">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/20 rounded-full px-4 py-2 mb-6">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              <span className="text-sm text-purple-300">AI-Powered</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              {t("aiFeature.title")}
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              {t("aiFeature.subtitle")}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-xl p-6 hover:border-purple-500/40 transition-colors">
+              <div className="mb-4">
+                <Wand2 className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-white">
+                {t("aiFeature.feature1.title")}
+              </h3>
+              <p className="text-gray-400 text-sm">
+                {t("aiFeature.feature1.description")}
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-xl p-6 hover:border-purple-500/40 transition-colors">
+              <div className="mb-4">
+                <Brain className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-white">
+                {t("aiFeature.feature2.title")}
+              </h3>
+              <p className="text-gray-400 text-sm">
+                {t("aiFeature.feature2.description")}
+              </p>
+            </div>
+            <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-xl p-6 hover:border-purple-500/40 transition-colors">
+              <div className="mb-4">
+                <MessageSquare className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 text-white">
+                {t("aiFeature.feature3.title")}
+              </h3>
+              <p className="text-gray-400 text-sm">
+                {t("aiFeature.feature3.description")}
+              </p>
+            </div>
           </div>
         </div>
       </section>

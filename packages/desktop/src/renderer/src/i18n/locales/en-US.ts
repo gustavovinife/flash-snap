@@ -222,6 +222,82 @@ const enUS = {
       'Your payment is past due. Please update your payment method to continue your subscription.',
     checkoutError: 'Failed to open checkout. Please try again.',
     portalError: 'Failed to open subscription portal. Please try again.'
+  },
+
+  // AI Generation
+  aiGeneration: {
+    // Page title and description
+    title: 'Create with AI',
+    description: 'Generate flashcards instantly using AI. Select a preset or enter your own topic.',
+
+    // Entry point card
+    createWithAI: 'Create with AI',
+    createWithAIDescription: 'Generate flashcards instantly using AI',
+
+    // Preset prompts
+    presets: {
+      title: 'Quick Start',
+      jsProgram: 'Learn JavaScript Programming',
+      englishTravel: 'Learn English for Travel',
+      englishInterviews: 'Learn English for Interviews',
+      spanishBasics: 'Learn Spanish Basics',
+      pythonProgram: 'Learn Python Programming'
+    },
+
+    // Input and generation
+    promptPlaceholder: 'Enter a topic for your flashcards...',
+    modifyPromptPlaceholder: 'Enter changes or a new topic to regenerate...',
+    generateButton: 'Generate Cards',
+    generating: 'Generating...',
+    minCharacters: 'Enter at least 3 characters',
+
+    // Preview section
+    preview: {
+      title: 'Preview',
+      cardCount: '{{count}} cards generated',
+      emptyState: 'Generated cards will appear here',
+      emptyStateHint: 'Select a preset or enter a topic above to generate flashcards'
+    },
+
+    // Deck saving
+    deckName: 'Deck Name',
+    deckNamePlaceholder: 'Enter deck name',
+    saveDeck: 'Save Deck',
+    saving: 'Saving...',
+    saveSuccess: 'Deck saved successfully!',
+
+    // Errors
+    errors: {
+      apiKeyMissing:
+        'OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment.',
+      generationFailed: 'Failed to generate cards. Please try again.',
+      saveFailed: 'Failed to save deck. Please try again.',
+      invalidPrompt: 'Please enter a valid topic',
+      emptyPrompt: 'Please enter a topic for your flashcards',
+      rateLimited: 'Too many requests. Please wait a moment and try again.',
+      networkError: 'Connection error. Please check your internet connection.',
+      parseError: 'Failed to parse AI response. Please try again.'
+    },
+
+    // Actions
+    retry: 'Try Again',
+    cancel: 'Cancel',
+
+    // Premium required
+    premiumRequired: {
+      title: 'Premium Feature',
+      description:
+        'AI-powered flashcard generation is a premium feature. Upgrade to create unlimited decks with AI assistance.',
+      upgradeButton: 'Upgrade to Premium'
+    },
+
+    // Deck limit reached
+    deckLimitReached: {
+      title: 'Deck Limit Reached',
+      description:
+        'Free users can only create 1 deck. Upgrade to Premium for unlimited decks and AI-generated flashcards.',
+      upgradeButton: 'Upgrade to Premium'
+    }
   }
 }
 

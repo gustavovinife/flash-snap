@@ -1,11 +1,13 @@
 ---
 inclusion: always
 ---
+
 # Development Workflow
 
 This document outlines the development workflow and important configuration files for Flash Snap.
 
 ## Key Configuration Files
+
 - [package.json](mdc:package.json) - Dependencies and npm scripts
 - [electron.vite.config.ts](mdc:electron.vite.config.ts) - Vite configuration for Electron
 - [electron-builder.yml](mdc:electron-builder.yml) - Electron build configuration
@@ -14,7 +16,9 @@ This document outlines the development workflow and important configuration file
 - [.env.example](mdc:.env.example) - Example environment variables for Supabase connection
 
 ## Build Process
+
 Flash Snap uses Electron Builder to package the application for different platforms:
+
 - `dist/mac` - macOS x64 build
 - `dist/mac-arm64` - macOS ARM64 build
 - `dist/linux-unpacked` - Linux x64 build
@@ -23,12 +27,12 @@ Flash Snap uses Electron Builder to package the application for different platfo
 - `dist/win-arm64-unpacked` - Windows ARM64 build
 
 ## Development Commands
-- `npm run dev` - Start the application in development mode
-- `npm run build` - Build the application for production
-- `npm run lint` - Run ESLint to check code quality
-- `npm run test` - Run tests (when implemented)
+
+- `yarn dev` - Start the application in development mode
+- `yarn build` - Build the application for production
+- `yarn lint` - Run ESLint to check code quality
+- `yarn test` - Run tests (when implemented)
 
 ## Deployment
+
 Updates are published directly to GitHub releases using `update-electron-app` at [gustavowebjs/flash-snap](mdc:https:/github.com/gustavowebjs/flash-snap).
-
-

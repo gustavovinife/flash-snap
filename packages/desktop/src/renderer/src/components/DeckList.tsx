@@ -5,10 +5,10 @@ import { Button, Input, Select } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import { getDueCards } from '../services/reviewService'
 import { calculateDeckProgress } from '../services/reportingService'
-import { Info } from 'lucide-react'
 import { useDecks } from '../hooks/useDecks'
 import { useSession } from '@renderer/context/SessionContext'
 import { useSubscription } from '../hooks/useSubscription'
+import CreateWithAICard from './CreateWithAICard'
 
 export default function DeckList(): React.JSX.Element {
   const navigate = useNavigate()
@@ -111,6 +111,11 @@ export default function DeckList(): React.JSX.Element {
           {t('deckList.startReview')}{' '}
           {dueCardCount > 0 && t('deckList.cardsDue', { count: dueCardCount })}
         </Button>
+      </div>
+
+      {/* Create With AI Card */}
+      <div className="mb-6">
+        <CreateWithAICard onClick={() => navigate('/ai-generate')} />
       </div>
 
       <hr className="my-6 border-gray-200" />
@@ -325,15 +330,6 @@ export default function DeckList(): React.JSX.Element {
           </Button>
         </div>
       )}
-
-      <div className="bg-gray-100 p-2 mt-12 rounded-md flex items-center gap-2 text-xs">
-        <Info className="h-4 w-4" />
-        <span>
-          {t('deckList.commandToInsertText', {
-            key: 'Cmd+C then Cmd+Shift+X'
-          })}
-        </span>
-      </div>
     </div>
   )
 }

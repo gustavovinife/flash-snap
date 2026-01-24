@@ -16,7 +16,6 @@ declare global {
       hasPendingChanges: () => Promise<boolean>
       syncToCloud: () => Promise<boolean>
       syncFromCloud: () => Promise<boolean>
-      onTextCaptured: (callback: (text: string) => void) => void
       notifySettingsUpdated: () => void
       checkForUpdates: () => void
       onAuthCallback: (callback: (url: string) => void) => void

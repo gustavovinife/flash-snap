@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react'
 import supabase from '../services/supabaseService'
 import { Session, User, AuthError } from '@supabase/supabase-js'
 
@@ -44,11 +44,43 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
   const [session, setSession] = useState<Session | null>(null)
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const previousUserIdRef = useRef<string | null>(null)
+
+  // Helper function to clear all cached data
+  const clearAllCachedData = async (): Promise<void> => {
+    try {
+      const { queryClient } = await import('../main')
+      // Clear all queries from the cache
+      queryClient.clear()
+      // Also remove all queries to ensure fresh fetch
+      queryClient.removeQueries()
+    } catch (err) {
+      console.error('Error clearing query cache:', err)
+    }
+  }
 
   useEffect(() => {
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const newUserId = session?.user?.id ?? null
+      const previousUserId = previousUserIdRef.current
+
+      // Detect user change (different user logged in)
+      if (previousUserId && newUserId && previousUserId !== newUserId) {
+        console.log('User changed, clearing cache...')
+        await clearAllCachedData()
+      }
+
+      // Detect sign out
+      if (event === 'SIGNED_OUT') {
+        console.log('User signed out, clearing cache...')
+        await clearAllCachedData()
+      }
+
+      // Update the previous user ID reference
+      previousUserIdRef.current = newUserId
+
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
@@ -56,6 +88,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
 
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      previousUserIdRef.current = session?.user?.id ?? null
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
@@ -77,6 +110,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
           })
 
           if (!error && data.session) {
+            // Check if this is a different user
+            const newUserId = data.session.user?.id
+            if (previousUserIdRef.current && newUserId !== previousUserIdRef.current) {
+              await clearAllCachedData()
+            }
+            previousUserIdRef.current = newUserId ?? null
             setSession(data.session)
             setUser(data.session.user)
           }
@@ -99,6 +138,9 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
   }
 
   const signIn = async (email: string, password: string): Promise<SignInResponse> => {
+    // Clear cache before signing in to ensure fresh data
+    await clearAllCachedData()
+
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     return { error }
   }
@@ -121,6 +163,9 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
 
   const signInWithGoogle = async (): Promise<{ error: AuthError | null }> => {
     try {
+      // Clear cache before signing in
+      await clearAllCachedData()
+
       // Get the authorization URL from Supabase but don't redirect automatically
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -156,8 +201,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
 
     if (!error) {
       // Clear React Query cache
-      const { queryClient } = await import('../main')
-      queryClient.clear()
+      await clearAllCachedData()
 
       // Clear localStorage (preserve language preference)
       const savedLanguage = localStorage.getItem('language')
@@ -170,6 +214,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
       sessionStorage.clear()
 
       // Reset local state
+      previousUserIdRef.current = null
       setSession(null)
       setUser(null)
     }

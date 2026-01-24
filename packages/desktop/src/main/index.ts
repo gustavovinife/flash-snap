@@ -1,26 +1,10 @@
-import {
-  app,
-  shell,
-  BrowserWindow,
-  ipcMain,
-  globalShortcut,
-  Tray,
-  Menu,
-  Notification,
-  autoUpdater
-} from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu, Notification, autoUpdater } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayIcon from '../../resources/trayIcon.png?asset'
 import icon from '../../resources/icon.png?asset'
 import AutoLaunch from 'auto-launch'
 import { updateElectronApp } from 'update-electron-app'
-import {
-  getSelectedText,
-  showNotification,
-  hasPermissionError,
-  resetPermissionError
-} from './clipboard-utils'
 
 // Initialize automatic updates
 updateElectronApp({
@@ -209,58 +193,6 @@ function createTray(): void {
   })
 }
 
-function registerGlobalShortcut(): void {
-  const shortcut = 'CommandOrControl+Shift+X'
-
-  const success = globalShortcut.register(shortcut, async () => {
-    try {
-      const clipboardText = await getSelectedText()
-
-      if (hasPermissionError()) {
-        showNotification(
-          'Could not access clipboard. Please check your system permissions.',
-          'error'
-        )
-        resetPermissionError()
-        return
-      }
-
-      if (clipboardText?.trim()) {
-        console.log('🔤 Text captured:', clipboardText)
-
-        // Ensure window is visible and has focus
-        if (mainWindow) {
-          if (process.platform === 'darwin') {
-            showDockIcon()
-          }
-          mainWindow.show()
-          mainWindow.focus()
-        }
-
-        mainWindow?.webContents.send('text-captured', clipboardText)
-      } else {
-        console.log('⚠️ No text in clipboard')
-        showNotification(
-          'No text found in clipboard.\n\n' +
-            'How to use:\n' +
-            '1. Select text in any app\n' +
-            '2. Copy it (Cmd+C / Ctrl+C)\n' +
-            '3. Press Cmd+Shift+X / Ctrl+Shift+X',
-          'info'
-        )
-      }
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      console.error('Error in clipboard:', message)
-      showNotification(`Error: ${message}`, 'error')
-    }
-  })
-
-  if (!success) {
-    console.error('❌ Failed to register global shortcut')
-  }
-}
-
 function setupAutoLaunch(): void {
   const flashSnapAutoLauncher = new AutoLaunch({
     name: 'Flash Snap',
@@ -285,7 +217,6 @@ app.whenReady().then(() => {
   setupAutoLaunch()
   createWindow()
   createTray()
-  registerGlobalShortcut()
 
   // Hide dock icon on macOS initially
   if (process.platform === 'darwin') {
@@ -313,7 +244,6 @@ app.on('activate', () => {
 })
 
 app.on('will-quit', () => {
-  globalShortcut.unregisterAll()
   if (reviewCheckInterval) {
     clearInterval(reviewCheckInterval)
   }

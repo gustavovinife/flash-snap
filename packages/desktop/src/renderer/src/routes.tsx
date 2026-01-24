@@ -7,9 +7,20 @@ import ReportsPage from './pages/ReportsPage'
 import TemplatesPage from './pages/TemplatesPage'
 import LoginPage from './pages/LoginPage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
+import AIGeneratePage from './pages/AIGeneratePage'
 import App from './App'
 import { SessionProvider } from './context/SessionContext'
 import ProtectedRoute from './components/ProtectedRoute'
+
+// Wrap the entire app with SessionProvider first, then define routes
+// This ensures useSession is available in all route components
+const ProtectedApp = (): React.ReactNode => {
+  return (
+    <ProtectedRoute>
+      <App />
+    </ProtectedRoute>
+  )
+}
 
 const router = createHashRouter([
   {
@@ -22,11 +33,7 @@ const router = createHashRouter([
   },
   {
     path: '/',
-    element: (
-      <ProtectedRoute>
-        <App />
-      </ProtectedRoute>
-    ),
+    element: <ProtectedApp />,
     children: [
       {
         index: true,
@@ -55,6 +62,10 @@ const router = createHashRouter([
       {
         path: '/settings',
         element: <SettingsPage />
+      },
+      {
+        path: '/ai-generate',
+        element: <AIGeneratePage />
       }
     ]
   }

@@ -61,7 +61,7 @@ linux:
   category: Utility
   packageCategory: utils
   synopsis: 'Flash Snap Application'
-  description: 'A clipboard text capture utility'
+  description: 'A spaced repetition flashcard app for desktop'
   maintainer: 'Flash Snap Team <example@example.com>'
   vendor: 'Flash Snap'
 
@@ -74,9 +74,9 @@ linux:
 
   desktop:
     Name: Flash Snap
-    Comment: Text capture utility
-    GenericName: Text Utility
-    Categories: Utility;TextTools;
+    Comment: Spaced repetition flashcard app
+    GenericName: Flashcard App
+    Categories: Utility;Education;
     Terminal: false
     Type: Application
 
@@ -98,8 +98,8 @@ appImage:
   artifactName: ${productName}-${version}.${ext}
   desktop:
     Name: Flash Snap
-    Comment: Text capture utility
-    Categories: Utility;TextTools;
+    Comment: Spaced repetition flashcard app
+    Categories: Utility;Education;
     Terminal: false
 
 npmRebuild: false

@@ -1,11 +1,11 @@
 const ptBR = {
   // Hero section
   hero: {
-    badge: "Capture. Aprenda. Lembre.",
+    badge: "Aprenda. Revise. Lembre.",
     title: "Aprenda idiomas e qualquer assunto",
     titleHighlight: "enquanto trabalha",
     subtitle:
-      "App desktop de flashcards que vive no seu fluxo de trabalho. Capture texto instantaneamente, receba notificações inteligentes, acompanhe seu progresso e domine idiomas ou qualquer tópico com repetição espaçada baseada em ciência.",
+      "App desktop de flashcards que vive no seu fluxo de trabalho. Receba notificações inteligentes, acompanhe seu progresso e domine idiomas ou qualquer tópico com repetição espaçada baseada em ciência.",
     downloadFor: "Baixar para {{platform}}",
     loading: "Carregando...",
     version: "Versão {{version}}",
@@ -19,7 +19,7 @@ const ptBR = {
     desktopFirst: {
       title: "Aprendizado Desktop-First",
       description:
-        "Sempre acessível enquanto você trabalha. Selecione texto em qualquer lugar, pressione Ctrl+Shift+X e crie flashcards sem quebrar seu fluxo.",
+        "Sempre acessível enquanto você trabalha. Crie flashcards rapidamente e revise-os sem quebrar seu fluxo.",
     },
     notifications: {
       title: "Notificações Inteligentes",
@@ -45,6 +45,28 @@ const ptBR = {
       title: "Texto para Fala",
       description:
         "Pronúncia perfeita para aprendizado de idiomas. Ouça qualquer card falado em voz alta para melhorar suas habilidades de escuta e fala.",
+    },
+  },
+
+  // AI Feature section
+  aiFeature: {
+    title: "Crie Flashcards com IA",
+    subtitle:
+      "Deixe a inteligência artificial fazer o trabalho pesado. Gere baralhos completos de flashcards em segundos sobre qualquer tema que você queira aprender.",
+    feature1: {
+      title: "Geração Instantânea de Baralhos",
+      description:
+        "Apenas descreva o que você quer aprender e a IA cria um baralho completo com perguntas e respostas. Sem criação manual de cards.",
+    },
+    feature2: {
+      title: "Conteúdo Inteligente",
+      description:
+        "A IA entende o contexto e gera conteúdo relevante e educacional. Perfeito para idiomas, assuntos técnicos ou qualquer tema.",
+    },
+    feature3: {
+      title: "Prompts Prontos",
+      description:
+        "Escolha entre prompts prontos para tópicos populares como JavaScript, inglês para viagem, preparação para entrevistas e mais.",
     },
   },
 
@@ -74,9 +96,9 @@ const ptBR = {
   howItWorks: {
     title: "Como Funciona",
     step1: {
-      title: "Capture Instantaneamente",
+      title: "Crie Cards",
       description:
-        "Selecione texto em qualquer lugar do seu desktop e pressione Ctrl+Shift+X. Seu flashcard é criado sem trocar de aplicativo.",
+        "Adicione flashcards manualmente ou deixe a IA gerar baralhos completos para qualquer tema que você queira aprender.",
     },
     step2: {
       title: "Receba Notificações",

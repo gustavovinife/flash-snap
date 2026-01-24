@@ -225,6 +225,83 @@ const ptBR = {
       'Seu pagamento está atrasado. Por favor, atualize seu método de pagamento para continuar sua assinatura.',
     checkoutError: 'Falha ao abrir o checkout. Por favor, tente novamente.',
     portalError: 'Falha ao abrir o portal de assinatura. Por favor, tente novamente.'
+  },
+
+  // AI Generation
+  aiGeneration: {
+    // Page title and description
+    title: 'Criar com IA',
+    description:
+      'Gere flashcards instantaneamente usando IA. Selecione um preset ou digite seu próprio tópico.',
+
+    // Entry point card
+    createWithAI: 'Criar com IA',
+    createWithAIDescription: 'Gere flashcards instantaneamente usando IA',
+
+    // Preset prompts
+    presets: {
+      title: 'Início Rápido',
+      jsProgram: 'Aprender Programação JavaScript',
+      englishTravel: 'Aprender Inglês para Viagens',
+      englishInterviews: 'Aprender Inglês para Entrevistas',
+      spanishBasics: 'Aprender Espanhol Básico',
+      pythonProgram: 'Aprender Programação Python'
+    },
+
+    // Input and generation
+    promptPlaceholder: 'Digite um tópico para seus flashcards...',
+    modifyPromptPlaceholder: 'Digite alterações ou um novo tópico para regenerar...',
+    generateButton: 'Gerar Cartões',
+    generating: 'Gerando...',
+    minCharacters: 'Digite pelo menos 3 caracteres',
+
+    // Preview section
+    preview: {
+      title: 'Pré-visualização',
+      cardCount: '{{count}} cartões gerados',
+      emptyState: 'Os cartões gerados aparecerão aqui',
+      emptyStateHint: 'Selecione um preset ou digite um tópico acima para gerar flashcards'
+    },
+
+    // Deck saving
+    deckName: 'Nome do Baralho',
+    deckNamePlaceholder: 'Digite o nome do baralho',
+    saveDeck: 'Salvar Baralho',
+    saving: 'Salvando...',
+    saveSuccess: 'Baralho salvo com sucesso!',
+
+    // Errors
+    errors: {
+      apiKeyMissing:
+        'A chave da API OpenAI não está configurada. Por favor, adicione VITE_OPENAI_API_KEY ao seu ambiente.',
+      generationFailed: 'Falha ao gerar cartões. Por favor, tente novamente.',
+      saveFailed: 'Falha ao salvar baralho. Por favor, tente novamente.',
+      invalidPrompt: 'Por favor, digite um tópico válido',
+      emptyPrompt: 'Por favor, digite um tópico para seus flashcards',
+      rateLimited: 'Muitas requisições. Por favor, aguarde um momento e tente novamente.',
+      networkError: 'Erro de conexão. Por favor, verifique sua conexão com a internet.',
+      parseError: 'Falha ao processar resposta da IA. Por favor, tente novamente.'
+    },
+
+    // Actions
+    retry: 'Tentar Novamente',
+    cancel: 'Cancelar',
+
+    // Premium required
+    premiumRequired: {
+      title: 'Recurso Premium',
+      description:
+        'A geração de flashcards com IA é um recurso premium. Faça upgrade para criar baralhos ilimitados com assistência de IA.',
+      upgradeButton: 'Fazer Upgrade para Premium'
+    },
+
+    // Deck limit reached
+    deckLimitReached: {
+      title: 'Limite de Baralhos Atingido',
+      description:
+        'Usuários gratuitos podem criar apenas 1 baralho. Faça upgrade para Premium para baralhos ilimitados e flashcards gerados por IA.',
+      upgradeButton: 'Fazer Upgrade para Premium'
+    }
   }
 }
 

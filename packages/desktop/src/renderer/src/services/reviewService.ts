@@ -133,7 +133,6 @@ export async function getDueCards(
         if (!card.next_review) {
           // If no next_review date is set, the card is due for its first review
           isDue = true
-          console.log(`Card ${card.id} has no next_review date, marking as due`)
         } else {
           // Parse the next_review date safely
           let reviewDate: Date | null = null
@@ -157,16 +156,6 @@ export async function getDueCards(
 
               // Compare dates - a card is due only if its review date is strictly earlier than today
               isDue = isSameDayOrEarlier(reviewDateMidnight, today)
-
-              console.log(`Card ${card.id}: Raw date from DB: ${rawReviewDate}`)
-              console.log(
-                `Card ${card.id}: Review date (local midnight): ${reviewDateMidnight.toLocaleString()}`
-              )
-              console.log(`Card ${card.id}: Today (local midnight): ${today.toLocaleString()}`)
-              console.log(
-                `Card ${card.id}: Year/Month/Day comparison: ${reviewDateMidnight.getFullYear()}/${reviewDateMidnight.getMonth() + 1}/${reviewDateMidnight.getDate()} < ${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`
-              )
-              console.log(`Card ${card.id}: isDue = ${isDue}`)
             }
           } catch (error) {
             console.error(`Error processing review date for card ${card.id}:`, error)

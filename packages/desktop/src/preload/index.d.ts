@@ -10,7 +10,9 @@ declare global {
       }
     }
     api: {
-      notifySettingsUpdated: () => void
+      notifySettingsUpdated: (settings: { reviewTime: string }) => void
+      syncSettings: (settings: { reviewTime: string; lastNotification: string | null }) => void
+      testNotification: () => void
       checkForUpdates: () => void
       onAuthCallback: (callback: (url: string) => void) => void
     }

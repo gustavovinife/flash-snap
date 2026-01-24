@@ -4,8 +4,18 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   // Notify main process that settings have been updated
-  notifySettingsUpdated: (): void => {
-    ipcRenderer.send('settings-updated')
+  notifySettingsUpdated: (settings: { reviewTime: string }): void => {
+    ipcRenderer.send('settings-updated', settings)
+  },
+
+  // Sync settings to main process on app start
+  syncSettings: (settings: { reviewTime: string; lastNotification: string | null }): void => {
+    ipcRenderer.send('sync-settings', settings)
+  },
+
+  // Test notification
+  testNotification: (): void => {
+    ipcRenderer.send('test-notification')
   },
 
   // Check for app updates

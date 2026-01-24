@@ -202,6 +202,7 @@ const ptBR = {
     title: 'Configurações',
     saveSuccess: 'Configurações salvas com sucesso!',
     saveButton: 'Salvar Configurações',
+    testNotification: 'Testar',
     language: {
       label: 'Idioma da Aplicação',
       description: 'Selecione o idioma preferido para a interface da aplicação.'

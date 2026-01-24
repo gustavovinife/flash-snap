@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { getSettings, saveSettings, getLanguages, Settings } from '../services/settingsService'
+import {
+  getSettings,
+  saveSettings,
+  getLanguages,
+  Settings,
+  testNotification
+} from '../services/settingsService'
 import { Button } from '@renderer/ui/common'
 import { useSubscription } from '@renderer/hooks/useSubscription'
 import SubscriptionStatus from '@renderer/components/SubscriptionStatus'
@@ -99,13 +105,18 @@ const SettingsPage: React.FC = () => {
             <label htmlFor="reviewTime" className="block text-sm font-medium text-gray-700">
               {t('settings.reviewTime.label')}
             </label>
-            <input
-              id="reviewTime"
-              type="time"
-              value={settings.reviewTime}
-              onChange={(e) => setSettings({ ...settings, reviewTime: e.target.value })}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
+            <div className="flex gap-2">
+              <input
+                id="reviewTime"
+                type="time"
+                value={settings.reviewTime}
+                onChange={(e) => setSettings({ ...settings, reviewTime: e.target.value })}
+                className="block flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              />
+              <Button variant="primary" size="md" type="button" onClick={testNotification}>
+                {t('settings.testNotification')}
+              </Button>
+            </div>
             <p className="text-sm text-gray-500">{t('settings.reviewTime.description')}</p>
           </div>
 

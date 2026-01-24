@@ -200,6 +200,7 @@ const enUS = {
     title: 'Settings',
     saveSuccess: 'Settings saved successfully!',
     saveButton: 'Save Settings',
+    testNotification: 'Test',
     language: {
       label: 'Application Language',
       description: 'Select your preferred language for the application interface.'

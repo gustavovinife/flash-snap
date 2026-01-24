@@ -1,32 +1,25 @@
-import { app, shell, BrowserWindow, ipcMain, Tray, Menu, Notification, autoUpdater } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Tray, Menu, Notification } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import trayIcon from '../../resources/trayIcon.png?asset'
 import icon from '../../resources/icon.png?asset'
 import AutoLaunch from 'auto-launch'
-import { updateElectronApp } from 'update-electron-app'
 
-// Initialize automatic updates
-updateElectronApp({
-  repo: 'gustavowebjs/flash-snap',
-  updateInterval: '1 hour',
-  logger: {
-    info: (message: string) => console.log(`Update info: ${message}`),
-    warn: (message: string) => console.warn(`Update warning: ${message}`),
-    error: (message: string) => console.error(`Update error: ${message}`),
-    log: (message: string) => console.log(`Update log: ${message}`)
-  },
-  notifyUser: true
-})
+// Disable auto-updater logging
+autoUpdater.logger = null
+
+// Auto-download updates
+autoUpdater.autoDownload = true
+autoUpdater.autoInstallOnAppQuit = true
 
 // Listen for update events
 ipcMain.on('check-for-updates', () => {
-  // The update-electron-app package automatically checks for updates
-  // This is just to provide feedback to the user when manually checking
   new Notification({
     title: 'Flash Snap',
     body: 'Checking for updates...'
   }).show()
+  autoUpdater.checkForUpdates()
 })
 
 let tray: Tray | null = null
@@ -34,11 +27,33 @@ let mainWindow: BrowserWindow | null = null
 let isQuiting = false
 let reviewCheckInterval: NodeJS.Timeout | null = null
 
+// Store settings in main process memory for reliable access
+const cachedSettings: { reviewTime: string; lastNotificationDate: string | null } = {
+  reviewTime: '09:00',
+  lastNotificationDate: null
+}
+
 function showReviewNotification(message = 'Time for your daily review!'): void {
-  new Notification({
+  // Check if notifications are supported
+  if (!Notification.isSupported()) {
+    return
+  }
+
+  const notification = new Notification({
     title: 'Flash Snap',
-    body: message
-  }).show()
+    body: message,
+    silent: false
+  })
+
+  notification.on('click', () => {
+    // Show the app when notification is clicked
+    if (mainWindow) {
+      mainWindow.show()
+      mainWindow.focus()
+    }
+  })
+
+  notification.show()
 }
 
 // Function to hide dock icon (macOS only)
@@ -56,7 +71,39 @@ function showDockIcon(): void {
 }
 
 function checkReviewTime(): void {
-  if (!mainWindow) return
+  const now = new Date()
+  const today = now.toDateString()
+
+  // Skip if we already notified today
+  if (cachedSettings.lastNotificationDate === today) {
+    return
+  }
+
+  // Parse the review time (handles both "9:00" and "09:00" formats)
+  const reviewTime = cachedSettings.reviewTime || '09:00'
+  const timeParts = reviewTime.split(':')
+  const targetHour = parseInt(timeParts[0], 10)
+  const targetMinute = parseInt(timeParts[1] || '0', 10)
+
+  const targetTime = new Date()
+  targetTime.setHours(targetHour, targetMinute, 0, 0)
+
+  if (now >= targetTime) {
+    showReviewNotification()
+    cachedSettings.lastNotificationDate = today
+
+    // Also persist to renderer's localStorage if window is available
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents
+        .executeJavaScript(`localStorage.setItem('lastReviewNotification', '${today}');`)
+        .catch(() => {})
+    }
+  }
+}
+
+// Sync settings from renderer to main process
+function syncSettingsFromRenderer(): void {
+  if (!mainWindow || mainWindow.isDestroyed()) return
 
   mainWindow.webContents
     .executeJavaScript(
@@ -64,38 +111,19 @@ function checkReviewTime(): void {
       try {
         const settingsStr = localStorage.getItem('flashSnap_settings');
         const settings = settingsStr ? JSON.parse(settingsStr) : null;
-
-        const last = localStorage.getItem('lastReviewNotification');
-
-        ({ settings, last });
+        const lastNotification = localStorage.getItem('lastReviewNotification');
+        ({ reviewTime: settings?.reviewTime || '09:00', lastNotification });
       } catch (e) {
         console.error('Failed to get settings:', e);
-        null;
+        ({ reviewTime: '09:00', lastNotification: null });
       }
     `
     )
-    .then((data) => {
-      if (!data || !data.settings) return
-
-      const { settings, last } = data
-      const now = new Date()
-
-      const [hourStr, minuteStr] = (settings.reviewTime || '9:0').split(':')
-      const targetTime = new Date()
-      targetTime.setHours(parseInt(hourStr), parseInt(minuteStr), 0, 0)
-
-      const today = now.toDateString()
-
-      if (now >= targetTime && last !== today) {
-        showReviewNotification()
-        mainWindow?.webContents.executeJavaScript(`
-          localStorage.setItem('lastReviewNotification', '${today}');
-        `)
-      }
+    .then((data: { reviewTime: string; lastNotification: string | null }) => {
+      cachedSettings.reviewTime = data.reviewTime
+      cachedSettings.lastNotificationDate = data.lastNotification
     })
-    .catch((err) => {
-      console.error('Error checking review time:', err)
-    })
+    .catch(() => {})
 }
 
 function createWindow(): void {
@@ -116,8 +144,8 @@ function createWindow(): void {
     clearInterval(reviewCheckInterval)
   }
 
-  // Check for review time every 5 minutes
-  reviewCheckInterval = setInterval(checkReviewTime, 5 * 60 * 1000)
+  // Check for review time every minute for better accuracy
+  reviewCheckInterval = setInterval(checkReviewTime, 60 * 1000)
 
   mainWindow.webContents.on('before-input-event', (event, input) => {
     if (input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i')) {
@@ -205,14 +233,24 @@ function setupAutoLaunch(): void {
     .then((isEnabled) => {
       if (!isEnabled) flashSnapAutoLauncher.enable()
     })
-    .catch((err) => {
-      console.error('Error configuring auto-launch:', err)
-    })
+    .catch(() => {})
 }
 
 app.whenReady().then(() => {
-  autoUpdater.checkForUpdates()
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.flashsnap.desktop')
+
+  // Check for updates after app is ready (only in production)
+  if (!is.dev) {
+    autoUpdater.checkForUpdates().catch(() => {})
+
+    // Check for updates every hour
+    setInterval(
+      () => {
+        autoUpdater.checkForUpdates().catch(() => {})
+      },
+      60 * 60 * 1000
+    )
+  }
 
   setupAutoLaunch()
   createWindow()
@@ -223,10 +261,13 @@ app.whenReady().then(() => {
     hideDockIcon()
   }
 
-  // Run the first check for review time
+  // Run the first check for review time after syncing settings
   setTimeout(() => {
-    if (mainWindow && mainWindow.webContents.isLoading() === false) {
-      checkReviewTime()
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      // First sync settings from renderer
+      syncSettingsFromRenderer()
+      // Then check review time after a short delay to allow sync to complete
+      setTimeout(checkReviewTime, 1000)
     }
   }, 5000) // Give the app 5 seconds to fully initialize
 
@@ -256,33 +297,51 @@ app.on('window-all-closed', () => {
   }
 })
 
-ipcMain.on('ping', () => console.log('pong'))
+ipcMain.on('ping', () => {})
 
 // Listen for settings changes to update notification schedule
-ipcMain.on('settings-updated', () => {
-  console.log('Settings updated, restarting review check interval')
+ipcMain.on('settings-updated', (_event, settings: { reviewTime: string }) => {
+  if (settings?.reviewTime) {
+    cachedSettings.reviewTime = settings.reviewTime
+  }
+
+  // Restart the check interval
   if (reviewCheckInterval) {
     clearInterval(reviewCheckInterval)
   }
-  reviewCheckInterval = setInterval(checkReviewTime, 5 * 60 * 1000)
+  reviewCheckInterval = setInterval(checkReviewTime, 60 * 1000) // Check every minute for more accuracy
 
   // Run a check immediately in case the time is now
-  if (mainWindow && mainWindow.webContents.isLoading() === false) {
-    checkReviewTime()
-  }
+  checkReviewTime()
 })
+
+// Handle test notification request
+ipcMain.on('test-notification', () => {
+  showReviewNotification('This is a test notification!')
+})
+
+// Handle request to sync settings on app start
+ipcMain.on(
+  'sync-settings',
+  (_event, settings: { reviewTime: string; lastNotification: string | null }) => {
+    if (settings) {
+      cachedSettings.reviewTime = settings.reviewTime || '09:00'
+      cachedSettings.lastNotificationDate = settings.lastNotification
+    }
+  }
+)
 
 autoUpdater.on('update-available', () => {
   new Notification({
     title: 'Flash Snap',
-    body: 'A new update is available. Please restart the app to apply it.'
+    body: 'A new update is available. Downloading...'
   }).show()
 })
 
 autoUpdater.on('update-downloaded', () => {
   new Notification({
     title: 'Flash Snap',
-    body: 'The update has been downloaded. Please restart the app to apply it.'
+    body: 'Update downloaded. Restart the app to apply the update.'
   }).show()
 })
 
@@ -295,10 +354,7 @@ app.on('web-contents-created', (_, contents) => {
     const allowedDomains = ['accounts.google.com', 'svufbwjdrbmiyvhimutm.supabase.co', 'localhost']
 
     // Allow navigation only to specific domains
-    if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
-      console.log('Allowing navigation to:', navigationUrl)
-    } else {
-      console.log('Blocking navigation to:', navigationUrl)
+    if (!allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
       event.preventDefault()
       shell.openExternal(navigationUrl)
     }
@@ -306,16 +362,13 @@ app.on('web-contents-created', (_, contents) => {
 
   // Open external links in default browser
   contents.setWindowOpenHandler(({ url }) => {
-    console.log('Window open request for URL:', url)
     const parsedUrl = new URL(url)
     const allowedDomains = ['accounts.google.com', 'svufbwjdrbmiyvhimutm.supabase.co']
 
     if (allowedDomains.some((domain) => parsedUrl.hostname.includes(domain))) {
-      console.log('Allowing window open for URL:', url)
       return { action: 'allow' }
     }
 
-    console.log('Opening URL in external browser:', url)
     shell.openExternal(url)
     return { action: 'deny' }
   })

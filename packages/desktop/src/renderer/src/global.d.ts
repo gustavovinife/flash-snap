@@ -1,3 +1,5 @@
+/// <reference path="../../preload/index.d.ts" />
+
 declare global {
   interface Window {
     electron: {
@@ -16,7 +18,9 @@ declare global {
       hasPendingChanges: () => Promise<boolean>
       syncToCloud: () => Promise<boolean>
       syncFromCloud: () => Promise<boolean>
-      notifySettingsUpdated: () => void
+      notifySettingsUpdated: (settings: { reviewTime: string }) => void
+      syncSettings: (settings: { reviewTime: string; lastNotification: string | null }) => void
+      testNotification: () => void
       checkForUpdates: () => void
       onAuthCallback: (callback: (url: string) => void) => void
       handleLogout: () => void

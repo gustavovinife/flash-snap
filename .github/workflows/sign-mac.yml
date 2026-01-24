@@ -1,0 +1,134 @@
+name: Sign and Notarize macOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sign-mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest release
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          RELEASE_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "Latest release: $RELEASE_TAG"
+
+      - name: Download macOS builds from release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          mkdir -p downloads
+          cd downloads
+
+          # Download x64 zip
+          gh release download ${{ steps.release.outputs.tag }} --pattern "*mac.zip" || echo "x64 zip not found"
+
+          # Download arm64 zip  
+          gh release download ${{ steps.release.outputs.tag }} --pattern "*mac-arm64.zip" || echo "arm64 zip not found"
+
+          ls -la
+
+      - name: Extract builds
+        run: |
+          cd downloads
+
+          # Extract x64
+          if [ -f *-mac.zip ]; then
+            unzip -q *-mac.zip -d ../dist-x64
+            echo "Extracted x64"
+          fi
+
+          # Extract arm64
+          if [ -f *-mac-arm64.zip ]; then
+            unzip -q *-mac-arm64.zip -d ../dist-arm64
+            echo "Extracted arm64"
+          fi
+
+          ls -la ../dist-x64 || true
+          ls -la ../dist-arm64 || true
+
+      - name: Setup Apple credentials
+        env:
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+        run: |
+          echo "$APPLE_API_KEY" | base64 --decode > /tmp/AuthKey.p8
+          echo "API Key created"
+
+      - name: Sign and Notarize x64
+        if: hashFiles('dist-x64/**') != ''
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          APP_PATH=$(find dist-x64 -name "*.app" -type d | head -1)
+          echo "Signing: $APP_PATH"
+
+          # Sign all components
+          find "$APP_PATH/Contents/Frameworks" -type f \( -name "*.dylib" -o -perm +111 \) | while read file; do
+            codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$file" 2>/dev/null || true
+          done
+
+          find "$APP_PATH/Contents/Frameworks" -name "*.framework" -type d | while read framework; do
+            codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$framework"
+          done
+
+          codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$APP_PATH"
+
+          # Notarize
+          ditto -c -k --keepParent "$APP_PATH" flash-snap-x64.zip
+          xcrun notarytool submit flash-snap-x64.zip --key /tmp/AuthKey.p8 --key-id $APPLE_API_KEY_ID --issuer $APPLE_API_ISSUER --wait
+
+          # Staple
+          xcrun stapler staple "$APP_PATH"
+
+          # Create DMG
+          hdiutil create -volname "Flash Snap" -srcfolder "$APP_PATH" -ov -format UDZO flash-snap-x64.dmg
+
+      - name: Sign and Notarize ARM64
+        if: hashFiles('dist-arm64/**') != ''
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          APP_PATH=$(find dist-arm64 -name "*.app" -type d | head -1)
+          echo "Signing: $APP_PATH"
+
+          # Sign all components
+          find "$APP_PATH/Contents/Frameworks" -type f \( -name "*.dylib" -o -perm +111 \) | while read file; do
+            codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$file" 2>/dev/null || true
+          done
+
+          find "$APP_PATH/Contents/Frameworks" -name "*.framework" -type d | while read framework; do
+            codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$framework"
+          done
+
+          codesign --force --sign "Developer ID Application: Lucas Castelani (7F7UX5FJX2)" --timestamp --options runtime "$APP_PATH"
+
+          # Notarize
+          ditto -c -k --keepParent "$APP_PATH" flash-snap-arm64.zip
+          xcrun notarytool submit flash-snap-arm64.zip --key /tmp/AuthKey.p8 --key-id $APPLE_API_KEY_ID --issuer $APPLE_API_ISSUER --wait
+
+          # Staple
+          xcrun stapler staple "$APP_PATH"
+
+          # Create DMG
+          hdiutil create -volname "Flash Snap" -srcfolder "$APP_PATH" -ov -format UDZO flash-snap-arm64.dmg
+
+      - name: Upload signed DMGs to Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ -f flash-snap-x64.dmg ]; then
+            gh release upload ${{ steps.release.outputs.tag }} flash-snap-x64.dmg --clobber
+          fi
+
+          if [ -f flash-snap-arm64.dmg ]; then
+            gh release upload ${{ steps.release.outputs.tag }} flash-snap-arm64.dmg --clobber
+          fi

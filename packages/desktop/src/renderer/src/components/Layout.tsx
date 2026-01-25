@@ -113,7 +113,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {t('layout.copyright')}{' '}
             <a
               style={{ color: '#501f75' }}
-              href="https://github.com/gustavovinife"
+              href="https://flashsnap.com.br/"
               target="_blank"
               rel="noopener noreferrer"
             >

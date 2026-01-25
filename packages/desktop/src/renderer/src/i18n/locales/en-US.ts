@@ -60,7 +60,7 @@ const enUS = {
     neverReviewed: 'Never reviewed',
     deleteConfirm: 'Are you sure you want to delete this {{item}}?',
     optional: 'Optional',
-    addTemplate: 'Add Template',
+    addTemplate: 'Install Templates',
     language: 'Language',
     knowledge: 'Knowledge'
   },
@@ -86,7 +86,8 @@ const enUS = {
     deckCount: '{{count}} {{deck}}',
     noDeck: 'No decks yet',
     createFirstDeck: 'Create your first deck',
-    addDeck: 'Add Deck',
+    addDeck: 'New Deck',
+    becomePremium: 'Become Premium',
     deckType: 'Deck Type',
     language: 'Language',
     knowledge: 'Knowledge',

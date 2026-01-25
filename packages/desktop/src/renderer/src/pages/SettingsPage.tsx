@@ -54,7 +54,7 @@ const SettingsPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <button
           onClick={handleBack}
@@ -78,19 +78,19 @@ const SettingsPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-medium mb-6">{t('settings.title')}</h2>
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <h2 className="text-xl font-medium mb-4">{t('settings.title')}</h2>
 
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <label htmlFor="language" className="text-sm font-medium text-gray-700 whitespace-nowrap min-w-[140px]">
               {t('settings.language.label')}
             </label>
             <select
               id="language"
               value={settings.language}
               onChange={(e) => setSettings({ ...settings, language: e.target.value })}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="block flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               {languages.map((lang) => (
                 <option key={lang.value} value={lang.value}>
@@ -98,30 +98,28 @@ const SettingsPage: React.FC = () => {
                 </option>
               ))}
             </select>
-            <p className="text-sm text-gray-500">{t('settings.language.description')}</p>
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="reviewTime" className="block text-sm font-medium text-gray-700">
+          <div className="flex items-center gap-4">
+            <label htmlFor="reviewTime" className="text-sm font-medium text-gray-700 whitespace-nowrap min-w-[140px]">
               {t('settings.reviewTime.label')}
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-1 gap-2">
               <input
                 id="reviewTime"
                 type="time"
                 value={settings.reviewTime}
                 onChange={(e) => setSettings({ ...settings, reviewTime: e.target.value })}
-                className="block flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               />
-              <Button variant="primary" size="md" type="button" onClick={testNotification}>
+              <Button variant="primary" size="sm" type="button" onClick={testNotification}>
                 {t('settings.testNotification')}
               </Button>
             </div>
-            <p className="text-sm text-gray-500">{t('settings.reviewTime.description')}</p>
           </div>
 
-          <div className="pt-4">
-            <Button variant="primary" size="md" onClick={handleSave}>
+          <div className="pt-2">
+            <Button variant="primary" size="sm" onClick={handleSave}>
               {t('settings.saveButton')}
             </Button>
           </div>
@@ -129,8 +127,8 @@ const SettingsPage: React.FC = () => {
       </div>
 
       {/* Subscription Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-medium mb-6">{t('subscription.title')}</h2>
+      <div className="bg-white rounded-lg shadow-md p-4">
+        <h2 className="text-xl font-medium mb-3">{t('subscription.title')}</h2>
         <SubscriptionStatus
           subscription={subscription}
           isLoading={subscriptionLoading}

@@ -152,7 +152,81 @@ const enUS = {
   // Footer
   footer: {
     contact: "Contact",
+    privacy: "Privacy Policy",
     copyright: "© {{year}} Flash Snap. All rights reserved.",
+  },
+
+  // Privacy Policy
+  privacy: {
+    title: "Privacy Policy",
+    backToHome: "Back to Home",
+    lastUpdated: "Last updated: {{date}}",
+    sections: {
+      introduction: {
+        title: "Introduction",
+        content:
+          "Flash Snap (\"we\", \"our\", or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our desktop application and services.",
+      },
+      dataCollection: {
+        title: "Information We Collect",
+        content: "We collect the following types of information:",
+        items: {
+          email: "Email address (for account creation and authentication)",
+          flashcards: "Flashcard content you create (questions, answers, and context)",
+          progress: "Learning progress data (review history, performance metrics)",
+          preferences: "App preferences and settings",
+        },
+      },
+      dataUsage: {
+        title: "How We Use Your Information",
+        content: "We use the collected information to:",
+        items: {
+          service: "Provide and maintain our flashcard service",
+          sync: "Sync your data across devices",
+          improve: "Improve our spaced repetition algorithm and user experience",
+          support: "Provide customer support when needed",
+        },
+      },
+      dataSecurity: {
+        title: "Data Security",
+        content:
+          "We implement industry-standard security measures to protect your data. Your information is stored securely using Supabase, which provides encrypted data storage and secure authentication. We use HTTPS for all data transmission.",
+      },
+      thirdParty: {
+        title: "Third-Party Services",
+        content: "We use the following third-party services to provide our app:",
+        items: {
+          supabase: "Supabase - Database and authentication (data storage)",
+          stripe: "Stripe - Payment processing (for Premium subscriptions)",
+          openai: "OpenAI - AI-powered flashcard generation (Premium feature)",
+        },
+      },
+      userRights: {
+        title: "Your Rights",
+        content: "You have the right to:",
+        items: {
+          access: "Access your personal data",
+          correction: "Request correction of inaccurate data",
+          deletion: "Request deletion of your account and data",
+          export: "Export your flashcard data",
+        },
+      },
+      cookies: {
+        title: "Cookies and Local Storage",
+        content:
+          "Flash Snap uses local storage to save your preferences and session information. We do not use tracking cookies or third-party analytics on our desktop application.",
+      },
+      changes: {
+        title: "Changes to This Policy",
+        content:
+          "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the \"Last updated\" date.",
+      },
+      contact: {
+        title: "Contact Us",
+        content:
+          "If you have any questions about this Privacy Policy or our data practices, please contact us at:",
+      },
+    },
   },
 };
 

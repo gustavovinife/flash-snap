@@ -60,7 +60,7 @@ const ptBR = {
     neverReviewed: 'Nunca revisado',
     deleteConfirm: 'Tem certeza que deseja excluir este {{item}}?',
     optional: 'Opcional',
-    addTemplate: 'Adicionar Template',
+    addTemplate: 'Instalar Templates',
     language: 'Idioma',
     knowledge: 'Conhecimento'
   },
@@ -86,7 +86,8 @@ const ptBR = {
     deckCount: '{{count}} {{deck}}',
     noDeck: 'Nenhum baralho ainda',
     createFirstDeck: 'Crie seu primeiro baralho',
-    addDeck: 'Adicionar Baralho',
+    addDeck: 'Novo Baralho',
+    becomePremium: 'Seja Premium',
     deckName: 'Nome do baralho',
     deleteDeck: 'Excluir baralho',
     deckType: 'Tipo de Baralho',

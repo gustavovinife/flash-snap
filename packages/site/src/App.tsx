@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { FAQAccordion } from "./components/FAQAccordion";
@@ -17,6 +18,7 @@ import {
   Sparkles,
   Wand2,
   MessageSquare,
+  Shield,
 } from "lucide-react";
 
 const PlatformIcon = ({ platform }: { platform: string }) => {
@@ -319,12 +321,19 @@ function App() {
           </div>
           <div className="flex gap-6 text-sm text-gray-500">
             <a
-              href="mailto:support@flashsnap.app"
+              href="mailto:support@flashsnap.com.br"
               className="hover:text-white transition-colors flex items-center gap-1"
             >
               <Mail className="w-4 h-4" />
               {t("footer.contact")}
             </a>
+            <Link
+              to="/privacy"
+              className="hover:text-white transition-colors flex items-center gap-1"
+            >
+              <Shield className="w-4 h-4" />
+              {t("footer.privacy")}
+            </Link>
           </div>
           <p className="text-sm text-gray-600">
             {t("footer.copyright", { year: new Date().getFullYear() })}

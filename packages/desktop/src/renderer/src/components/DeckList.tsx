@@ -86,6 +86,14 @@ export default function DeckList(): React.JSX.Element {
     }
   }
 
+  const handleCreateWithAI = (): void => {
+    if (canCreateDeck(decks.length)) {
+      navigate('/ai-generate')
+    } else {
+      setShowUpgradePrompt(true)
+    }
+  }
+
   return (
     <div className="w-full max-w-lg">
       <div className="my-6">
@@ -115,7 +123,7 @@ export default function DeckList(): React.JSX.Element {
 
       {/* Create With AI Card */}
       <div className="mb-6">
-        <CreateWithAICard onClick={() => navigate('/ai-generate')} />
+        <CreateWithAICard onClick={handleCreateWithAI} />
       </div>
 
       <hr className="my-6 border-gray-200" />
@@ -142,7 +150,7 @@ export default function DeckList(): React.JSX.Element {
               </svg>
             }
           >
-            {t('common.add')}
+            {t('deckList.addDeck')}
           </Button>
           <Button
             variant="primary"

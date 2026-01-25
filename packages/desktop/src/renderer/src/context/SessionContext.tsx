@@ -66,8 +66,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
       queryClient.clear()
       // Also remove all queries to ensure fresh fetch
       queryClient.removeQueries()
-    } catch (err) {
-      console.error('Error clearing query cache:', err)
+    } catch {
+      // Silently handle cache clearing errors
     }
   }
 
@@ -87,10 +87,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
       const { data, error } = await supabase.auth.getSession()
 
       if (error) {
-        console.error('Error refreshing session on focus:', error)
         // If refresh fails (e.g., refresh token expired), sign out the user
         if (error.message?.includes('refresh_token') || error.status === 401) {
-          console.log('Refresh token expired, signing out...')
           await supabase.auth.signOut()
         }
         return
@@ -102,13 +100,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
         setUser(data.session.user)
       } else if (session) {
         // Had a session but now it's gone - user needs to re-authenticate
-        console.log('Session expired, clearing state...')
         await clearAllCachedData()
         setSession(null)
         setUser(null)
       }
-    } catch (err) {
-      console.error('Unexpected error refreshing session:', err)
+    } catch {
+      // Silently handle unexpected errors during session refresh
     }
   }, [session])
 
@@ -144,13 +141,11 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
 
       // Detect user change (different user logged in)
       if (previousUserId && newUserId && previousUserId !== newUserId) {
-        console.log('User changed, clearing cache...')
         await clearAllCachedData()
       }
 
       // Detect sign out
       if (event === 'SIGNED_OUT') {
-        console.log('User signed out, clearing cache...')
         await clearAllCachedData()
       }
 
@@ -195,9 +190,8 @@ export const SessionProvider = ({ children }: { children: ReactNode }): React.Re
             setSession(data.session)
             setUser(data.session.user)
           }
-        } catch (err) {
+        } catch {
           // Authentication error handling is silent to the user
-          console.error('Authentication error:', err)
         }
       })
     }

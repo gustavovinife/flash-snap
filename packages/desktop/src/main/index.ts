@@ -147,12 +147,17 @@ function createWindow(): void {
   // Check for review time every minute for better accuracy
   reviewCheckInterval = setInterval(checkReviewTime, 60 * 1000)
 
-  mainWindow.webContents.on('before-input-event', (event, input) => {
-    if (input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i')) {
-      mainWindow?.webContents.toggleDevTools()
-      event.preventDefault()
-    }
-  })
+  if (is.dev) {
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+      if (
+        input.key === 'F12' ||
+        (input.control && input.shift && input.key.toLowerCase() === 'i')
+      ) {
+        mainWindow?.webContents.toggleDevTools()
+        event.preventDefault()
+      }
+    })
+  }
 
   mainWindow.on('ready-to-show', () => mainWindow?.show())
 
@@ -271,9 +276,11 @@ app.whenReady().then(() => {
     }
   }, 5000) // Give the app 5 seconds to fully initialize
 
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
+  if (is.dev) {
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window)
+    })
+  }
 })
 
 app.on('activate', () => {

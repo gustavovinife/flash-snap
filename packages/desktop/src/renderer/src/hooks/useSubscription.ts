@@ -19,7 +19,7 @@ interface UseSubscriptionReturn {
   refetch: () => void
 }
 
-const STRIPE_PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_ID || 'price_1SsUhmE13c2k8XKrUecLh4J7'
+const STRIPE_PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_ID
 
 export function useSubscription(): UseSubscriptionReturn {
   const { user } = useSession()

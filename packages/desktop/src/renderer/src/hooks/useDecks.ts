@@ -37,7 +37,6 @@ export const useDecks = (): IUseDecks => {
       return { ...newDeck, cards: [] }
     },
     onSuccess: (newDeck: Deck) => {
-      console.log('newDeck', newDeck)
       queryClient.setQueryData<Deck[]>(['decks'], (oldData) => {
         return oldData ? [newDeck, ...oldData] : [newDeck]
       })

@@ -89,44 +89,30 @@ export async function getDueCards(
   decks: Deck[],
   deckId?: string
 ): Promise<{ card: Card; deckId: string; deckName: string }[]> {
-  console.log(
-    `Getting due cards. Total decks: ${decks.length}, Specific deckId: ${deckId || 'all'}`
-  )
-
   if (!decks || !Array.isArray(decks) || decks.length === 0) {
-    console.warn('No decks available for review')
     return []
   }
 
   // Get today's date in local timezone
   const today = getLocalMidnight(new Date())
-  console.log(`Today's date (local midnight): ${today.toISOString()}`)
-  console.log(`Local timezone offset: ${today.getTimezoneOffset()} minutes`)
 
   // Filter decks by ID if specified
   const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
 
   if (decksToCheck.length === 0) {
-    console.warn(`No matching decks found for deckId: ${deckId}`)
     return []
   }
-
-  console.log(`Checking ${decksToCheck.length} decks for due cards`)
 
   const dueCards: { card: Card; deckId: string; deckName: string }[] = []
 
   for (const deck of decksToCheck) {
     if (!deck.cards || !Array.isArray(deck.cards)) {
-      console.warn(`Deck ${deck.id} (${deck.name}) has no cards array`)
       continue
     }
-
-    console.log(`Checking deck: ${deck.id} (${deck.name}), Total cards: ${deck.cards.length}`)
 
     for (const card of deck.cards) {
       try {
         if (!card || !card.id) {
-          console.warn('Invalid card found, skipping')
           continue
         }
 
@@ -140,17 +126,10 @@ export async function getDueCards(
           let reviewDate: Date | null = null
 
           try {
-            // Get the raw stored date string for debugging
-            const rawReviewDate =
-              card.next_review instanceof Date
-                ? card.next_review.toISOString()
-                : String(card.next_review)
-
             reviewDate = new Date(card.next_review)
 
             // Ensure it's a valid date
             if (isNaN(reviewDate.getTime())) {
-              console.warn(`Card ${card.id} has invalid next_review date: ${rawReviewDate}`)
               isDue = true
             } else {
               // Get local midnight of the review date
@@ -159,8 +138,7 @@ export async function getDueCards(
               // Compare dates - a card is due only if its review date is strictly earlier than today
               isDue = isSameDayOrEarlier(reviewDateMidnight, today)
             }
-          } catch (error) {
-            console.error(`Error processing review date for card ${card.id}:`, error)
+          } catch {
             isDue = true
           }
         }
@@ -172,13 +150,12 @@ export async function getDueCards(
             deckName: deck.name
           })
         }
-      } catch (error) {
-        console.error(`Error processing card in deck ${deck.id}:`, error)
+      } catch {
+        // Skip cards that fail processing
       }
     }
   }
 
-  console.log(`Found ${dueCards.length} due cards`)
   return dueCards
 }
 
@@ -202,7 +179,6 @@ export async function updateCardAfterReview(
   await updateCard.mutateAsync(updatedCard)
 
   if (!deck) {
-    console.error(`Deck  not found.`)
     return
   }
 

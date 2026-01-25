@@ -31,7 +31,7 @@
     "format": "yarn workspaces run format",
     "test": "yarn workspace @flash-snap/desktop test",
     "test:desktop": "yarn workspace @flash-snap/desktop test",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "engines": {
     "node": ">=18.0.0",

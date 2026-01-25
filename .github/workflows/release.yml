@@ -59,6 +59,8 @@ jobs:
       - name: Bump version
         id: version
         working-directory: packages/desktop
+        env:
+          HUSKY: 0
         run: |
           # Get current version
           CURRENT_VERSION=$(node -p "require('./package.json').version")

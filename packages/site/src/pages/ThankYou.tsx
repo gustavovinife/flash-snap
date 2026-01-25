@@ -1,22 +1,9 @@
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { CheckCircle, ArrowLeft, RefreshCw } from "lucide-react";
 
 export function ThankYou() {
   const { t } = useTranslation();
-
-  // Add noindex meta tag to prevent search engine indexing
-  useEffect(() => {
-    const metaRobots = document.createElement("meta");
-    metaRobots.name = "robots";
-    metaRobots.content = "noindex, nofollow";
-    document.head.appendChild(metaRobots);
-
-    return () => {
-      document.head.removeChild(metaRobots);
-    };
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col">

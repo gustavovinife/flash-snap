@@ -28,9 +28,10 @@ jobs:
       - name: Decode and setup Apple API Key
         run: |
           mkdir -p ~/private_keys
-          echo "-----BEGIN PRIVATE KEY-----" > ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
-          echo "${{ secrets.APPLE_API_KEY }}" >> ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
-          echo "-----END PRIVATE KEY-----" >> ~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
+          KEY_FILE=~/private_keys/AuthKey_${{ secrets.APPLE_API_KEY_ID }}.p8
+          printf '%s\n' "-----BEGIN PRIVATE KEY-----" > "$KEY_FILE"
+          printf '%s\n' "${{ secrets.APPLE_API_KEY }}" >> "$KEY_FILE"
+          printf '%s\n' "-----END PRIVATE KEY-----" >> "$KEY_FILE"
 
       - name: Build and publish macOS
         working-directory: packages/desktop

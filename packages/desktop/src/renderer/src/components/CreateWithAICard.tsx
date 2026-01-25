@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Sparkles } from 'lucide-react'
 
 interface CreateWithAICardProps {
@@ -7,10 +8,16 @@ interface CreateWithAICardProps {
 
 export default function CreateWithAICard({ onClick }: CreateWithAICardProps): React.JSX.Element {
   const { t } = useTranslation()
+  const posthog = usePostHog()
+
+  const handleClick = (): void => {
+    posthog.capture('ai_generate_button_clicked')
+    onClick()
+  }
 
   return (
     <button
-      onClick={onClick}
+      onClick={handleClick}
       className="w-full p-4 rounded-lg border-2 border-purple-400 bg-white text-purple-600 hover:bg-purple-50 hover:border-purple-500 transition-all duration-300 relative overflow-hidden group"
     >
       {/* Subtle shiny effect overlay */}

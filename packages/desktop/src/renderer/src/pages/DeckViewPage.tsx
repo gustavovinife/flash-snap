@@ -1,18 +1,26 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
+import { usePostHog } from 'posthog-js/react'
 import DeckView from '../components/DeckView'
 import { useDecks } from '../hooks/useDecks'
 
 const DeckViewPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
+  const posthog = usePostHog()
 
   const { decks, isLoading } = useDecks()
 
   const deck = useMemo(() => {
     return decks.find((d) => d.id === id)
   }, [decks, id])
+
+  useEffect(() => {
+    if (deck) {
+      posthog.capture('page_viewed', { page: 'deck_view', deck_id: id, deck_name: deck.name })
+    }
+  }, [deck, id])
 
   if (isLoading) {
     return <div>{t('common.loading')}</div>

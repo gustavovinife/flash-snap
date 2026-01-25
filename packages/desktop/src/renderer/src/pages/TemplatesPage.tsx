@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Button, Input } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -16,6 +17,7 @@ import { useSubscription } from '../hooks/useSubscription'
 export default function TemplatesPage(): React.JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const posthog = usePostHog()
   const { createDeck, decks } = useDecks()
   const { createManyCards } = useCards()
   const { canCreateDeck, openCheckout } = useSubscription()
@@ -30,6 +32,8 @@ export default function TemplatesPage(): React.JSX.Element {
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false)
 
   useEffect(() => {
+    posthog.capture('page_viewed', { page: 'templates' })
+
     // Load templates on component mount
     const loadTemplates = async (): Promise<void> => {
       try {

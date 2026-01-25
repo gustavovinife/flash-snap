@@ -228,6 +228,23 @@ const ptBR = {
       },
     },
   },
+
+  // Thank You Page
+  thankYou: {
+    title: "Obrigado!",
+    subtitle: "Bem-vindo ao Flash Snap Premium",
+    description:
+      "Sua assinatura foi ativada com sucesso. Agora você tem acesso a todos os recursos premium, incluindo baralhos ilimitados, geração de flashcards com IA e muito mais.",
+    backToHome: "Voltar para Início",
+    nextSteps: {
+      title: "Próximos Passos",
+      step1: "Volte para o aplicativo Flash Snap",
+      step2: "Atualize a página ou reinicie o aplicativo",
+      step3: "Aproveite todos os seus novos recursos premium!",
+    },
+    support:
+      "Precisa de ajuda? Entre em contato conosco em",
+  },
 };
 
 export default ptBR;

@@ -51,7 +51,7 @@ const AIGeneratePage: React.FC = () => {
   const hasGeneratedCards = state.generatedCards.length > 0
 
   useEffect(() => {
-    posthog.capture('ai_generate_page_loaded')
+    posthog.capture('page_viewed', { page: 'ai_generate' })
   }, [])
 
   const handleUpgrade = async (): Promise<void> => {
@@ -86,8 +86,7 @@ const AIGeneratePage: React.FC = () => {
   }, [])
 
   const handleGenerate = useCallback(async () => {
-    posthog.capture('ai_generate_clicked')
-    posthog.capture('ai_generate_prompt_entered', { prompt: state.prompt })
+    posthog.capture('ai_prompt_submitted', { prompt: state.prompt })
     const trimmedPrompt = state.prompt.trim()
 
     if (!trimmedPrompt) {
@@ -176,7 +175,12 @@ const AIGeneratePage: React.FC = () => {
 
       await createManyCards.mutateAsync(cardsToInsert)
 
-      posthog.capture('ai_generate_deck_saved', { deck_id: newDeck.id })
+      posthog.capture('ai_deck_created', {
+        deck_id: newDeck.id,
+        deck_name: deckName,
+        deck_type: state.generatedDeckType,
+        cards_count: state.generatedCards.length
+      })
 
       // Navigate to the new deck
       navigate(`/deck/${newDeck.id}`)

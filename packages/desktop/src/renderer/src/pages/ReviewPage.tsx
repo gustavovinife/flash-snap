@@ -38,7 +38,7 @@ const ReviewPage: React.FC = () => {
       : false
 
   useEffect(() => {
-    posthog.capture('review_page_loaded')
+    posthog.capture('page_viewed', { page: 'review', deck_id: id || 'all' })
 
     async function loadDueCards(): Promise<void> {
       try {
@@ -97,6 +97,13 @@ const ReviewPage: React.FC = () => {
           // If no more cards, mark review as complete
           if (dueCards.length <= 1) {
             setReviewComplete(true)
+
+            // Track study session completion
+            posthog.capture('study_session_completed', {
+              cards_reviewed: cardsReviewed + 1,
+              deck_id: id || 'all',
+              deck_name: currentDeckName
+            })
           } else {
             setShowAnswer(false)
             setShowCardStats(false)

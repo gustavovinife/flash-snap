@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from '../context/SessionContext'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
 import LanguageSwitcher from '../components/LanguageSwitcher'
@@ -12,6 +13,11 @@ const LoginPage = (): React.ReactNode => {
   const { session } = useSession()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const posthog = usePostHog()
+
+  useEffect(() => {
+    posthog.capture('page_viewed', { page: 'login' })
+  }, [])
 
   const toggleMode = (): void => {
     setIsRegistering(!isRegistering)

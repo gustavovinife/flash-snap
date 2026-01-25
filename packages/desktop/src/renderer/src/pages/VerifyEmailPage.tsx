@@ -1,11 +1,18 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Button } from '../ui/common'
 import Logo from '../components/Logo'
 
 export default function VerifyEmailPage(): React.JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const posthog = usePostHog()
+
+  useEffect(() => {
+    posthog.capture('page_viewed', { page: 'verify_email' })
+  }, [])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">

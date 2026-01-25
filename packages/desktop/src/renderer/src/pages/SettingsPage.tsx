@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { usePostHog } from 'posthog-js/react'
 import {
   getSettings,
   saveSettings,
@@ -15,7 +16,12 @@ import SubscriptionStatus from '@renderer/components/SubscriptionStatus'
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const posthog = usePostHog()
   const [settings, setSettings] = useState<Settings>(getSettings())
+
+  useEffect(() => {
+    posthog.capture('page_viewed', { page: 'settings' })
+  }, [])
   const languages = getLanguages()
   const {
     subscription,

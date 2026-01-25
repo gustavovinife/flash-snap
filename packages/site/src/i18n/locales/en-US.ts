@@ -228,6 +228,23 @@ const enUS = {
       },
     },
   },
+
+  // Thank You Page
+  thankYou: {
+    title: "Thank You!",
+    subtitle: "Welcome to Flash Snap Premium",
+    description:
+      "Your subscription has been successfully activated. You now have access to all premium features including unlimited decks, AI-powered flashcard generation, and more.",
+    backToHome: "Back to Home",
+    nextSteps: {
+      title: "What's Next?",
+      step1: "Go back to the Flash Snap app",
+      step2: "Refresh the page or restart the app",
+      step3: "Enjoy all your new premium features!",
+    },
+    support:
+      "Need help? Contact us at",
+  },
 };
 
 export default enUS;

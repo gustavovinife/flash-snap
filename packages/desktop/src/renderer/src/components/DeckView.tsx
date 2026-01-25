@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Deck } from '../types'
 import { Button, Input } from '../ui/common'
 import { playPronunciation } from '../services/translationService'
@@ -12,6 +13,7 @@ interface DeckViewProps {
 
 export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
   const { t } = useTranslation()
+  const posthog = usePostHog()
   const { createCard, deleteCard } = useCards()
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -40,7 +42,15 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
           deck_id: deck.id
         }
 
-        await createCard.mutateAsync(newCard)
+        const createdCard = await createCard.mutateAsync(newCard)
+
+        // Track card creation
+        posthog.capture('card_created', {
+          card_id: createdCard.id,
+          deck_id: deck.id,
+          deck_name: deck.name,
+          has_context: !!context
+        })
 
         // Reset form
         setNewCardFront('')

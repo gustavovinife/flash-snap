@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSession } from '../context/SessionContext'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import Input from '../ui/common/Input/Input'
 import Button from '../ui/common/Button/Button'
 
@@ -19,6 +20,7 @@ const SignupForm = ({ onToggleMode }: SignupFormProps): React.ReactNode => {
   const { signUp } = useSession()
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const posthog = usePostHog()
 
   const validateForm = (): boolean => {
     if (!email || !password || !confirmPassword || !fullName) {
@@ -56,6 +58,11 @@ const SignupForm = ({ onToggleMode }: SignupFormProps): React.ReactNode => {
         if (data?.user?.identities?.length === 0) {
           setError(t('auth.emailAlreadyRegistered'))
         } else {
+          // Track successful signup
+          posthog.capture('user_signed_up', {
+            email: email,
+            full_name: fullName
+          })
           // Redirect to verify email page
           navigate('/verify-email')
         }

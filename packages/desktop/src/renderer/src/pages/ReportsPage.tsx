@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Deck, Card } from '../types'
 import { Button } from '../ui/common'
 import {
@@ -29,6 +30,7 @@ const ReportsPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const posthog = usePostHog()
   const [deck, setDeck] = useState<Deck | null>(null)
   const [cardStats, setCardStats] = useState<CardStats>({
     total: 0,
@@ -65,6 +67,9 @@ const ReportsPage: React.FC = () => {
         setRetentionRate(calculateRetentionRate(foundDeck.cards))
         setReviewEfficiency(calculateReviewEfficiency(foundDeck.cards))
         setCardsByDifficulty(getCardsByDifficulty(foundDeck.cards))
+
+        // Track page view
+        posthog.capture('page_viewed', { page: 'reports', deck_id: id, deck_name: foundDeck.name })
       } else {
         navigate('/')
       }

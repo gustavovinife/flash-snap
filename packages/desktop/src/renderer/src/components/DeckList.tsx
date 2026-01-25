@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { usePostHog } from 'posthog-js/react'
 import { Deck } from '../types'
 import { Button, Input, Select } from '../ui/common'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +14,7 @@ import CreateWithAICard from './CreateWithAICard'
 export default function DeckList(): React.JSX.Element {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const posthog = usePostHog()
 
   const { user } = useSession()
 
@@ -64,11 +66,19 @@ export default function DeckList(): React.JSX.Element {
     if (!user) return
 
     if (newDeckName.trim()) {
-      await createDeck.mutateAsync({
+      const newDeck = await createDeck.mutateAsync({
         name: newDeckName.trim(),
         type: newDeckType,
         user_id: user.id
       })
+
+      // Track deck creation
+      posthog.capture('deck_created', {
+        deck_id: newDeck.id,
+        deck_name: newDeck.name,
+        deck_type: newDeckType
+      })
+
       setNewDeckName('')
       setIsAddingDeck(false)
     }

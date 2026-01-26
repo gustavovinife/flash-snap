@@ -2377,6 +2377,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.2.0"
     lucide-react: "npm:^0.503.0"
     postcss: "npm:^8.5.3"
+    posthog-js: "npm:^1.335.2"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
     react-i18next: "npm:^16.5.3"

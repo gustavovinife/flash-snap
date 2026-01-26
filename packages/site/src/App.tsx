@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { usePostHog } from "posthog-js/react";
 import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { FAQAccordion } from "./components/FAQAccordion";
@@ -36,10 +38,36 @@ const PlatformIcon = ({ platform }: { platform: string }) => {
 
 function App() {
   const { t } = useTranslation();
+  const posthog = usePostHog();
   const { loading, platform, downloadInfo, allDownloads } = useGitHubRelease();
+
+  // Track scroll depth
+  useEffect(() => {
+    let maxScroll = 0;
+    const handleScroll = () => {
+      const scrollPercent = Math.round(
+        (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+      );
+      if (scrollPercent > maxScroll) {
+        maxScroll = scrollPercent;
+        // Track at 25%, 50%, 75%, 100% milestones
+        if ([25, 50, 75, 100].includes(scrollPercent)) {
+          posthog.capture("scroll_depth", { depth: scrollPercent });
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [posthog]);
 
   const handleDownload = () => {
     if (downloadInfo?.url) {
+      posthog.capture("download_clicked", {
+        platform,
+        version: downloadInfo.version,
+        filename: downloadInfo.filename,
+        location: "hero",
+      });
       window.open(downloadInfo.url, "_blank");
     }
   };
@@ -299,7 +327,18 @@ function App() {
                       ? "border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 text-white"
                       : "border-gray-800 opacity-50 cursor-not-allowed text-gray-500"
                   }`}
-                  onClick={(e) => !info && e.preventDefault()}
+                  onClick={(e) => {
+                    if (!info) {
+                      e.preventDefault();
+                    } else {
+                      posthog.capture("download_clicked", {
+                        platform: p,
+                        version: info.version,
+                        filename: info.filename,
+                        location: "footer",
+                      });
+                    }
+                  }}
                 >
                   <PlatformIcon platform={p} />
                   <span>{t(`download.platforms.${p}`)}</span>

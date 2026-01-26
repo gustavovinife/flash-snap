@@ -37,7 +37,8 @@ function detectPlatform(): Platform {
   if (platform.includes("linux") || userAgent.includes("linux")) {
     return "linux";
   }
-  return "unknown";
+  // Default to Windows for mobile/unknown platforms
+  return "windows";
 }
 
 function formatBytes(bytes: number): string {

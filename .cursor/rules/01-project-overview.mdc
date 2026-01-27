@@ -14,7 +14,6 @@ Flash Snap is an Electron desktop application designed for spaced repetition lea
 - **Updates**: Using `update-electron-app` with GitHub releases
 
 ## Key Features
-- Global shortcut (`Ctrl + Shift + X`) to create cards from selected text
 - Pre-built card templates for immediate value
 - Spaced repetition algorithm (SM-2) for optimized learning
 - Text-to-Speech integration via Supabase Edge Functions

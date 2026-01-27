@@ -28,16 +28,26 @@ function detectPlatform(): Platform {
   const userAgent = navigator.userAgent.toLowerCase();
   const platform = navigator.platform.toLowerCase();
 
+  // Check for mobile devices first - always show Windows for mobile
+  const isMobile =
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(
+      userAgent,
+    );
+  if (isMobile) {
+    return "windows";
+  }
+
   if (platform.includes("mac") || userAgent.includes("mac")) {
     return "mac";
   }
   if (platform.includes("win") || userAgent.includes("win")) {
     return "windows";
   }
+  // Only detect Linux for actual desktop Linux, not Android (which contains "linux" in userAgent)
   if (platform.includes("linux") || userAgent.includes("linux")) {
     return "linux";
   }
-  // Default to Windows for mobile/unknown platforms
+  // Default to Windows for unknown platforms
   return "windows";
 }
 

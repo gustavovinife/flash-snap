@@ -8,7 +8,7 @@ Accepted
 
 Flash Snap is an Electron (Vite 3.1.0) desktop application designed to simplify spaced repetition learning. User data (cards and decks) are stored in Supabase (PostgreSQL), while application settings are maintained in `localStorage`.
 
-The core UX principle is frictionless card creation. Users can add cards by selecting any text and pressing a global shortcut (`Ctrl + Shift + X`). This shortcut is currently fixed but will be made customizable through a future **Settings Page** — where users can also manage their preferred language (i18n) and review notification time ("Time to Review").
+The core UX principle is frictionless card creation. Users can quickly add cards through the app interface. A future **Settings Page** will allow users to manage their preferred language (i18n) and review notification time ("Time to Review").
 
 The application UI is built with TailwindCSS, leveraging a `/ui` folder containing reusable components (e.g., Input, Select, Button). New reusable components are added progressively as the product evolves.
 

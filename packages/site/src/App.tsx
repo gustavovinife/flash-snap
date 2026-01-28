@@ -3,6 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { usePostHog } from "posthog-js/react";
 import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
+
+// Facebook Pixel type declaration
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
 import { FAQAccordion } from "./components/FAQAccordion";
 import {
@@ -46,7 +53,9 @@ function App() {
     let maxScroll = 0;
     const handleScroll = () => {
       const scrollPercent = Math.round(
-        (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+        (window.scrollY /
+          (document.documentElement.scrollHeight - window.innerHeight)) *
+          100,
       );
       if (scrollPercent > maxScroll) {
         maxScroll = scrollPercent;
@@ -68,6 +77,13 @@ function App() {
         filename: downloadInfo.filename,
         location: "hero",
       });
+      // Track Facebook Pixel StartTrial event
+      if (typeof window.fbq === "function") {
+        window.fbq("track", "StartTrial", {
+          value: 0,
+          currency: "BRL",
+        });
+      }
       window.open(downloadInfo.url, "_blank");
     }
   };

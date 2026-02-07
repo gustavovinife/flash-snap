@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePostHog } from 'posthog-js/react'
 import { Deck } from '../types'
-import { Button, Input } from '../ui/common'
+import { Button, Input, Select } from '../ui/common'
 import { playPronunciation } from '../services/translationService'
 import { useNavigate } from 'react-router-dom'
 import { useCards } from '@renderer/hooks/useCards'
+import { useDecks } from '@renderer/hooks/useDecks'
 
 interface DeckViewProps {
   deck: Deck
@@ -15,6 +16,7 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
   const { t } = useTranslation()
   const posthog = usePostHog()
   const { createCard, deleteCard } = useCards()
+  const { updateDeck } = useDecks()
 
   const [searchTerm, setSearchTerm] = useState('')
   const [expandedCardId, setExpandedCardId] = useState<number | null>(null)
@@ -22,11 +24,21 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
   const [newCardFront, setNewCardFront] = useState('')
   const [newCardBack, setNewCardBack] = useState('')
   const [newCardContext, setNewCardContext] = useState('')
+  const [isEditingDeck, setIsEditingDeck] = useState(false)
+  const [deckName, setDeckName] = useState(deck.name)
+  const [deckType, setDeckType] = useState<Deck['type']>(deck.type)
   const filteredCards = deck.cards.filter(
     (card) =>
       card.front.toLowerCase().includes(searchTerm.toLowerCase()) ||
       card.back.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  useEffect(() => {
+    if (!isEditingDeck) {
+      setDeckName(deck.name)
+      setDeckType(deck.type)
+    }
+  }, [deck, isEditingDeck])
 
   const handleAddCard = async (): Promise<void> => {
     if (newCardFront.trim() && newCardBack.trim()) {
@@ -95,9 +107,55 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
     }
   }
 
+  const handleSaveDeck = async (): Promise<void> => {
+    const trimmedName = deckName.trim()
+    if (!trimmedName) return
+
+    if (trimmedName === deck.name && deckType === deck.type) {
+      setIsEditingDeck(false)
+      return
+    }
+
+    try {
+      await updateDeck.mutateAsync({
+        ...deck,
+        name: trimmedName,
+        type: deckType
+      })
+
+      posthog.capture('deck_updated', {
+        deck_id: deck.id,
+        deck_name: trimmedName,
+        deck_type: deckType
+      })
+
+      setIsEditingDeck(false)
+    } catch (error) {
+      console.error('Error updating deck:', error)
+    }
+  }
+
+  const handleCancelEdit = (): void => {
+    setDeckName(deck.name)
+    setDeckType(deck.type)
+    setIsEditingDeck(false)
+  }
+
+  const handleDeckEditorKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      handleSaveDeck()
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      handleCancelEdit()
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
         <div>
           <button
             onClick={() => navigate('/')}
@@ -117,15 +175,75 @@ export default function DeckView({ deck }: DeckViewProps): React.JSX.Element {
             </svg>
             {t('deckView.backToDecks')}
           </button>
-          <h2 className="text-xl font-medium text-gray-800">{deck.name}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-medium text-gray-800">{deck.name}</h2>
+            <span className="text-xs uppercase tracking-wide bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+              {deck.type === 'language' ? t('common.language') : t('common.knowledge')}
+            </span>
+            <button
+              onClick={() => setIsEditingDeck(true)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label={t('deckView.editDeck')}
+              title={t('deckView.editDeck')}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M17.414 2.586a2 2 0 010 2.828l-8.5 8.5a1 1 0 01-.414.242l-3.5 1a1 1 0 01-1.242-1.242l1-3.5a1 1 0 01.242-.414l8.5-8.5a2 2 0 012.828 0z" />
+                <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+              </svg>
+            </button>
+          </div>
           <p className="text-sm text-gray-400 mt-1">
             {t('deckView.cardCount', {
               count: deck.cards.length,
               card: deck.cards.length === 1 ? t('common.card') : t('common.cards')
             })}
           </p>
+          {isEditingDeck && (
+            <div className="mt-3 rounded-lg border border-gray-100 bg-white p-3">
+              <div className="flex flex-wrap items-end gap-2">
+                <Input
+                  fullWidth={false}
+                  placeholder={t('deckView.deckName')}
+                  value={deckName}
+                  onChange={(e) => setDeckName(e.target.value)}
+                  onKeyDown={handleDeckEditorKeyDown}
+                  className="min-w-[220px]"
+                  autoFocus
+                />
+                <Select
+                  fullWidth={false}
+                  options={[
+                    { label: t('common.language'), value: 'language' },
+                    { label: t('common.knowledge'), value: 'knowledge' }
+                  ]}
+                  value={deckType}
+                  onChange={(e) => setDeckType(e.target.value as Deck['type'])}
+                  className="min-w-[180px]"
+                />
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="xs" onClick={handleCancelEdit}>
+                    {t('common.cancel')}
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="xs"
+                    onClick={handleSaveDeck}
+                    disabled={!deckName.trim() || updateDeck.isPending}
+                  >
+                    {t('common.save')}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex space-x-2">
+        </div>
+        <div className="mt-3 flex flex-wrap gap-2">
           <Button
             variant="secondary"
             size="sm"

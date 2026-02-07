@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePostHog } from 'posthog-js/react'
 import { Deck } from '../types'
@@ -27,15 +27,31 @@ export default function DeckList(): React.JSX.Element {
   const { decks, createDeck, deleteDeck } = useDecks()
   const { canCreateDeck, openCheckout } = useSubscription()
 
+  const fetchDueCards = useCallback(async (): Promise<void> => {
+    // Count due cards
+    const dueCards = await getDueCards(decks)
+    setDueCardCount(dueCards.length)
+  }, [decks])
+
   useEffect(() => {
-    async function fetchDueCards(): Promise<void> {
-      // Count due cards
-      const dueCards = await getDueCards(decks)
-      setDueCardCount(dueCards.length)
+    fetchDueCards()
+  }, [fetchDueCards])
+
+  useEffect(() => {
+    const handleVisibilityChange = (): void => {
+      if (document.visibilityState === 'visible') {
+        fetchDueCards()
+      }
     }
 
-    fetchDueCards()
-  }, [decks])
+    window.addEventListener('focus', fetchDueCards)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      window.removeEventListener('focus', fetchDueCards)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [fetchDueCards])
 
   const handleDeleteDeck = async (e: React.MouseEvent, deckId: string): Promise<void> => {
     e.stopPropagation() // Prevent triggering the deck click

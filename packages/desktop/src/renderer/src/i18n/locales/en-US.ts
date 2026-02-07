@@ -60,6 +60,7 @@ const enUS = {
     neverReviewed: 'Never reviewed',
     deleteConfirm: 'Are you sure you want to delete this {{item}}?',
     optional: 'Optional',
+    save: 'Save',
     addTemplate: 'Install Templates',
     language: 'Language',
     knowledge: 'Knowledge'
@@ -120,7 +121,10 @@ const enUS = {
     portugueseTranslation: 'Portuguese Translation',
     pronunciation: 'Pronunciation',
     context: 'Context',
-    enterContext: 'Enter the context of the card (optional)'
+    enterContext: 'Enter the context of the card (optional)',
+    editDeck: 'Edit',
+    deckName: 'Deck name',
+    deckType: 'Deck type'
   },
 
   // AddCard component

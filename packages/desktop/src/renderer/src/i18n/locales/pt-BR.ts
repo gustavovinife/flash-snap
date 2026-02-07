@@ -60,6 +60,7 @@ const ptBR = {
     neverReviewed: 'Nunca revisado',
     deleteConfirm: 'Tem certeza que deseja excluir este {{item}}?',
     optional: 'Opcional',
+    save: 'Salvar',
     addTemplate: 'Instalar Templates',
     language: 'Idioma',
     knowledge: 'Conhecimento'
@@ -121,7 +122,10 @@ const ptBR = {
     portugueseTranslation: 'Tradução em Português',
     pronunciation: 'Pronúncia',
     context: 'Contexto',
-    enterContext: 'Digite o contexto do cartão (opcional)'
+    enterContext: 'Digite o contexto do cartão (opcional)',
+    editDeck: 'Editar',
+    deckName: 'Nome do baralho',
+    deckType: 'Tipo de baralho'
   },
 
   // AddCard component

@@ -56,7 +56,14 @@ export const useDecks = (): IUseDecks => {
     },
     onSuccess: (updatedDeck: Deck) => {
       queryClient.setQueryData<Deck[]>(['decks'], (oldData) => {
-        return oldData?.map((deck) => (deck.id === updatedDeck.id ? updatedDeck : deck))
+        return oldData?.map((deck) => {
+          if (deck.id !== updatedDeck.id) return deck
+          return {
+            ...deck,
+            ...updatedDeck,
+            cards: deck.cards
+          }
+        })
       })
     }
   })

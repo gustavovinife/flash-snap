@@ -1,4 +1,4 @@
-/// <reference path="../../preload/index.d.ts" />
+import type {} from '../../preload/index.d.ts'
 
 declare global {
   interface Window {

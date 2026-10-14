@@ -187,6 +187,7 @@ const ptBR = {
       reviewCards: 'Cartões em Revisão',
       masteredCards: 'Cartões Dominados',
       dueCards: 'Cartões Pendentes',
+      cardsDueToday: 'cartões pendentes hoje',
       cardsDueNext7Days: 'cartões pendentes nos próximos 7 dias',
       startReview: 'Começar Revisão',
       easeFactorDistribution: 'Distribuição do Fator de Facilidade',
@@ -198,7 +199,7 @@ const ptBR = {
       deckProgress: 'Progresso do Baralho',
       masteredCardsMessage: 'Você dominou {{mastered}} de {{total}} cartões neste baralho.',
       masteredExplanation:
-        'Cartões são considerados dominados quando seu fator de facilidade está acima de 2.5'
+        'Cartões são considerados dominados após 3 revisões corretas seguidas com fator de facilidade acima de 2.5'
     }
   },
 

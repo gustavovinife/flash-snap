@@ -79,6 +79,26 @@ function isSameDayOrEarlier(date1: Date, date2: Date): boolean {
 }
 
 /**
+ * Checks whether a card is due for review on the given day (day-based, ignoring time).
+ * Cards that were never reviewed or have an invalid next_review date are always due.
+ *
+ * @param card The card to check
+ * @param referenceDate The day to check against (defaults to today)
+ */
+export function isCardDue(card: Card, referenceDate: Date = new Date()): boolean {
+  if (!card.next_review) {
+    return true
+  }
+
+  const reviewDate = new Date(card.next_review)
+  if (isNaN(reviewDate.getTime())) {
+    return true
+  }
+
+  return isSameDayOrEarlier(reviewDate, referenceDate)
+}
+
+/**
  * Returns all cards that are due for review today or earlier.
  *
  * @param decks List of all decks to check
@@ -93,8 +113,7 @@ export async function getDueCards(
     return []
   }
 
-  // Get today's date in local timezone
-  const today = getLocalMidnight(new Date())
+  const today = new Date()
 
   // Filter decks by ID if specified
   const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
@@ -111,47 +130,16 @@ export async function getDueCards(
     }
 
     for (const card of deck.cards) {
-      try {
-        if (!card || !card.id) {
-          continue
-        }
+      if (!card || !card.id) {
+        continue
+      }
 
-        let isDue = false
-
-        if (!card.next_review) {
-          // If no next_review date is set, the card is due for its first review
-          isDue = true
-        } else {
-          // Parse the next_review date safely
-          let reviewDate: Date | null = null
-
-          try {
-            reviewDate = new Date(card.next_review)
-
-            // Ensure it's a valid date
-            if (isNaN(reviewDate.getTime())) {
-              isDue = true
-            } else {
-              // Get local midnight of the review date
-              const reviewDateMidnight = getLocalMidnight(reviewDate)
-
-              // Compare dates - a card is due only if its review date is strictly earlier than today
-              isDue = isSameDayOrEarlier(reviewDateMidnight, today)
-            }
-          } catch {
-            isDue = true
-          }
-        }
-
-        if (isDue) {
-          dueCards.push({
-            card,
-            deckId: deck.id,
-            deckName: deck.name
-          })
-        }
-      } catch {
-        // Skip cards that fail processing
+      if (isCardDue(card, today)) {
+        dueCards.push({
+          card,
+          deckId: deck.id,
+          deckName: deck.name
+        })
       }
     }
   }

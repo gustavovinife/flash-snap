@@ -186,6 +186,7 @@ const enUS = {
       reviewCards: 'Review Cards',
       masteredCards: 'Mastered Cards',
       dueCards: 'Due Cards',
+      cardsDueToday: 'cards due today',
       cardsDueNext7Days: 'cards due in the next 7 days',
       startReview: 'Start Review',
       easeFactorDistribution: 'Ease Factor Distribution',
@@ -196,7 +197,8 @@ const enUS = {
       ofTotal: 'of total',
       deckProgress: 'Deck Progress',
       masteredCardsMessage: "You've mastered {{mastered}} out of {{total}} cards in this deck.",
-      masteredExplanation: 'Cards are considered mastered when their ease factor is above 2.5'
+      masteredExplanation:
+        'Cards are considered mastered after 3 successful reviews in a row with an ease factor above 2.5'
     }
   },
 

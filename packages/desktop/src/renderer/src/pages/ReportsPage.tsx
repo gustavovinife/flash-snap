@@ -1,155 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { usePostHog } from 'posthog-js/react'
-import { Deck, Card } from '../types'
 import { Button } from '../ui/common'
-import {
-  calculateAverageEaseFactor,
-  calculateRetentionRate,
-  calculateReviewEfficiency,
-  getCardsByDifficulty
-} from '../services/reportingService'
+import { getDeckReport } from '../services/reportingService'
 import { useDecks } from '../hooks/useDecks'
-// Categories of cards based on performance
-interface CardStats {
-  total: number
-  new: number
-  learning: number
-  review: number
-  mastered: number
-  dueSoon: number
-}
-
-// Interface for the distribution of ease factors
-interface EaseFactorDistribution {
-  [key: string]: number // range -> count
-}
 
 const ReportsPage: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const posthog = usePostHog()
-  const [deck, setDeck] = useState<Deck | null>(null)
-  const [cardStats, setCardStats] = useState<CardStats>({
-    total: 0,
-    new: 0,
-    learning: 0,
-    review: 0,
-    mastered: 0,
-    dueSoon: 0
-  })
-  const [easeFactorDistribution, setEaseFactorDistribution] = useState<EaseFactorDistribution>({})
-  const [loading, setLoading] = useState(true)
-  const [averageEaseFactor, setAverageEaseFactor] = useState(0)
-  const [retentionRate, setRetentionRate] = useState(0)
-  const [reviewEfficiency, setReviewEfficiency] = useState(0)
+  const { decks, isLoading } = useDecks()
+  const trackedDeckIdRef = useRef<string | null>(null)
 
-  const { decks } = useDecks()
-
-  const [cardsByDifficulty, setCardsByDifficulty] = useState<{
-    easy: Card[]
-    medium: Card[]
-    hard: Card[]
-  }>({ easy: [], medium: [], hard: [] })
+  const deck = useMemo(() => decks.find((d) => d.id === id) ?? null, [decks, id])
+  const report = useMemo(() => (deck ? getDeckReport(deck.cards ?? []) : null), [deck])
 
   useEffect(() => {
-    if (id) {
-      const foundDeck = decks.find((d) => d.id === id)
-
-      if (foundDeck) {
-        setDeck(foundDeck)
-        calculateCardStats(foundDeck.cards)
-
-        // Calculate additional stats using reportingService
-        setAverageEaseFactor(calculateAverageEaseFactor(foundDeck.cards))
-        setRetentionRate(calculateRetentionRate(foundDeck.cards))
-        setReviewEfficiency(calculateReviewEfficiency(foundDeck.cards))
-        setCardsByDifficulty(getCardsByDifficulty(foundDeck.cards))
-
-        // Track page view
-        posthog.capture('page_viewed', { page: 'reports', deck_id: id, deck_name: foundDeck.name })
-      } else {
-        navigate('/')
-      }
-
-      setLoading(false)
+    if (!isLoading && !deck) {
+      navigate('/')
     }
-  }, [decks, id, navigate])
+  }, [isLoading, deck, navigate])
 
-  const calculateCardStats = (cards: Card[]): void => {
-    const today = new Date()
-    const oneWeekFromNow = new Date()
-    oneWeekFromNow.setDate(today.getDate() + 7)
-
-    // Initialize stats
-    const stats: CardStats = {
-      total: cards.length,
-      new: 0,
-      learning: 0,
-      review: 0,
-      mastered: 0,
-      dueSoon: 0
+  useEffect(() => {
+    if (deck && trackedDeckIdRef.current !== deck.id) {
+      trackedDeckIdRef.current = deck.id
+      posthog.capture('page_viewed', { page: 'reports', deck_id: deck.id, deck_name: deck.name })
     }
-
-    // Initialize ease factor distribution
-    const easeFactors: EaseFactorDistribution = {
-      '<1.5': 0,
-      '1.5-2.0': 0,
-      '2.0-2.5': 0,
-      '2.5-3.0': 0,
-      '>3.0': 0
-    }
-
-    // Analyze each card
-    cards.forEach((card) => {
-      // Categorize cards
-      if (!card.repetition || card.repetition === 0) {
-        stats.new++
-      } else if (card.repetition < 3) {
-        stats.learning++
-      } else if (card.ease_factor && card.ease_factor > 2.5) {
-        stats.mastered++
-      } else {
-        stats.review++
-      }
-
-      // Count cards due soon
-      if (card.next_review && card.next_review <= oneWeekFromNow) {
-        stats.dueSoon++
-      }
-
-      // Categorize by ease factor
-      const ef = card.ease_factor || 2.5
-      if (ef < 1.5) {
-        easeFactors['<1.5']++
-      } else if (ef < 2.0) {
-        easeFactors['1.5-2.0']++
-      } else if (ef < 2.5) {
-        easeFactors['2.0-2.5']++
-      } else if (ef < 3.0) {
-        easeFactors['2.5-3.0']++
-      } else {
-        easeFactors['>3.0']++
-      }
-    })
-
-    setCardStats(stats)
-    setEaseFactorDistribution(easeFactors)
-  }
+  }, [deck, posthog])
 
   const handleBack = (): void => {
     navigate(`/deck/${id}`)
   }
 
-  if (loading) {
+  if (isLoading) {
     return <div>{t('common.loading')}</div>
   }
 
-  if (!deck) {
+  if (!deck || !report) {
     return <div>{t('common.notFound', { item: t('common.deck') })}</div>
   }
+
+  const {
+    cardStats,
+    easeFactorDistribution,
+    cardsByDifficulty,
+    averageEaseFactor,
+    retentionRate,
+    averageInterval
+  } = report
 
   // Helper function to get card progress percentage
   const getProgressPercentage = (count: number): number => {
@@ -201,7 +101,7 @@ const ReportsPage: React.FC = () => {
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="text-sm text-gray-500 mb-1">{t('reports.stats.avgReviewInterval')}</div>
           <div className="text-xl font-semibold">
-            {reviewEfficiency} {t('common.days')}
+            {averageInterval} {t('common.days')}
           </div>
         </div>
       </div>
@@ -285,9 +185,13 @@ const ReportsPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-medium text-gray-800 mb-4">{t('reports.stats.dueCards')}</h3>
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center gap-8">
             <div>
-              <p className="text-2xl font-bold text-gray-800">{cardStats.dueSoon}</p>
+              <p className="text-2xl font-bold text-gray-800">{cardStats.dueToday}</p>
+              <p className="text-sm text-gray-500">{t('reports.stats.cardsDueToday')}</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-400">{cardStats.dueThisWeek}</p>
               <p className="text-sm text-gray-500">{t('reports.stats.cardsDueNext7Days')}</p>
             </div>
           </div>
@@ -295,7 +199,7 @@ const ReportsPage: React.FC = () => {
             variant="primary"
             size="sm"
             onClick={() => navigate(`/review/${deck.id}`)}
-            disabled={cardStats.dueSoon === 0}
+            disabled={cardStats.dueToday === 0}
           >
             {t('reports.stats.startReview')}
           </Button>

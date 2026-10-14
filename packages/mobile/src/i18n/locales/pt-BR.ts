@@ -197,7 +197,20 @@ const ptBR: typeof enUS = {
       'As notificações estão desativadas para o Flash Snap. Ative-as nos ajustes do celular.',
     signOut: 'Sair',
     signOutTitle: 'Sair da conta?',
+    app: 'App',
+    installApp: 'Adicionar à Tela de Início',
     version: 'Versão {{version}}'
+  },
+  install: {
+    title: 'Instale o Flash Snap',
+    body: 'Adicione o Flash Snap à tela de início para abrir como um app, em tela cheia.',
+    iosStep1: 'Toque no botão Compartilhar do navegador',
+    iosStep2: 'Role para baixo e toque em "Adicionar à Tela de Início"',
+    androidStep1: 'Abra o menu do navegador',
+    androidStep2: 'Toque em "Instalar app" ou "Adicionar à tela inicial"',
+    install: 'Instalar',
+    gotIt: 'Entendi',
+    notNow: 'Agora não'
   },
   notifications: {
     title: 'Hora de revisar ✨',

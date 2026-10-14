@@ -194,7 +194,20 @@ const enUS = {
     notificationsDenied: 'Notifications are turned off for Flash Snap. Enable them in your phone settings.',
     signOut: 'Sign out',
     signOutTitle: 'Sign out?',
+    app: 'App',
+    installApp: 'Add to Home Screen',
     version: 'Version {{version}}'
+  },
+  install: {
+    title: 'Install Flash Snap',
+    body: 'Add Flash Snap to your home screen to open it like an app, in full screen.',
+    iosStep1: 'Tap the Share button in your browser',
+    iosStep2: 'Scroll down and tap "Add to Home Screen"',
+    androidStep1: 'Open your browser menu',
+    androidStep2: 'Tap "Install app" or "Add to Home screen"',
+    install: 'Install',
+    gotIt: 'Got it',
+    notNow: 'Not now'
   },
   notifications: {
     title: 'Time to review ✨',

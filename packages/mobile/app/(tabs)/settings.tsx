@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useSubscription } from '@/hooks/useSubscription'
 import { LANGUAGES, type LanguageCode, setLanguage } from '@/i18n'
 import { confirm, showActions } from '@/lib/actions'
+import { getInstallMode, openInstallPrompt } from '@/lib/install'
 import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
 import { radius, spacing, useTheme } from '@/theme'
@@ -113,6 +114,12 @@ export default function SettingsScreen(): React.JSX.Element {
           ) : (
             <ListRow icon="diamond-outline" title={t('settings.upgrade')} onPress={() => openStripe(openCheckout)} />
           )}
+        </Section>
+      )}
+
+      {getInstallMode() && (
+        <Section title={t('settings.app')}>
+          <ListRow icon="phone-portrait-outline" title={t('settings.installApp')} onPress={openInstallPrompt} />
         </Section>
       )}
 

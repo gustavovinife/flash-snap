@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Logo } from '@/components'
+import { InstallPrompt } from '@/components/InstallPrompt'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { DialogHost } from '@/lib/dialogs'
 import { useTheme } from '@/theme'
@@ -69,6 +70,7 @@ export default function RootLayout(): React.JSX.Element {
         <AuthProvider>
           <RootNavigator />
           <DialogHost />
+          <InstallPrompt />
         </AuthProvider>
       </QueryClientProvider>
     </SafeAreaProvider>

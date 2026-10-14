@@ -1,0 +1,210 @@
+import type enUS from './en-US'
+
+const ptBR: typeof enUS = {
+  common: {
+    cancel: 'Cancelar',
+    save: 'Salvar',
+    delete: 'Excluir',
+    edit: 'Editar',
+    loading: 'Carregando…',
+    error: 'Algo deu errado',
+    retry: 'Tentar novamente',
+    cardCount_one: '{{count}} cartão',
+    cardCount_other: '{{count}} cartões'
+  },
+  auth: {
+    tagline: 'Lembre de tudo o que você aprende, com poucos minutos por dia.',
+    signIn: 'Entrar',
+    signUp: 'Criar conta',
+    name: 'Nome',
+    email: 'E-mail',
+    password: 'Senha',
+    noAccount: 'Não tem uma conta?',
+    haveAccount: 'Já tem uma conta?',
+    or: 'ou',
+    continueWithGoogle: 'Continuar com Google',
+    checkEmailTitle: 'Confira seu e-mail',
+    checkEmailBody: 'Enviamos um link de confirmação. Abra o link e depois entre aqui.',
+    missingFields: 'Informe seu e-mail e senha.'
+  },
+  tabs: {
+    decks: 'Baralhos',
+    explore: 'Explorar',
+    settings: 'Ajustes'
+  },
+  home: {
+    greeting: 'Olá, {{name}}',
+    greetingNoName: 'Bem-vindo de volta',
+    dueTitle_one: '{{count}} cartão para revisar hoje',
+    dueTitle_other: '{{count}} cartões para revisar hoje',
+    caughtUpTitle: 'Tudo em dia',
+    caughtUpBody: 'Volte amanhã ou adicione novos cartões para continuar aprendendo.',
+    startReview: 'Começar revisão',
+    myDecks: 'Meus baralhos',
+    emptyTitle: 'Crie seu primeiro baralho',
+    emptyBody: 'Comece do zero ou escolha um baralho pronto para começar a aprender agora.',
+    newDeck: 'Novo baralho',
+    createWithAI: 'Criar com IA',
+    browseTemplates: 'Ver modelos',
+    dueBadge: '{{count}} pendentes'
+  },
+  deck: {
+    types: {
+      language: 'Idioma',
+      knowledge: 'Conhecimento'
+    },
+    review_one: 'Revisar {{count}} cartão',
+    review_other: 'Revisar {{count}} cartões',
+    caughtUp: 'Tudo em dia',
+    stats: 'Estatísticas',
+    dueToday: 'Para hoje',
+    total: 'Cartões',
+    mastered: 'Dominados',
+    cards: 'Cartões',
+    searchCards: 'Buscar cartões',
+    noCardsTitle: 'Nenhum cartão ainda',
+    noCardsBody: 'Adicione seu primeiro cartão para começar a revisar.',
+    noMatches: 'Nenhum cartão corresponde à busca',
+    addCard: 'Adicionar cartão',
+    editDeck: 'Editar baralho',
+    deleteDeck: 'Excluir baralho',
+    deleteTitle: 'Excluir este baralho?',
+    deleteBody: 'Todos os cartões serão excluídos. Isso não pode ser desfeito.',
+    notFound: 'Este baralho não existe mais.'
+  },
+  deckForm: {
+    newTitle: 'Novo baralho',
+    editTitle: 'Editar baralho',
+    name: 'Nome',
+    namePlaceholder: 'ex.: Verbos em espanhol',
+    type: 'Tipo',
+    languageHint: 'Palavras e frases, com pronúncia',
+    knowledgeHint: 'Fatos, conceitos e qualquer outro assunto',
+    create: 'Criar baralho'
+  },
+  cardForm: {
+    newTitle: 'Novo cartão',
+    editTitle: 'Editar cartão',
+    front: 'Frente',
+    frontPlaceholder: 'Palavra, frase ou pergunta',
+    back: 'Verso',
+    backPlaceholder: 'Tradução ou resposta',
+    context: 'Contexto (opcional)',
+    contextPlaceholder: 'Uma frase de exemplo ou uma dica',
+    saveAndAddAnother: 'Salvar e adicionar outro',
+    links: 'Links (opcional)',
+    linksHint: 'Artigos ou vídeos que ajudam a entender a resposta.',
+    linkUrlPlaceholder: 'https://…',
+    linkTitlePlaceholder: 'Título (opcional)',
+    addLink: 'Adicionar link',
+    removeLink: 'Remover link',
+    invalidLink: 'Informe um endereço web válido.',
+    deleteTitle: 'Excluir este cartão?',
+    deleteBody: 'Isso não pode ser desfeito.'
+  },
+  review: {
+    progress: '{{current}} de {{total}}',
+    tapToReveal: 'Toque para ver a resposta',
+    playPronunciation: 'Ouvir pronúncia',
+    learnMore: 'Saiba mais',
+    howWell: 'Quão bem você lembrou?',
+    again: 'De novo',
+    hard: 'Difícil',
+    good: 'Bom',
+    easy: 'Fácil',
+    inDays: '{{count}}d',
+    doneTitle: 'Sessão concluída!',
+    doneBody_one: 'Você revisou {{count}} cartão. Mandou bem.',
+    doneBody_other: 'Você revisou {{count}} cartões. Mandou bem.',
+    backToDecks: 'Voltar aos baralhos',
+    nothingDueTitle: 'Nada para revisar',
+    nothingDueBody: 'Todos os cartões estão em dia. Volte amanhã!',
+    saveError: 'Não foi possível salvar sua resposta. Verifique sua conexão e tente novamente.'
+  },
+  stats: {
+    title: 'Estatísticas',
+    dueToday: 'Para hoje',
+    dueThisWeek: 'Próximos 7 dias',
+    retention: 'Retenção',
+    avgInterval: 'Intervalo médio',
+    avgEase: 'Facilidade média',
+    days_one: '{{count}} dia',
+    days_other: '{{count}} dias',
+    cardStatus: 'Situação dos cartões',
+    new: 'Novos',
+    learning: 'Aprendendo',
+    reviewing: 'Revisando',
+    mastered: 'Dominados',
+    difficulty: 'Dificuldade',
+    easy: 'Fácil',
+    medium: 'Médio',
+    hard: 'Difícil',
+    masteredExplanation:
+      'Um cartão é dominado após 3 revisões corretas seguidas com fator de facilidade acima de 2.5.'
+  },
+  aiGeneration: {
+    title: 'Criar com IA',
+    heading: 'O que você quer aprender?',
+    subtitle: 'Descreva um assunto e a IA monta um baralho de cartões para você.',
+    promptPlaceholder: 'ex.: 30 frases essenciais em italiano para pedir comida',
+    ideas: 'Ideias',
+    presets: {
+      jsProgram: 'JavaScript básico',
+      englishTravel: 'Inglês para viagem',
+      englishInterviews: 'Inglês para entrevistas',
+      spanishBasics: 'Espanhol básico',
+      pythonProgram: 'Python básico'
+    },
+    generate: 'Gerar baralho',
+    generating: 'Gerando…',
+    generatingHint: 'Isso costuma levar de 10 a 20 segundos.',
+    minLength: 'Escreva mais algumas palavras sobre o assunto.',
+    deckName: 'Nome do baralho',
+    cardsTitle_one: '{{count}} cartão',
+    cardsTitle_other: '{{count}} cartões',
+    removeCard: 'Remover cartão',
+    save_one: 'Salvar baralho com {{count}} cartão',
+    save_other: 'Salvar baralho com {{count}} cartões',
+    regenerate: 'Tentar outro pedido',
+    banner: 'Descreva qualquer assunto e receba um baralho pronto para estudar em segundos.'
+  },
+  explore: {
+    title: 'Explorar',
+    subtitle: 'Baralhos prontos para começar a aprender com um toque.',
+    add: 'Adicionar',
+    added: 'Adicionado',
+    addedTitle: 'Baralho adicionado',
+    addedBody: '"{{name}}" agora está nos seus baralhos.',
+    openDeck: 'Abrir baralho'
+  },
+  premium: {
+    limitTitle: 'Seja Premium',
+    limitBody: 'Contas gratuitas podem ter 1 baralho. Faça upgrade para criar baralhos ilimitados.',
+    upgrade: 'Fazer upgrade',
+    notNow: 'Agora não'
+  },
+  settings: {
+    title: 'Ajustes',
+    account: 'Conta',
+    plan: 'Plano',
+    free: 'Gratuito',
+    premium: 'Premium',
+    upgrade: 'Seja Premium',
+    manage: 'Gerenciar assinatura',
+    language: 'Idioma',
+    reminder: 'Lembrete diário',
+    reminderBody: 'Receba um aviso para revisar seus cartões todos os dias.',
+    reminderTime: 'Horário do lembrete',
+    notificationsDenied:
+      'As notificações estão desativadas para o Flash Snap. Ative-as nos ajustes do celular.',
+    signOut: 'Sair',
+    signOutTitle: 'Sair da conta?',
+    version: 'Versão {{version}}'
+  },
+  notifications: {
+    title: 'Hora de revisar ✨',
+    body: 'Seus cartões estão esperando. Poucos minutos por dia mantêm tudo fresco.'
+  }
+}
+
+export default ptBR

@@ -118,7 +118,7 @@ npmRebuild: false
 
 publish:
   provider: github
-  owner: gustavowebjs
+  owner: gustavovinife
   repo: flash-snap
 
 electronDownload:

@@ -12,7 +12,7 @@ The core UX principle is frictionless card creation. Users can quickly add cards
 
 The application UI is built with TailwindCSS, leveraging a `/ui` folder containing reusable components (e.g., Input, Select, Button). New reusable components are added progressively as the product evolves.
 
-For updating and publishing, we use `electron-updater` with `electron-builder`, publishing releases directly on GitHub: [gustavowebjs/flash-snap](https://github.com/gustavowebjs/flash-snap). A new version is released with `yarn release:desktop` (see `packages/desktop/scripts/release.sh`).
+For updating and publishing, we use `electron-updater` with `electron-builder`, publishing releases directly on GitHub: [gustavovinife/flash-snap](https://github.com/gustavovinife/flash-snap). A new version is released with `yarn release:desktop` (see `packages/desktop/scripts/release.sh`).
 
 We have structured services located under `/services`, such as:
 

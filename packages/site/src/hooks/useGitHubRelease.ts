@@ -22,7 +22,7 @@ interface DownloadInfo {
 
 type Platform = "mac" | "windows" | "linux" | "unknown";
 
-const GITHUB_REPO = "gustavowebjs/flash-snap";
+const GITHUB_REPO = "gustavovinife/flash-snap";
 
 function detectPlatform(): Platform {
   const userAgent = navigator.userAgent.toLowerCase();

@@ -4,7 +4,7 @@
   "description": "Flash Snap Desktop - Electron application for spaced repetition learning",
   "main": "./out/main/index.js",
   "author": "Gustavo Ferreira",
-  "homepage": "https://github.com/gustavowebjs/flash-snap",
+  "homepage": "https://github.com/gustavovinife/flash-snap",
   "scripts": {
     "test": "vitest --run",
     "test:watch": "vitest",

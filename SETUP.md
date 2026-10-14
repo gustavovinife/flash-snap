@@ -20,7 +20,7 @@ For mobile development, you'll also need:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/gustavowebjs/flash-snap.git
+git clone https://github.com/gustavovinife/flash-snap.git
 cd flash-snap
 ```
 
@@ -293,7 +293,7 @@ flash-snap/
 
 ## Getting Help
 
-- Check the [Issues](https://github.com/gustavowebjs/flash-snap/issues) page
+- Check the [Issues](https://github.com/gustavovinife/flash-snap/issues) page
 - Read the documentation in each package
 - Contact the maintainers
 

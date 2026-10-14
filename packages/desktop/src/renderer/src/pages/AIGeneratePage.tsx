@@ -1,8 +1,9 @@
 import React, { useState, useCallback ,useEffect} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { AI_MIN_PROMPT_LENGTH } from '@flash-snap/shared'
 import { Sparkles, AlertCircle, ArrowLeft, Crown } from 'lucide-react'
-import { generateDeck, isConfigured, GeneratedCard } from '../services/aiGenerationService'
+import { generateDeck, GeneratedCard } from '../services/aiGenerationService'
 import { useDecks } from '../hooks/useDecks'
 import { useCards } from '../hooks/useCards'
 import { useSession } from '../context/SessionContext'
@@ -23,7 +24,7 @@ interface AIGeneratePageState {
   showUpgradePrompt: boolean
 }
 
-const MIN_PROMPT_LENGTH = 3
+const MIN_PROMPT_LENGTH = AI_MIN_PROMPT_LENGTH
 
 const AIGeneratePage: React.FC = () => {
   const { t } = useTranslation()
@@ -45,9 +46,8 @@ const AIGeneratePage: React.FC = () => {
     showUpgradePrompt: false
   })
 
-  const apiKeyConfigured = isConfigured()
   const isValidPrompt = state.prompt.trim().length >= MIN_PROMPT_LENGTH
-  const canGenerate = apiKeyConfigured && isValidPrompt && !state.isGenerating
+  const canGenerate = isValidPrompt && !state.isGenerating
   const hasGeneratedCards = state.generatedCards.length > 0
 
   useEffect(() => {
@@ -278,18 +278,6 @@ const AIGeneratePage: React.FC = () => {
         </div>
       )}
 
-      {/* API Key Missing Error */}
-      {!apiKeyConfigured && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm text-amber-800 font-medium">
-              {t('aiGeneration.errors.apiKeyMissing')}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Preset Prompts */}
       <PromptPills onSelect={handlePresetSelect} selectedPrompt={state.prompt || null} />
 
@@ -305,7 +293,7 @@ const AIGeneratePage: React.FC = () => {
                   ? t('aiGeneration.modifyPromptPlaceholder')
                   : t('aiGeneration.promptPlaceholder')
               }
-              disabled={!apiKeyConfigured || state.isGenerating}
+              disabled={state.isGenerating}
             />
           </div>
           <Button

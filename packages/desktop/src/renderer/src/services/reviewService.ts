@@ -1,102 +1,7 @@
+import { isCardDue, sm2 } from '@flash-snap/shared'
 import { Card, Deck } from '../types'
 
-const INITIAL_EASE_FACTOR = 2.5
-const MIN_EASE_FACTOR = 1.3
-
-/**
- * Applies the SM-2 spaced repetition algorithm to a card based on the review grade.
- *
- * @param card The card being reviewed
- * @param grade The recall grade (0–5). Lower grades mean poor recall.
- * @returns Updated scheduling properties for the card
- */
-export function sm2(card: Card, grade: number): Partial<Card> {
-  let { interval = 0, repetition = 0, ease_factor = INITIAL_EASE_FACTOR } = card
-
-  // Handle null values from database (destructuring defaults don't work with null)
-  if (ease_factor === null || ease_factor === undefined) {
-    ease_factor = INITIAL_EASE_FACTOR
-  }
-  if (interval === null || interval === undefined) {
-    interval = 0
-  }
-  if (repetition === null || repetition === undefined) {
-    repetition = 0
-  }
-
-  if (grade < 3) {
-    // Poor recall: reset repetition and set minimal interval
-    repetition = 0
-    interval = 1
-  } else {
-    // Good recall: increase interval based on repetition count
-    interval = repetition === 0 ? 1 : repetition === 1 ? 6 : Math.round(interval * ease_factor)
-    repetition += 1
-  }
-
-  // Adjust ease factor (EF)
-  ease_factor += 0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02)
-  ease_factor = Math.max(ease_factor, MIN_EASE_FACTOR)
-
-  const next_review = new Date()
-  next_review.setDate(next_review.getDate() + interval)
-  // Normalize to midnight to ensure day-based comparison (not hour-based)
-  next_review.setHours(0, 0, 0, 0)
-
-  return { interval, repetition, ease_factor, next_review }
-}
-
-/**
- * Gets a date with time set to midnight in local timezone
- *
- * @param date The date to normalize
- * @returns A new Date object representing midnight of the given date in local timezone
- */
-function getLocalMidnight(date: Date): Date {
-  // Create a new date object to avoid modifying the input
-  const localDate = new Date(date)
-
-  // Set to midnight in the local timezone
-  localDate.setHours(0, 0, 0, 0)
-
-  return localDate
-}
-
-/**
- * Compare two dates ignoring time component
- *
- * @param date1 First date
- * @param date2 Second date
- * @returns True if date1 is earlier than or the same day as date2
- */
-function isSameDayOrEarlier(date1: Date, date2: Date): boolean {
-  // Convert both dates to local timezone midnight
-  const d1 = getLocalMidnight(date1)
-  const d2 = getLocalMidnight(date2)
-
-  // Compare the dates - card is due if its review date is on or before today
-  return d1 <= d2
-}
-
-/**
- * Checks whether a card is due for review on the given day (day-based, ignoring time).
- * Cards that were never reviewed or have an invalid next_review date are always due.
- *
- * @param card The card to check
- * @param referenceDate The day to check against (defaults to today)
- */
-export function isCardDue(card: Card, referenceDate: Date = new Date()): boolean {
-  if (!card.next_review) {
-    return true
-  }
-
-  const reviewDate = new Date(card.next_review)
-  if (isNaN(reviewDate.getTime())) {
-    return true
-  }
-
-  return isSameDayOrEarlier(reviewDate, referenceDate)
-}
+export { isCardDue, sm2 }
 
 /**
  * Returns all cards that are due for review today or earlier.
@@ -114,37 +19,13 @@ export async function getDueCards(
   }
 
   const today = new Date()
-
-  // Filter decks by ID if specified
   const decksToCheck = deckId ? decks.filter((deck) => deck.id === deckId) : decks
 
-  if (decksToCheck.length === 0) {
-    return []
-  }
-
-  const dueCards: { card: Card; deckId: string; deckName: string }[] = []
-
-  for (const deck of decksToCheck) {
-    if (!deck.cards || !Array.isArray(deck.cards)) {
-      continue
-    }
-
-    for (const card of deck.cards) {
-      if (!card || !card.id) {
-        continue
-      }
-
-      if (isCardDue(card, today)) {
-        dueCards.push({
-          card,
-          deckId: deck.id,
-          deckName: deck.name
-        })
-      }
-    }
-  }
-
-  return dueCards
+  return decksToCheck.flatMap((deck) =>
+    (deck.cards ?? [])
+      .filter((card) => card?.id && isCardDue(card, today))
+      .map((card) => ({ card, deckId: deck.id, deckName: deck.name }))
+  )
 }
 
 /**
@@ -158,19 +39,16 @@ export async function updateCardAfterReview(
   deck: Deck,
   card: Card,
   grade: number,
-  updateCard: any,
-  updateDeck: any
+  updateCard: { mutateAsync: (card: Card) => Promise<unknown> },
+  updateDeck: { mutateAsync: (deck: Deck) => Promise<unknown> }
 ): Promise<void> {
-  const updatedCard = { ...card, ...sm2(card, grade) }
-
-  // Update card in the database
-  await updateCard.mutateAsync(updatedCard)
+  const schedule = sm2(card, grade)
+  await updateCard.mutateAsync({ ...card, ...schedule, next_review: schedule.next_review.toISOString() })
 
   if (!deck) {
     return
   }
 
-  // Update the deck's last reviewed timestamp
-  deck.last_reviewed = new Date()
+  deck.last_reviewed = new Date().toISOString()
   await updateDeck.mutateAsync(deck)
 }

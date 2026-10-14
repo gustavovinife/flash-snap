@@ -1,43 +1,17 @@
-export interface Template {
-  name: string
-  description: string
-  type: 'language' | 'knowledge'
-  language?: string
-  nationality?: string
-  emoji?: string
-  cards: Array<{
-    front: string
-    back: string
-    content?: string
-  }>
-}
+import { isTemplateInstalled, templates, type NewCard, type Template } from '@flash-snap/shared'
+import type { UseMutationResult } from '@tanstack/react-query'
+import type { Card, Deck, DeckType } from '../types'
 
-// Function to load all available templates
-export const getTemplates = async (): Promise<Template[]> => {
-  try {
-    // Dynamically import all templates
-    const templateModules = import.meta.glob('../data/templates/*.json', { eager: true })
+export { isTemplateInstalled }
+export type { Template }
 
-    return Object.values(templateModules).map((module) => module as unknown as Template)
-  } catch (error) {
-    console.error('Error loading templates:', error)
-    return []
-  }
-}
-
-// Check if a template is already installed (by matching deck name)
-export const isTemplateInstalled = (
-  template: Template,
-  existingDecks: { name: string }[]
-): boolean => {
-  return existingDecks.some((deck) => deck.name === template.name)
-}
+export const getTemplates = async (): Promise<Template[]> => templates
 
 // Function to install a template as a new deck
 export const installTemplate = async (
   template: Template,
-  addDeck: any,
-  createManyCards: any,
+  addDeck: UseMutationResult<Deck, Error, { name: string; type: DeckType; user_id: string }, unknown>,
+  createManyCards: UseMutationResult<Card[], Error, NewCard[], unknown>,
   user_id: string,
   existingDecks: { name: string }[] = []
 ): Promise<string> => {
@@ -45,31 +19,24 @@ export const installTemplate = async (
     throw new Error('User ID is required')
   }
 
-  // Check if template is already installed
   if (isTemplateInstalled(template, existingDecks)) {
     throw new Error('TEMPLATE_ALREADY_INSTALLED')
   }
 
-  // Create a new deck from the template
-  const newDeck = {
+  const newDeck = await addDeck.mutateAsync({
     name: template.name,
-    user_id: user_id,
-    created_at: new Date(),
+    user_id,
     type: template.type
-  }
+  })
 
-  // Add the deck
-  const response = await addDeck.mutateAsync(newDeck)
-
-  // Add the cards
   await createManyCards.mutateAsync(
     template.cards.map((card) => ({
       front: card.front,
       back: card.back,
       context: card.content || '',
-      deck_id: response.id
+      deck_id: newDeck.id
     }))
   )
 
-  return response.id
+  return newDeck.id
 }

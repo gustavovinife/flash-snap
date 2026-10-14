@@ -120,7 +120,9 @@ describe('isMastered / calculateDeckProgress', () => {
       id: 'deck-1',
       name: 'Deck',
       type: 'language',
-      created_at: NOW,
+      user_id: 'user-1',
+      created_at: NOW.toISOString(),
+      last_reviewed: null,
       cards: [
         newCard(),
         reviewedCard({ dueInDays: 5, repetition: 1, ease_factor: 2.8 }),

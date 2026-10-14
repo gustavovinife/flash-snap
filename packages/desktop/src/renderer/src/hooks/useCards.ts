@@ -1,5 +1,5 @@
 import supabase from '@renderer/services/supabaseService'
-import { Card, Deck } from '@renderer/types'
+import { Card, Deck, NewCard } from '@renderer/types'
 import { useQueryClient, useQuery, useMutation, UseMutationResult } from '@tanstack/react-query'
 
 interface IUseCards {
@@ -11,10 +11,7 @@ interface IUseCards {
   deleteCard: UseMutationResult<Card, Error, number, unknown>
 }
 
-type CreateCard = Omit<
-  Card,
-  'id' | 'created_at' | 'next_review' | 'repetition' | 'ease_factor' | 'interval'
->
+type CreateCard = NewCard
 
 export const useCards = (): IUseCards => {
   const queryClient = useQueryClient()

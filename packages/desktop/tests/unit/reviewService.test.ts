@@ -12,11 +12,19 @@ import { Card, Deck } from '../../src/renderer/src/types'
 /**
  * Helper to create a card with optional overrides
  */
-function createCard(overrides: Partial<Card> = {}): Card {
+type CardOverrides = Partial<Omit<Card, 'next_review'>> & { next_review?: Date | string | null }
+
+function createCard({ next_review, ...overrides }: CardOverrides = {}): Card {
   return {
     id: 1,
+    deck_id: 'deck-1',
     front: 'Test Question',
     back: 'Test Answer',
+    context: null,
+    interval: null,
+    ease_factor: null,
+    repetition: null,
+    next_review: next_review instanceof Date ? next_review.toISOString() : (next_review ?? null),
     ...overrides
   }
 }
@@ -29,7 +37,9 @@ function createDeck(cards: Card[], overrides: Partial<Deck> = {}): Deck {
     id: 'deck-1',
     name: 'Test Deck',
     cards,
-    created_at: new Date(),
+    user_id: 'user-1',
+    created_at: new Date().toISOString(),
+    last_reviewed: null,
     type: 'knowledge',
     ...overrides
   }

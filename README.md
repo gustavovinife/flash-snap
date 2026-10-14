@@ -6,6 +6,8 @@ Flash Snap is a spaced repetition learning application available on desktop and 
 
 - **[@flash-snap/desktop](./packages/desktop)** - Electron desktop application
 - **[@flash-snap/mobile](./packages/mobile)** - React Native mobile application (Expo)
+- **[@flash-snap/site](./packages/site)** - Landing page
+- **[@flash-snap/shared](./packages/shared)** - Code shared by the apps: entities (DTOs), spaced-repetition scheduling, reports, templates and the AI deck-generation contract. Consumed as TypeScript source, no build step
 
 ## 🚀 Getting Started
 

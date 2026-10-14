@@ -24,16 +24,25 @@ type Platform = "mac" | "windows" | "linux" | "unknown";
 
 const GITHUB_REPO = "gustavovinife/flash-snap";
 
+export function isMobileDevice(): boolean {
+  const userAgent = navigator.userAgent.toLowerCase();
+  // iPadOS reports itself as a Mac, so also check for touch support
+  const isIPad =
+    userAgent.includes("macintosh") && navigator.maxTouchPoints > 1;
+  return (
+    isIPad ||
+    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(
+      userAgent,
+    )
+  );
+}
+
 function detectPlatform(): Platform {
   const userAgent = navigator.userAgent.toLowerCase();
   const platform = navigator.platform.toLowerCase();
 
-  // Check for mobile devices first - always show Windows for mobile
-  const isMobile =
-    /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(
-      userAgent,
-    );
-  if (isMobile) {
+  // Mobile visitors are sent to the mobile beta; Windows is just a fallback
+  if (isMobileDevice()) {
     return "windows";
   }
 

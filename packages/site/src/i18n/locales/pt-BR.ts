@@ -9,6 +9,10 @@ const ptBR = {
     downloadFor: "Baixar para {{platform}}",
     loading: "Carregando...",
     version: "Versão {{version}}",
+    mobileSubtitle:
+      "Revise seus flashcards em qualquer lugar com repetição espaçada, baralhos gerados por IA e lembretes diários. Experimente o beta gratuito para celular.",
+    tryMobile: "Experimentar o app",
+    mobileNote: "Beta gratuito para iPhone e Android",
   },
 
   // Features section
@@ -122,6 +126,9 @@ const ptBR = {
       windows: "Windows",
       linux: "Linux",
     },
+    mobileTitle: "Comece a aprender no celular hoje",
+    mobileSubtitle:
+      "O beta do Flash Snap para celular é gratuito. Seus baralhos sincronizam com o app desktop, para você estudar em qualquer lugar.",
   },
 
   // FAQ section

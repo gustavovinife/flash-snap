@@ -9,6 +9,10 @@ const enUS = {
     downloadFor: "Download for {{platform}}",
     loading: "Loading...",
     version: "Version {{version}}",
+    mobileSubtitle:
+      "Review your flashcards anywhere with smart spaced repetition, AI-generated decks and daily reminders. Try the free mobile beta.",
+    tryMobile: "Try the mobile app",
+    mobileNote: "Free beta for iPhone and Android",
   },
 
   // Features section
@@ -122,6 +126,9 @@ const enUS = {
       windows: "Windows",
       linux: "Linux",
     },
+    mobileTitle: "Start learning on your phone today",
+    mobileSubtitle:
+      "The Flash Snap mobile beta is free. Your decks sync with the desktop app, so you can study anywhere.",
   },
 
   // FAQ section

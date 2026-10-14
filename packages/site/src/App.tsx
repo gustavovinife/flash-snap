@@ -2,7 +2,11 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { usePostHog } from "posthog-js/react";
-import { useGitHubRelease, platformNames } from "./hooks/useGitHubRelease";
+import {
+  useGitHubRelease,
+  platformNames,
+  isMobileDevice,
+} from "./hooks/useGitHubRelease";
 
 // Facebook Pixel type declaration
 declare global {
@@ -28,6 +32,8 @@ import {
   Wand2,
   MessageSquare,
   Shield,
+  Smartphone,
+  ArrowRight,
 } from "lucide-react";
 
 const PlatformIcon = ({ platform }: { platform: string }) => {
@@ -47,6 +53,10 @@ function App() {
   const { t } = useTranslation();
   const posthog = usePostHog();
   const { loading, platform, downloadInfo, allDownloads } = useGitHubRelease();
+  const isMobile = isMobileDevice();
+
+  const trackBetaClick = (location: "hero" | "footer") =>
+    posthog.capture("mobile_beta_clicked", { location });
 
   // Track scroll depth
   useEffect(() => {
@@ -117,40 +127,57 @@ function App() {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-              {t("hero.subtitle")}
+              {isMobile ? t("hero.mobileSubtitle") : t("hero.subtitle")}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button
-                onClick={handleDownload}
-                disabled={loading || !downloadInfo}
-                className="group relative inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20 hover:shadow-secondary-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <span>{t("hero.loading")}</span>
-                ) : (
-                  <>
-                    <PlatformIcon platform={platform} />
-                    <span>
-                      {t("hero.downloadFor", {
-                        platform: platformNames[platform],
-                      })}
-                    </span>
-                    {downloadInfo && (
-                      <span className="text-sm opacity-75">
-                        ({downloadInfo.size})
-                      </span>
-                    )}
-                  </>
-                )}
-              </button>
-
-              {downloadInfo && (
+            {isMobile ? (
+              <div className="flex flex-col gap-3 items-center">
+                <Link
+                  to="/beta"
+                  onClick={() => trackBetaClick("hero")}
+                  className="inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20"
+                >
+                  <Smartphone className="w-5 h-5" />
+                  <span>{t("hero.tryMobile")}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
                 <span className="text-sm text-gray-500">
-                  {t("hero.version", { version: downloadInfo.version })}
+                  {t("hero.mobileNote")}
                 </span>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button
+                  onClick={handleDownload}
+                  disabled={loading || !downloadInfo}
+                  className="group relative inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20 hover:shadow-secondary-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <span>{t("hero.loading")}</span>
+                  ) : (
+                    <>
+                      <PlatformIcon platform={platform} />
+                      <span>
+                        {t("hero.downloadFor", {
+                          platform: platformNames[platform],
+                        })}
+                      </span>
+                      {downloadInfo && (
+                        <span className="text-sm opacity-75">
+                          ({downloadInfo.size})
+                        </span>
+                      )}
+                    </>
+                  )}
+                </button>
+
+                {downloadInfo && (
+                  <span className="text-sm text-gray-500">
+                    {t("hero.version", { version: downloadInfo.version })}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -325,46 +352,60 @@ function App() {
       <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-            {t("download.title")}
+            {isMobile ? t("download.mobileTitle") : t("download.title")}
           </h2>
           <p className="text-gray-400 mb-10 text-lg">
-            {t("download.subtitle")}
+            {isMobile ? t("download.mobileSubtitle") : t("download.subtitle")}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4">
-            {(["mac", "windows", "linux"] as const).map((p) => {
-              const info = allDownloads[p];
-              return (
-                <a
-                  key={p}
-                  href={info?.url || "#"}
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 ${
-                    info
-                      ? "border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 text-white"
-                      : "border-gray-800 opacity-50 cursor-not-allowed text-gray-500"
-                  }`}
-                  onClick={(e) => {
-                    if (!info) {
-                      e.preventDefault();
-                    } else {
-                      posthog.capture("download_clicked", {
-                        platform: p,
-                        version: info.version,
-                        filename: info.filename,
-                        location: "footer",
-                      });
-                    }
-                  }}
-                >
-                  <PlatformIcon platform={p} />
-                  <span>{t(`download.platforms.${p}`)}</span>
-                  {info && (
-                    <span className="text-sm text-gray-500">({info.size})</span>
-                  )}
-                </a>
-              );
-            })}
-          </div>
+          {isMobile ? (
+            <Link
+              to="/beta"
+              onClick={() => trackBetaClick("footer")}
+              className="inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200"
+            >
+              <Smartphone className="w-5 h-5" />
+              <span>{t("hero.tryMobile")}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-4">
+              {(["mac", "windows", "linux"] as const).map((p) => {
+                const info = allDownloads[p];
+                return (
+                  <a
+                    key={p}
+                    href={info?.url || "#"}
+                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 ${
+                      info
+                        ? "border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 text-white"
+                        : "border-gray-800 opacity-50 cursor-not-allowed text-gray-500"
+                    }`}
+                    onClick={(e) => {
+                      if (!info) {
+                        e.preventDefault();
+                      } else {
+                        posthog.capture("download_clicked", {
+                          platform: p,
+                          version: info.version,
+                          filename: info.filename,
+                          location: "footer",
+                        });
+                      }
+                    }}
+                  >
+                    <PlatformIcon platform={p} />
+                    <span>{t(`download.platforms.${p}`)}</span>
+                    {info && (
+                      <span className="text-sm text-gray-500">
+                        ({info.size})
+                      </span>
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

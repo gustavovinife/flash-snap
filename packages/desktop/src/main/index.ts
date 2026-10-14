@@ -19,13 +19,24 @@ ipcMain.on('check-for-updates', () => {
     title: 'Flash Snap',
     body: 'Checking for updates...'
   }).show()
-  autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdates().catch(() => {})
 })
 
 let tray: Tray | null = null
 let mainWindow: BrowserWindow | null = null
 let isQuiting = false
+let isUpdateReady = false
 let reviewCheckInterval: NodeJS.Timeout | null = null
+
+// Closing the window only hides it, so any real quit (tray, Cmd+Q, logout, updater) must flag it
+app.on('before-quit', () => {
+  isQuiting = true
+})
+
+function installUpdate(): void {
+  isQuiting = true
+  autoUpdater.quitAndInstall()
+}
 
 // Store settings in main process memory for reliable access
 const cachedSettings: { reviewTime: string; lastNotificationDate: string | null } = {
@@ -195,16 +206,22 @@ function createWindow(): void {
   }
 }
 
-function createTray(): void {
-  tray = new Tray(trayIcon)
-
-  const contextMenu = Menu.buildFromTemplate([
+function buildTrayMenu(): Menu {
+  return Menu.buildFromTemplate([
     {
       label: 'Show Flash Snap',
       click: () => {
         mainWindow?.show()
       }
     },
+    ...(isUpdateReady
+      ? [
+          {
+            label: 'Restart to Update',
+            click: installUpdate
+          }
+        ]
+      : []),
     {
       label: 'Quit',
       click: () => {
@@ -213,9 +230,13 @@ function createTray(): void {
       }
     }
   ])
+}
+
+function createTray(): void {
+  tray = new Tray(trayIcon)
 
   tray.setToolTip('Flash Snap')
-  tray.setContextMenu(contextMenu)
+  tray.setContextMenu(buildTrayMenu())
 
   tray.on('click', () => {
     if (mainWindow?.isVisible()) {
@@ -346,10 +367,15 @@ autoUpdater.on('update-available', () => {
 })
 
 autoUpdater.on('update-downloaded', () => {
-  new Notification({
+  isUpdateReady = true
+  tray?.setContextMenu(buildTrayMenu())
+
+  const notification = new Notification({
     title: 'Flash Snap',
-    body: 'Update downloaded. Restart the app to apply the update.'
-  }).show()
+    body: 'Update downloaded. Click to restart and update now, or it will install the next time you quit.'
+  })
+  notification.on('click', installUpdate)
+  notification.show()
 })
 
 // Remove the protocol handler setup since we're not using custom protocols

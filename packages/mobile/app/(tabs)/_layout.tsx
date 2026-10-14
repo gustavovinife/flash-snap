@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import type { ColorValue } from 'react-native'
-import { useTheme } from '@/theme'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { spacing, useTheme } from '@/theme'
 
 type IconName = keyof typeof Ionicons.glyphMap
 
@@ -15,6 +16,9 @@ function tabIcon(active: IconName, inactive: IconName) {
 export default function TabsLayout(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
+  const insets = useSafeAreaInsets()
+  // Some devices report no bottom inset (Android 3-button navigation, browsers), so keep a minimum
+  const bottomPadding = Math.max(insets.bottom, spacing.md)
 
   return (
     <Tabs
@@ -22,8 +26,15 @@ export default function TabsLayout(): React.JSX.Element {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSubtle,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
-        tabBarLabelStyle: { fontWeight: '600' }
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          height: 56 + bottomPadding,
+          paddingTop: spacing.sm,
+          paddingBottom: bottomPadding
+        },
+        tabBarItemStyle: { paddingVertical: 2 },
+        tabBarLabelStyle: { fontWeight: '600', fontSize: 12 }
       }}
     >
       <Tabs.Screen

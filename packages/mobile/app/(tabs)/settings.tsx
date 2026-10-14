@@ -107,12 +107,16 @@ export default function SettingsScreen(): React.JSX.Element {
         <Pill label={isPremium ? t('settings.premium') : t('settings.free')} tone={isPremium ? 'success' : 'neutral'} />
       </Surface>
 
-      {(isPremium || canUpgrade) && (
+      {((!isPremium && canUpgrade) || subscription?.stripe_customer_id) && (
         <Section title={t('settings.plan')}>
-          {isPremium && subscription?.stripe_customer_id ? (
-            <ListRow icon="card-outline" title={t('settings.manage')} onPress={() => openStripe(openPortal)} />
-          ) : (
+          {!isPremium && canUpgrade && (
             <ListRow icon="diamond-outline" title={t('settings.upgrade')} onPress={() => openStripe(openCheckout)} />
+          )}
+          {!isPremium && canUpgrade && subscription?.stripe_customer_id && (
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+          )}
+          {subscription?.stripe_customer_id && (
+            <ListRow icon="card-outline" title={t('settings.manage')} onPress={() => openStripe(openPortal)} />
           )}
         </Section>
       )}

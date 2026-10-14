@@ -9,6 +9,7 @@ import { Animated, Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '@/components'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
+import { useReviewSounds } from '@/hooks/useReviewSounds'
 import { showDialog } from '@/lib/dialogs'
 import { speak } from '@/lib/speech'
 import { radius, spacing, useTheme } from '@/theme'
@@ -38,6 +39,7 @@ export default function ReviewScreen(): React.JSX.Element {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data: decks, isLoading } = useDecks()
   const { reviewCard } = useDeckMutations()
+  const playGradeSound = useReviewSounds()
 
   // The queue is fixed when the session starts, so graded cards don't reshuffle it
   const [queue, setQueue] = useState<DueCard<Card, Deck>[] | null>(null)
@@ -73,6 +75,7 @@ export default function ReviewScreen(): React.JSX.Element {
   const grade = (value: Grade): void => {
     if (!current) return
     haptic(value)
+    playGradeSound(value)
     reviewCard.mutate(
       { card: current.card, grade: value },
       { onError: () => showDialog(t('common.error'), t('review.saveError')) }

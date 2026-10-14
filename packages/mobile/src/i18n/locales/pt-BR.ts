@@ -198,6 +198,8 @@ const ptBR: typeof enUS = {
     signOut: 'Sair',
     signOutTitle: 'Sair da conta?',
     app: 'App',
+    review: 'Revisão',
+    soundEffects: 'Efeitos sonoros',
     installApp: 'Adicionar à Tela de Início',
     version: 'Versão {{version}}'
   },

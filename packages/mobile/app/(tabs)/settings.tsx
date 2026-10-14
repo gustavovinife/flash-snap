@@ -12,6 +12,7 @@ import { confirm, showActions } from '@/lib/actions'
 import { getInstallMode, openInstallPrompt } from '@/lib/install'
 import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
+import { areSoundEffectsEnabled, setSoundEffectsEnabled } from '@/lib/soundSettings'
 import { radius, spacing, useTheme } from '@/theme'
 
 const supportsReminders = Platform.OS !== 'web'
@@ -42,6 +43,7 @@ export default function SettingsScreen(): React.JSX.Element {
   const { user, signOut } = useAuth()
   const { isPremium, canUpgrade, subscription, openCheckout, openPortal } = useSubscription()
   const [reminder, setReminder] = useState<ReminderSettings | null>(null)
+  const [soundEffects, setSoundEffects] = useState(areSoundEffectsEnabled)
 
   useEffect(() => {
     if (supportsReminders) getReminderSettings().then(setReminder)
@@ -126,6 +128,23 @@ export default function SettingsScreen(): React.JSX.Element {
           <ListRow icon="phone-portrait-outline" title={t('settings.installApp')} onPress={openInstallPrompt} />
         </Section>
       )}
+
+      <Section title={t('settings.review')}>
+        <ListRow
+          icon="volume-medium-outline"
+          title={t('settings.soundEffects')}
+          right={
+            <Switch
+              value={soundEffects}
+              onValueChange={(enabled) => {
+                setSoundEffects(enabled)
+                void setSoundEffectsEnabled(enabled)
+              }}
+              trackColor={{ true: colors.primary, false: colors.border }}
+            />
+          }
+        />
+      </Section>
 
       <Section title={t('settings.language')}>
         <ListRow icon="language-outline" title={t('settings.language')} value={languageLabel} onPress={chooseLanguage} />

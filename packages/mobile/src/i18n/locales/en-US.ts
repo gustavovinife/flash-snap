@@ -195,6 +195,8 @@ const enUS = {
     signOut: 'Sign out',
     signOutTitle: 'Sign out?',
     app: 'App',
+    review: 'Review',
+    soundEffects: 'Sound effects',
     installApp: 'Add to Home Screen',
     version: 'Version {{version}}'
   },

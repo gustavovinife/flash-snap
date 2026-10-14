@@ -46,7 +46,15 @@
           "resizeMode": "contain",
           "backgroundColor": "#7c3aed"
         }
-      ]
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-asset"
     ],
     "extra": {
       "router": {},

@@ -1,4 +1,5 @@
 {
+  "installCommand": "cd ../.. && corepack enable && yarn workspaces focus @flash-snap/site",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]

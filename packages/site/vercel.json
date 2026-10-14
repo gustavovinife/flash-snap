@@ -1,6 +1,17 @@
 {
-  "installCommand": "cd ../.. && yarn workspaces focus @flash-snap/site",
+  "installCommand": "cd ../.. && yarn workspaces focus @flash-snap/site @flash-snap/mobile",
+  "buildCommand": "yarn build && yarn workspace @flash-snap/mobile export:web",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "app.flashsnap.com.br" }],
+      "destination": "https://www.flashsnap.com.br/app/:path*",
+      "permanent": false
+    }
+  ],
   "rewrites": [
+    { "source": "/app", "destination": "/app/index.html" },
+    { "source": "/app/(.*)", "destination": "/app/index.html" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }

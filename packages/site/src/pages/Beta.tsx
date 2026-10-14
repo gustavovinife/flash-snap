@@ -1,20 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
-import { ArrowLeft, Smartphone, Apple, Play } from "lucide-react";
+import { ArrowLeft, Smartphone, Share, PlusSquare } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 
-// The preview channel always serves the latest `yarn publish:preview` from packages/mobile
-const EXPO_PREVIEW_URL =
-  "exp://u.expo.dev/b3d83416-1a3f-45f5-9512-8d1c09c9cbc6?channel-name=preview";
-const EXPO_GO_IOS = "https://apps.apple.com/app/expo-go/id982107779";
-const EXPO_GO_ANDROID =
-  "https://play.google.com/store/apps/details?id=host.exp.exponent";
+// The mobile app's web build, served from this site (see vercel.json)
+const WEB_APP_PATH = "/app/";
 
 export function Beta() {
   const { t } = useTranslation();
+  const posthog = usePostHog();
+  const webAppUrl = `${window.location.origin}${WEB_APP_PATH}`;
 
-  const steps = [t("beta.step1"), t("beta.step2"), t("beta.step3")];
+  const steps = [
+    { icon: Smartphone, text: t("beta.step1") },
+    { icon: Share, text: t("beta.step2") },
+    { icon: PlusSquare, text: t("beta.step3") },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-950 flex flex-col">
@@ -46,49 +49,32 @@ export function Beta() {
             </h1>
             <p className="text-lg text-gray-300 mb-8">{t("beta.subtitle")}</p>
 
-            <ol className="space-y-4 mb-8">
-              {steps.map((step, index) => (
-                <li key={step} className="flex gap-3 text-gray-300">
+            <ol className="space-y-4">
+              {steps.map(({ icon: Icon, text }, index) => (
+                <li key={text} className="flex gap-3 text-gray-300">
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-purple-600 text-white text-sm font-semibold flex items-center justify-center">
                     {index + 1}
                   </span>
-                  <span className="pt-0.5">{step}</span>
+                  <span className="pt-0.5 flex items-start gap-2">
+                    <Icon className="w-4 h-4 mt-1 flex-shrink-0 text-purple-300" />
+                    {text}
+                  </span>
                 </li>
               ))}
             </ol>
-
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={EXPO_GO_IOS}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-700 px-4 py-2.5 text-gray-200 hover:bg-gray-800 transition-colors"
-              >
-                <Apple className="w-5 h-5" />
-                {t("beta.appStore")}
-              </a>
-              <a
-                href={EXPO_GO_ANDROID}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-700 px-4 py-2.5 text-gray-200 hover:bg-gray-800 transition-colors"
-              >
-                <Play className="w-5 h-5" />
-                {t("beta.playStore")}
-              </a>
-            </div>
           </div>
 
           <div className="bg-gray-900 border border-gray-800 rounded-3xl p-8 text-center">
             <div className="hidden md:block">
               <div className="bg-white rounded-2xl p-4 inline-block mb-5">
-                <QRCodeSVG value={EXPO_PREVIEW_URL} size={200} level="M" />
+                <QRCodeSVG value={webAppUrl} size={200} level="M" />
               </div>
               <p className="text-gray-400 text-sm mb-6">{t("beta.scan")}</p>
             </div>
 
             <a
-              href={EXPO_PREVIEW_URL}
+              href={WEB_APP_PATH}
+              onClick={() => posthog.capture("mobile_web_app_opened")}
               className="block w-full rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold py-4 transition-colors"
             >
               {t("beta.open")}

@@ -256,17 +256,15 @@ const enUS = {
   // Mobile beta page
   beta: {
     badge: "Mobile beta",
-    title: "Try Flash Snap on your phone",
+    title: "Flash Snap on your phone",
     subtitle:
-      "Review your cards, create decks with AI and study anywhere. The mobile app is in beta and runs inside Expo Go.",
-    step1: "Install the free Expo Go app on your iPhone or Android phone.",
-    step2: "Open this page on your phone and tap \"Open in Expo Go\", or scan the QR code with your camera.",
-    step3: "Sign in with your Flash Snap account, or create one.",
-    appStore: "Expo Go for iPhone",
-    playStore: "Expo Go for Android",
+      "Review your cards, create decks with AI and study anywhere. No download needed: it runs in your phone's browser and syncs with the desktop app.",
+    step1: "Open this page on your phone and tap \"Open Flash Snap\" (or scan the QR code).",
+    step2: "Tap Share in Safari (or ⋮ in Chrome).",
+    step3: "Choose \"Add to Home Screen\" to get the Flash Snap icon, then sign in.",
     scan: "Scan with your phone's camera",
-    open: "Open in Expo Go",
-    openHint: "Works on a phone with Expo Go installed.",
+    open: "Open Flash Snap",
+    openHint: "Free beta. Works on iPhone and Android.",
     backToHome: "Back to Home",
   },
 };

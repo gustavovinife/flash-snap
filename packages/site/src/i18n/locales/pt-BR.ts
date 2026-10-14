@@ -245,6 +245,23 @@ const ptBR = {
     support:
       "Precisa de ajuda? Entre em contato conosco em",
   },
+
+  // Mobile beta page
+  beta: {
+    badge: "Beta para celular",
+    title: "Experimente o Flash Snap no celular",
+    subtitle:
+      "Revise seus cartões, crie baralhos com IA e estude em qualquer lugar. O app para celular está em beta e roda dentro do Expo Go.",
+    step1: "Instale o app gratuito Expo Go no seu iPhone ou Android.",
+    step2: "Abra esta página no celular e toque em \"Abrir no Expo Go\", ou escaneie o QR code com a câmera.",
+    step3: "Entre com sua conta do Flash Snap ou crie uma.",
+    appStore: "Expo Go para iPhone",
+    playStore: "Expo Go para Android",
+    scan: "Escaneie com a câmera do celular",
+    open: "Abrir no Expo Go",
+    openHint: "Funciona em um celular com o Expo Go instalado.",
+    backToHome: "Voltar ao início",
+  },
 };
 
 export default ptBR;

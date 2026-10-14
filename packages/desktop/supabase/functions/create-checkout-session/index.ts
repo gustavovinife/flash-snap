@@ -1,11 +1,7 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts'
 import Stripe from 'npm:stripe@17.7.0'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
-}
+import { corsHeaders, getCaller, json, returnUrl } from '../_shared/stripeAuth.ts'
 
 // Initialize Stripe
 const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')
@@ -22,8 +18,9 @@ console.info('Create checkout session server started')
 
 interface CreateCheckoutRequest {
   priceId: string
-  userId: string
-  userEmail: string
+  userId?: string
+  userEmail?: string
+  returnUrl?: string
 }
 
 Deno.serve(async (req: Request) => {
@@ -34,40 +31,28 @@ Deno.serve(async (req: Request) => {
 
   // Only allow POST requests
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    return json({ error: 'Method not allowed' }, 405)
   }
 
   try {
-    const { priceId, userId, userEmail }: CreateCheckoutRequest = await req.json()
+    const user = await getCaller(req)
+    if (!user?.email) {
+      return json({ error: 'You need to be signed in to upgrade.' }, 401)
+    }
 
-    // Validate required fields
+    const { priceId, userId, returnUrl: requestedReturnUrl }: CreateCheckoutRequest = await req.json()
+
     if (!priceId) {
-      return new Response(JSON.stringify({ error: 'priceId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+      return json({ error: 'priceId is required' }, 400)
     }
 
-    if (!userId) {
-      return new Response(JSON.stringify({ error: 'userId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+    // Older clients also send userId; it must belong to the caller
+    if (userId && userId !== user.id) {
+      return json({ error: 'You can only upgrade your own account.' }, 403)
     }
 
-    if (!userEmail) {
-      return new Response(JSON.stringify({ error: 'userEmail is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    console.info(`Creating checkout session for user ${user.id} with price ${priceId}`)
 
-    console.info(`Creating checkout session for user ${userId} with price ${priceId}`)
-
-    // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       payment_method_types: ['card'],
@@ -77,28 +62,21 @@ Deno.serve(async (req: Request) => {
           quantity: 1
         }
       ],
-      customer_email: userEmail,
+      customer_email: user.email,
       metadata: {
-        user_id: userId
+        user_id: user.id
       },
-      success_url: 'flash-snap://subscription-callback?success=true',
-      cancel_url: 'flash-snap://subscription-callback?canceled=true'
+      success_url: returnUrl(requestedReturnUrl, { success: 'true' }),
+      cancel_url: returnUrl(requestedReturnUrl, { canceled: 'true' })
     })
 
     console.info(`Checkout session created: ${session.id}`)
 
-    return new Response(JSON.stringify({ url: session.url }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    return json({ url: session.url })
   } catch (error) {
     console.error('Error creating checkout session:', error)
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
-    return new Response(
-      JSON.stringify({ error: 'Failed to create checkout session', details: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return json({ error: 'Failed to create checkout session', details: errorMessage }, 500)
   }
 })

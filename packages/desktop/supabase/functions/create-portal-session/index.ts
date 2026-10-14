@@ -1,11 +1,7 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts'
 import Stripe from 'npm:stripe@17.7.0'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
-}
+import { adminClient, corsHeaders, getCaller, json, returnUrl } from '../_shared/stripeAuth.ts'
 
 // Initialize Stripe
 const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY')
@@ -21,7 +17,8 @@ const stripe = new Stripe(stripeSecretKey || '', {
 console.info('Create portal session server started')
 
 interface CreatePortalRequest {
-  customerId: string
+  customerId?: string
+  returnUrl?: string
 }
 
 Deno.serve(async (req: Request) => {
@@ -32,45 +29,48 @@ Deno.serve(async (req: Request) => {
 
   // Only allow POST requests
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    return json({ error: 'Method not allowed' }, 405)
   }
 
   try {
-    const { customerId }: CreatePortalRequest = await req.json()
-
-    // Validate required fields
-    if (!customerId) {
-      return new Response(JSON.stringify({ error: 'customerId is required' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+    const user = await getCaller(req)
+    if (!user) {
+      return json({ error: 'You need to be signed in to manage your subscription.' }, 401)
     }
 
-    console.info(`Creating portal session for customer ${customerId}`)
+    const { customerId, returnUrl: requestedReturnUrl }: CreatePortalRequest = await req.json()
 
-    // Create Stripe Customer Portal session
+    // The customer always comes from the caller's own subscription, never from the request
+    const { data: subscription, error } = await adminClient()
+      .from('subscriptions')
+      .select('stripe_customer_id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    if (error) {
+      throw error
+    }
+    if (!subscription?.stripe_customer_id) {
+      return json({ error: 'No subscription found for this account.' }, 404)
+    }
+    if (customerId && customerId !== subscription.stripe_customer_id) {
+      return json({ error: 'You can only manage your own subscription.' }, 403)
+    }
+
+    console.info(`Creating portal session for user ${user.id}`)
+
     const session = await stripe.billingPortal.sessions.create({
-      customer: customerId,
-      return_url: 'flash-snap://subscription-callback?portal=closed'
+      customer: subscription.stripe_customer_id,
+      return_url: returnUrl(requestedReturnUrl, { portal: 'closed' })
     })
 
     console.info(`Portal session created: ${session.id}`)
 
-    return new Response(JSON.stringify({ url: session.url }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    return json({ url: session.url })
   } catch (error) {
     console.error('Error creating portal session:', error)
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
-    return new Response(
-      JSON.stringify({ error: 'Failed to create portal session', details: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return json({ error: 'Failed to create portal session', details: errorMessage }, 500)
   }
 })

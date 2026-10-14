@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
+import { showDialog } from '@/lib/dialogs'
 import { useDecks } from './useDecks'
 import { useSubscription } from './useSubscription'
 
@@ -15,7 +15,7 @@ export function useDeckLimit(): (action: () => void) => void {
       return
     }
 
-    Alert.alert(t('premium.limitTitle'), t('premium.limitBody'), [
+    showDialog(t('premium.limitTitle'), t('premium.limitBody'), [
       { text: t('premium.notNow'), style: 'cancel' },
       ...(canUpgrade
         ? [{ text: t('premium.upgrade'), onPress: () => void openCheckout().catch(() => {}) }]

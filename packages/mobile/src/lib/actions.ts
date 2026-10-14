@@ -1,4 +1,5 @@
-import { ActionSheetIOS, Alert, Platform } from 'react-native'
+import { ActionSheetIOS, Platform } from 'react-native'
+import { showDialog } from './dialogs'
 
 export interface ActionOption {
   label: string
@@ -20,7 +21,7 @@ export function showActions(title: string | undefined, options: ActionOption[], 
     return
   }
 
-  Alert.alert(title ?? '', undefined, [
+  showDialog(title ?? '', undefined, [
     ...options.map((option) => ({
       text: option.label,
       style: option.destructive ? ('destructive' as const) : ('default' as const),
@@ -37,7 +38,7 @@ export function confirm(
   cancelLabel: string,
   onConfirm: () => void
 ): void {
-  Alert.alert(title, message, [
+  showDialog(title, message, [
     { text: cancelLabel, style: 'cancel' },
     { text: confirmLabel, style: 'destructive', onPress: onConfirm }
   ])

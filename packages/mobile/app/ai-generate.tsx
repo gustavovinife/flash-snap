@@ -3,11 +3,12 @@ import { AI_MAX_PROMPT_LENGTH, AI_MIN_PROMPT_LENGTH, AI_PRESET_PROMPTS, type Gen
 import { router, Stack } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { Button, Pill, Surface, Text, TextField } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations } from '@/hooks/useDecks'
 import { generateDeck } from '@/lib/ai'
+import { showDialog } from '@/lib/dialogs'
 import { radius, spacing, useTheme } from '@/theme'
 
 export default function AIGenerateScreen(): React.JSX.Element {
@@ -54,7 +55,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
         },
         {
           onSuccess: (deck) => router.replace(`/deck/${deck.id}`),
-          onError: (e) => Alert.alert(t('common.error'), e.message)
+          onError: (e) => showDialog(t('common.error'), e.message)
         }
       )
     )

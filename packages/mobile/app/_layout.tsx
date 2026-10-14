@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Logo } from '@/components'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
+import { DialogHost } from '@/lib/dialogs'
 import { useTheme } from '@/theme'
 
 const queryClient = new QueryClient({
@@ -67,6 +68,7 @@ export default function RootLayout(): React.JSX.Element {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <RootNavigator />
+          <DialogHost />
         </AuthProvider>
       </QueryClientProvider>
     </SafeAreaProvider>

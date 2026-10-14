@@ -2,10 +2,11 @@ import type { DeckType } from '@flash-snap/shared'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { Button, OptionTiles, Text, TextField } from '@/components'
 import { useDeck, useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { useSubscription } from '@/hooks/useSubscription'
+import { showDialog } from '@/lib/dialogs'
 import { spacing, useTheme } from '@/theme'
 
 export default function DeckFormScreen(): React.JSX.Element {
@@ -25,7 +26,7 @@ export default function DeckFormScreen(): React.JSX.Element {
   const save = (): void => {
     const trimmed = name.trim()
     if (!trimmed) return
-    const onError = (error: Error): void => Alert.alert(t('common.error'), error.message)
+    const onError = (error: Error): void => showDialog(t('common.error'), error.message)
 
     if (isEditing) {
       updateDeck.mutate({ id: deck.id, name: trimmed, type }, { onSuccess: () => router.back(), onError })
@@ -33,7 +34,7 @@ export default function DeckFormScreen(): React.JSX.Element {
     }
 
     if (!canCreateDeck(decks.length)) {
-      Alert.alert(t('premium.limitTitle'), t('premium.limitBody'))
+      showDialog(t('premium.limitTitle'), t('premium.limitBody'))
       return
     }
     createDeck.mutate(

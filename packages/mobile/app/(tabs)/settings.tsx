@@ -2,13 +2,14 @@ import DateTimePicker, { DateTimePickerAndroid, type DateTimePickerEvent } from 
 import Constants from 'expo-constants'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Platform, ScrollView, StyleSheet, Switch, View } from 'react-native'
+import { Platform, ScrollView, StyleSheet, Switch, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ListRow, Pill, Surface, Text } from '@/components'
 import { useAuth } from '@/context/AuthContext'
 import { useSubscription } from '@/hooks/useSubscription'
 import { LANGUAGES, type LanguageCode, setLanguage } from '@/i18n'
 import { confirm, showActions } from '@/lib/actions'
+import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
 import { radius, spacing, useTheme } from '@/theme'
 
@@ -50,7 +51,7 @@ export default function SettingsScreen(): React.JSX.Element {
     const allowed = await saveReminderSettings(next)
     if (!allowed) {
       setReminder({ ...next, enabled: false })
-      Alert.alert(t('settings.reminder'), t('settings.notificationsDenied'))
+      showDialog(t('settings.reminder'), t('settings.notificationsDenied'))
     }
   }
 
@@ -73,7 +74,7 @@ export default function SettingsScreen(): React.JSX.Element {
     )
 
   const openStripe = (action: () => Promise<void>): void => {
-    action().catch((error: Error) => Alert.alert(t('common.error'), error.message))
+    action().catch((error: Error) => showDialog(t('common.error'), error.message))
   }
 
   const fullName = typeof user?.user_metadata?.full_name === 'string' ? user.user_metadata.full_name : ''

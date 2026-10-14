@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "doctor": "expo-doctor",
     "clean": "rm -rf node_modules .expo dist",
-    "publish:preview": "npx eas-cli@latest update --branch preview --environment preview"
+    "publish:preview": "npx eas-cli@latest update --branch preview --environment preview",
+    "export:web": "expo export --platform web --output-dir ../site/dist/app && node scripts/finalize-web.mjs ../site/dist/app"
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.17",

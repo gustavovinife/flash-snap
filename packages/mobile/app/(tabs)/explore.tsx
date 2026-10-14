@@ -2,12 +2,13 @@ import { isTemplateInstalled, type Template, templates } from '@flash-snap/share
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { Button, Surface, Text } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
+import { showDialog } from '@/lib/dialogs'
 import { radius, spacing, useTheme } from '@/theme'
 
 export default function ExploreScreen(): React.JSX.Element {
@@ -24,11 +25,11 @@ export default function ExploreScreen(): React.JSX.Element {
       setInstallingId(template.id)
       installTemplate(template, {
         onSuccess: (deck) =>
-          Alert.alert(t('explore.addedTitle'), t('explore.addedBody', { name: template.name }), [
+          showDialog(t('explore.addedTitle'), t('explore.addedBody', { name: template.name }), [
             { text: t('common.cancel'), style: 'cancel' },
             { text: t('explore.openDeck'), onPress: () => router.push(`/deck/${deck.id}`) }
           ]),
-        onError: (error) => Alert.alert(t('common.error'), error.message),
+        onError: (error) => showDialog(t('common.error'), error.message),
         onSettled: () => setInstallingId(null)
       })
     })

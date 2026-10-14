@@ -3,10 +3,11 @@ import { type CardLink, linkLabel, normalizeLinkUrl } from '@flash-snap/shared'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, type TextInput, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, type TextInput, View } from 'react-native'
 import { Button, Surface, Text, TextField } from '@/components'
 import { useDeck, useDeckMutations } from '@/hooks/useDecks'
 import { confirm } from '@/lib/actions'
+import { showDialog } from '@/lib/dialogs'
 import { radius, spacing, useTheme } from '@/theme'
 
 export default function CardFormScreen(): React.JSX.Element {
@@ -31,7 +32,7 @@ export default function CardFormScreen(): React.JSX.Element {
   const isEditing = !!card
   const canSave = front.trim().length > 0 && back.trim().length > 0
   const saving = createCard.isPending || updateCard.isPending
-  const onError = (error: Error): void => Alert.alert(t('common.error'), error.message)
+  const onError = (error: Error): void => showDialog(t('common.error'), error.message)
 
   const save = (addAnother = false): void => {
     if (!canSave || !deckId) return

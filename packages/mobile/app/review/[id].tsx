@@ -5,10 +5,11 @@ import { router, useLocalSearchParams } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Animated, Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Animated, Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '@/components'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
+import { showDialog } from '@/lib/dialogs'
 import { speak } from '@/lib/speech'
 import { radius, spacing, useTheme } from '@/theme'
 
@@ -74,7 +75,7 @@ export default function ReviewScreen(): React.JSX.Element {
     haptic(value)
     reviewCard.mutate(
       { card: current.card, grade: value },
-      { onError: () => Alert.alert(t('common.error'), t('review.saveError')) }
+      { onError: () => showDialog(t('common.error'), t('review.saveError')) }
     )
     setRevealed(false)
     setIndex((i) => i + 1)

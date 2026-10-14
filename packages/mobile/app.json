@@ -21,7 +21,11 @@
     },
     "web": {
       "output": "single",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "Flash Snap",
+      "shortName": "Flash Snap",
+      "themeColor": "#7c3aed",
+      "backgroundColor": "#7c3aed"
     },
     "plugins": [
       "expo-router",
@@ -56,6 +60,9 @@
     },
     "updates": {
       "url": "https://u.expo.dev/b3d83416-1a3f-45f5-9512-8d1c09c9cbc6"
+    },
+    "experiments": {
+      "baseUrl": "/app"
     }
   }
 }

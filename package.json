@@ -17,6 +17,7 @@
     "build:mobile": "yarn workspace @flash-snap/mobile build",
     "build:site": "yarn workspace @flash-snap/site build",
     "start:desktop": "yarn workspace @flash-snap/desktop start",
+    "release:desktop": "yarn workspace @flash-snap/desktop release",
     "android": "yarn workspace @flash-snap/mobile android",
     "ios": "yarn workspace @flash-snap/mobile ios",
     "web": "yarn workspace @flash-snap/mobile web",

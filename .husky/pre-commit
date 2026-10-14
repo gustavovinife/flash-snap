@@ -2,4 +2,4 @@
 
 # Run desktop tests before commit
 yarn workspace @flash-snap/desktop test
-clear
+clear 2>/dev/null || true

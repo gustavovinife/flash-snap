@@ -10,7 +10,11 @@ files:
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
   - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml,package-lock.json}'
+  - '!**/*.{p8,p12,pem,key,cer,mobileprovision}'
+  - '!{dist,scripts,supabase,docs}/**'
+  - '!*.sh'
+  - '!{tailwind.config.js,postcss.config.ts,vitest.config.ts}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   - '!**/*.map'
   - '!**/*.md'
@@ -24,6 +28,9 @@ asarUnpack:
   - resources/**
 
 win:
+  target:
+    - target: nsis
+      arch: x64
   executableName: flash-snap
   artifactName: ${productName}-${version}-setup.${ext}
   icon: build/icon.ico
@@ -38,8 +45,10 @@ mac:
   icon: build/icon.icns
 
   target:
-    - dmg
-    - zip
+    - target: dmg
+      arch: universal
+    - target: zip
+      arch: universal
 
   hardenedRuntime: true
   gatekeeperAssess: false
@@ -70,8 +79,10 @@ linux:
   icon: build/icon.png
 
   target:
-    - AppImage
-    - deb
+    - target: AppImage
+      arch: x64
+    - target: deb
+      arch: x64
 
   desktop:
     Name: Flash Snap

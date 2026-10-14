@@ -6,7 +6,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Animated, Platform, Pressable, StyleSheet, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '@/components'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { speak } from '@/lib/speech'
@@ -32,6 +32,8 @@ function haptic(grade: Grade): void {
 export default function ReviewScreen(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
+  // SafeAreaView doesn't get insets reliably inside a fullScreenModal, so pad explicitly
+  const insets = useSafeAreaInsets()
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data: decks, isLoading } = useDecks()
   const { reviewCard } = useDeckMutations()
@@ -81,7 +83,13 @@ export default function ReviewScreen(): React.JSX.Element {
   if (queue.length === 0 || finished) {
     const reviewed = queue.length
     return (
-      <SafeAreaView style={[styles.flex, styles.centered, { backgroundColor: colors.background }]}>
+      <View
+        style={[
+          styles.flex,
+          styles.centered,
+          { backgroundColor: colors.background, paddingTop: insets.top, paddingBottom: insets.bottom }
+        ]}
+      >
         <EmptyState
           icon={reviewed > 0 ? 'trophy-outline' : 'checkmark-done-outline'}
           title={reviewed > 0 ? t('review.doneTitle') : t('review.nothingDueTitle')}
@@ -89,7 +97,7 @@ export default function ReviewScreen(): React.JSX.Element {
         >
           <Button title={t('review.backToDecks')} onPress={close} />
         </EmptyState>
-      </SafeAreaView>
+      </View>
     )
   }
 
@@ -97,7 +105,16 @@ export default function ReviewScreen(): React.JSX.Element {
   const rotate = flip.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '90deg'] })
 
   return (
-    <SafeAreaView style={[styles.flex, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.flex,
+        {
+          backgroundColor: colors.background,
+          paddingTop: Math.max(insets.top, spacing.lg),
+          paddingBottom: Math.max(insets.bottom, spacing.sm)
+        }
+      ]}
+    >
       <View style={styles.topBar}>
         <IconButton icon="close" label={t('common.cancel')} onPress={close} />
         <View style={styles.progress}>
@@ -209,7 +226,7 @@ export default function ReviewScreen(): React.JSX.Element {
           <Button title={t('review.tapToReveal')} icon="eye-outline" onPress={reveal} />
         )}
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 

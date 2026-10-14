@@ -43,6 +43,19 @@
           "backgroundColor": "#7c3aed"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b3d83416-1a3f-45f5-9512-8d1c09c9cbc6"
+      }
+    },
+    "owner": "gustavovinife",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b3d83416-1a3f-45f5-9512-8d1c09c9cbc6"
+    }
   }
 }

@@ -1,11 +1,7 @@
 import type { Session, User } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
-import * as Linking from 'expo-linking'
-import * as WebBrowser from 'expo-web-browser'
 import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-
-WebBrowser.maybeCompleteAuthSession()
 
 interface AuthResult {
   error: string | null
@@ -21,17 +17,10 @@ interface AuthContextValue {
   loading: boolean
   signIn: (email: string, password: string) => Promise<AuthResult>
   signUp: (email: string, password: string, fullName?: string) => Promise<SignUpResult>
-  signInWithGoogle: () => Promise<AuthResult>
   signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
-
-function paramsFromUrl(url: string): URLSearchParams {
-  const [, fragment = ''] = url.split('#')
-  const [, query = ''] = url.split('#')[0].split('?')
-  return new URLSearchParams(fragment || query)
-}
 
 export function AuthProvider({ children }: { children: ReactNode }): React.JSX.Element {
   const queryClient = useQueryClient()
@@ -74,37 +63,6 @@ export function AuthProvider({ children }: { children: ReactNode }): React.JSX.E
           options: fullName ? { data: { full_name: fullName.trim() } } : undefined
         })
         return { error: error?.message ?? null, needsConfirmation: !error && !data.session }
-      },
-
-      signInWithGoogle: async () => {
-        const redirectTo = Linking.createURL('auth-callback')
-        const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: { redirectTo, skipBrowserRedirect: true }
-        })
-        if (error || !data.url) return { error: error?.message ?? 'No sign-in URL returned' }
-
-        const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo)
-        if (result.type !== 'success') return { error: null }
-
-        const params = paramsFromUrl(result.url)
-        const code = params.get('code')
-        if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
-          return { error: exchangeError?.message ?? null }
-        }
-
-        const accessToken = params.get('access_token')
-        const refreshToken = params.get('refresh_token')
-        if (!accessToken || !refreshToken) {
-          return { error: params.get('error_description') ?? 'Google sign-in failed' }
-        }
-
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken
-        })
-        return { error: sessionError?.message ?? null }
       },
 
       signOut: async () => {

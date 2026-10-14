@@ -21,8 +21,6 @@ const ptBR: typeof enUS = {
     password: 'Senha',
     noAccount: 'Não tem uma conta?',
     haveAccount: 'Já tem uma conta?',
-    or: 'ou',
-    continueWithGoogle: 'Continuar com Google',
     checkEmailTitle: 'Confira seu e-mail',
     checkEmailBody: 'Enviamos um link de confirmação. Abra o link e depois entre aqui.',
     missingFields: 'Informe seu e-mail e senha.'

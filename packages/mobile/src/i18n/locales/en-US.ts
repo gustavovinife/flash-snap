@@ -19,8 +19,6 @@ const enUS = {
     password: 'Password',
     noAccount: "Don't have an account?",
     haveAccount: 'Already have an account?',
-    or: 'or',
-    continueWithGoogle: 'Continue with Google',
     checkEmailTitle: 'Check your email',
     checkEmailBody: 'We sent you a confirmation link. Open it, then sign in here.',
     missingFields: 'Enter your email and password.'

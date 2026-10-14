@@ -4,7 +4,7 @@ Expo (SDK 57) app for iOS and Android. It uses the same Supabase backend as the 
 
 ## Features
 
-- Email/password and Google sign-in
+- Email/password sign-in
 - Decks and cards: create, edit, delete, search
 - Spaced-repetition reviews (same SM-2 scheduling as desktop) with pronunciation for language decks
 - Deck stats, ready-made templates, daily review reminder
@@ -38,7 +38,3 @@ cd packages/desktop
 supabase secrets set OPENAI_API_KEY=sk-...
 supabase functions deploy generate-deck
 ```
-
-## Google sign-in
-
-Add `flashsnap://auth-callback` (and your Expo Go URL, e.g. `exp://192.168.x.x:8081/--/auth-callback`, while developing) to the allowed redirect URLs in Supabase → Authentication → URL Configuration.

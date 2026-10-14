@@ -2,8 +2,9 @@ import '@/i18n'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { LoadingView } from '@/components'
+import { Logo } from '@/components'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { useTheme } from '@/theme'
 
@@ -15,7 +16,15 @@ function RootNavigator(): React.JSX.Element {
   const { session, loading } = useAuth()
   const colors = useTheme()
 
-  if (loading) return <LoadingView />
+  // Same look as the native splash screen, so startup flows straight into the app
+  if (loading) {
+    return (
+      <View style={[styles.splash, { backgroundColor: colors.primary }]}>
+        <StatusBar style="light" />
+        <Logo size={96} />
+      </View>
+    )
+  }
 
   return (
     <>
@@ -47,7 +56,6 @@ function RootNavigator(): React.JSX.Element {
           <Stack.Screen name="ai-generate" options={{ presentation: 'modal' }} />
         </Stack.Protected>
 
-        <Stack.Screen name="auth-callback" options={{ headerShown: false }} />
       </Stack>
     </>
   )
@@ -64,3 +72,7 @@ export default function RootLayout(): React.JSX.Element {
     </SafeAreaProvider>
   )
 }
+
+const styles = StyleSheet.create({
+  splash: { flex: 1, alignItems: 'center', justifyContent: 'center' }
+})

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -11,7 +10,7 @@ import {
   View
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, EmptyState, Surface, Text, TextField } from '@/components'
+import { Button, EmptyState, Logo, Surface, Text, TextField } from '@/components'
 import { useAuth } from '@/context/AuthContext'
 import { radius, spacing, useTheme } from '@/theme'
 
@@ -20,7 +19,7 @@ type Mode = 'signIn' | 'signUp'
 export default function SignInScreen(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
-  const { signIn, signUp, signInWithGoogle } = useAuth()
+  const { signIn, signUp } = useAuth()
 
   const [mode, setMode] = useState<Mode>('signIn')
   const [name, setName] = useState('')
@@ -28,7 +27,6 @@ export default function SignInScreen(): React.JSX.Element {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false)
   const passwordRef = useRef<TextInput>(null)
 
@@ -55,17 +53,6 @@ export default function SignInScreen(): React.JSX.Element {
     }
   }
 
-  const continueWithGoogle = async (): Promise<void> => {
-    setError(null)
-    setGoogleLoading(true)
-    try {
-      const result = await signInWithGoogle()
-      if (result.error) setError(result.error)
-    } finally {
-      setGoogleLoading(false)
-    }
-  }
-
   const switchMode = (): void => {
     setMode(isSignUp ? 'signIn' : 'signUp')
     setError(null)
@@ -80,7 +67,9 @@ export default function SignInScreen(): React.JSX.Element {
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <View style={[styles.hero, { backgroundColor: colors.primary }]}>
             <SafeAreaView edges={['top']} style={styles.heroContent}>
-              <Image source={require('../assets/flashsnapicon.png')} style={styles.logo} />
+              <View style={styles.logo}>
+                <Logo size={72} />
+              </View>
               <Text variant="headline" tone="inverse">
                 Flash Snap
               </Text>
@@ -152,22 +141,6 @@ export default function SignInScreen(): React.JSX.Element {
                   loading={submitting}
                 />
 
-                <View style={styles.divider}>
-                  <View style={[styles.line, { backgroundColor: colors.border }]} />
-                  <Text variant="small" tone="subtle">
-                    {t('auth.or')}
-                  </Text>
-                  <View style={[styles.line, { backgroundColor: colors.border }]} />
-                </View>
-
-                <Button
-                  title={t('auth.continueWithGoogle')}
-                  icon="logo-google"
-                  variant="secondary"
-                  onPress={continueWithGoogle}
-                  loading={googleLoading}
-                />
-
                 <Pressable onPress={switchMode} style={styles.switch} hitSlop={8}>
                   <Text variant="small" tone="muted" center>
                     {isSignUp ? t('auth.haveAccount') : t('auth.noAccount')}{' '}
@@ -199,13 +172,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.xl
   },
-  logo: { width: 72, height: 72, borderRadius: radius.lg, marginBottom: spacing.sm },
+  logo: { marginBottom: spacing.sm },
   tagline: { opacity: 0.9, maxWidth: 300 },
   scroll: { flexGrow: 1, paddingBottom: spacing.xl },
   card: { marginTop: spacing.lg, marginHorizontal: spacing.lg, padding: spacing.xl },
   form: { gap: spacing.lg },
   error: { borderRadius: radius.sm, padding: spacing.md },
-  divider: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  line: { flex: 1, height: StyleSheet.hairlineWidth },
   switch: { paddingVertical: spacing.sm }
 })

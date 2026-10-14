@@ -17,8 +17,9 @@ export default function TabsLayout(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
   const insets = useSafeAreaInsets()
-  // Some devices report no bottom inset (Android 3-button navigation, browsers), so keep a minimum
-  const bottomPadding = Math.max(insets.bottom, spacing.md)
+  // React Navigation already pads the bar by the bottom inset; only devices reporting
+  // (almost) none, like Android 3-button navigation or browsers, need extra room
+  const needsExtraPadding = insets.bottom < spacing.md
 
   return (
     <Tabs
@@ -29,11 +30,8 @@ export default function TabsLayout(): React.JSX.Element {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          height: 56 + bottomPadding,
-          paddingTop: spacing.sm,
-          paddingBottom: bottomPadding
+          ...(needsExtraPadding && { height: 64, paddingTop: spacing.xs, paddingBottom: spacing.md })
         },
-        tabBarItemStyle: { paddingVertical: 2 },
         tabBarLabelStyle: { fontWeight: '600', fontSize: 12 }
       }}
     >

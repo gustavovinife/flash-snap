@@ -2367,7 +2367,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@flash-snap/mobile@workspace:packages/mobile":
+"@flash-snap/mobile@workspace:*, @flash-snap/mobile@workspace:packages/mobile":
   version: 0.0.0-use.local
   resolution: "@flash-snap/mobile@workspace:packages/mobile"
   dependencies:
@@ -2419,6 +2419,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@flash-snap/site@workspace:packages/site"
   dependencies:
+    "@flash-snap/mobile": "workspace:*"
     "@types/react": "npm:^19.1.1"
     "@types/react-dom": "npm:^19.1.2"
     "@vitejs/plugin-react": "npm:^4.3.4"

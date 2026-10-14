@@ -170,6 +170,7 @@ const AIGeneratePage: React.FC = () => {
       const cardsToInsert = state.generatedCards.map((card) => ({
         front: card.front,
         back: card.back,
+        context: card.context ?? null,
         deck_id: newDeck.id
       }))
 

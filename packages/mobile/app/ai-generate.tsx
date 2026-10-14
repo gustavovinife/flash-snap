@@ -51,7 +51,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
         {
           name: deckName.trim(),
           type: result.deckType,
-          cards: result.cards.map((card) => ({ ...card, context: null }))
+          cards: result.cards.map((card) => ({ front: card.front, back: card.back, context: card.context ?? null }))
         },
         {
           onSuccess: (deck) => router.replace(`/deck/${deck.id}`),
@@ -170,6 +170,11 @@ export default function AIGenerateScreen(): React.JSX.Element {
                   <Text variant="small" tone="muted">
                     {card.back}
                   </Text>
+                  {card.context ? (
+                    <Text variant="caption" tone="subtle" style={styles.context}>
+                      {card.context}
+                    </Text>
+                  ) : null}
                 </View>
                 <Pressable
                   accessibilityRole="button"
@@ -226,5 +231,6 @@ const styles = StyleSheet.create({
   resultHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   card: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   cardFront: { fontSize: 16 },
+  context: { fontStyle: 'italic', fontWeight: '400', marginTop: spacing.xs },
   actions: { gap: spacing.sm, marginTop: spacing.sm }
 })

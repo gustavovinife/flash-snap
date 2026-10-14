@@ -4,7 +4,9 @@ import { createClient } from 'jsr:@supabase/supabase-js@2'
 import {
   AI_MAX_PROMPT_LENGTH,
   AI_MIN_PROMPT_LENGTH,
+  AI_RESPONSE_SCHEMA,
   AI_SYSTEM_PROMPT,
+  buildGenerationUserMessage,
   parseGenerationResult
 } from '../../../../shared/src/ai.ts'
 
@@ -63,11 +65,12 @@ Deno.serve(async (req) => {
       model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: AI_SYSTEM_PROMPT },
-        { role: 'user', content: trimmed }
+        { role: 'user', content: buildGenerationUserMessage(trimmed) }
       ],
-      temperature: 0.7,
-      max_tokens: 4096,
-      response_format: { type: 'json_object' }
+      temperature: 0.6,
+      // Up to 50 rich cards (front, back and context) need around 6k tokens
+      max_tokens: 12000,
+      response_format: { type: 'json_schema', json_schema: AI_RESPONSE_SCHEMA }
     })
   })
 
@@ -80,7 +83,11 @@ Deno.serve(async (req) => {
   }
 
   const completion = await response.json()
-  const content = completion.choices?.[0]?.message?.content
+  const message = completion.choices?.[0]?.message
+  if (message?.refusal) {
+    return json({ error: "The AI couldn't create a deck for this request. Try rephrasing it." }, 422)
+  }
+  const content = message?.content
   if (typeof content !== 'string') {
     return json({ error: 'The AI returned an empty response. Please try again.' }, 502)
   }

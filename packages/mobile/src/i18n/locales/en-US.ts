@@ -153,7 +153,7 @@ const enUS = {
     },
     generate: 'Generate deck',
     generating: 'Generating…',
-    generatingHint: 'This usually takes 10–20 seconds.',
+    generatingHint: 'This usually takes 10–30 seconds.',
     minLength: 'Add a few more words about the topic.',
     deckName: 'Deck name',
     cardsTitle_one: '{{count}} card',

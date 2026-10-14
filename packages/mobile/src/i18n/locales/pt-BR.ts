@@ -155,7 +155,7 @@ const ptBR: typeof enUS = {
     },
     generate: 'Gerar baralho',
     generating: 'Gerando…',
-    generatingHint: 'Isso costuma levar de 10 a 20 segundos.',
+    generatingHint: 'Isso costuma levar de 10 a 30 segundos.',
     minLength: 'Escreva mais algumas palavras sobre o assunto.',
     deckName: 'Nome do baralho',
     cardsTitle_one: '{{count}} cartão',

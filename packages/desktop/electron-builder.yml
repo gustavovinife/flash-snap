@@ -27,6 +27,8 @@ files:
 asarUnpack:
   - resources/**
 
+afterPack: scripts/adhoc-sign-mac.mjs
+
 win:
   target:
     - target: nsis
@@ -44,24 +46,21 @@ nsis:
 mac:
   icon: build/icon.icns
 
+  # No Developer ID: ad-hoc signed in afterPack, not notarized, so macOS can't auto-update.
+  # To sign again: remove identity, set notarize to true and re-add the zip target.
+  identity: null
   target:
     - target: dmg
-      arch: universal
-    - target: zip
       arch: universal
 
   hardenedRuntime: true
   gatekeeperAssess: false
-  notarize: true
+  notarize: false
 
   entitlements: build/entitlements.mac.plist
   entitlementsInherit: build/entitlements.mac.plist
 
   extendInfo:
-    NSCameraUsageDescription: Application requests access to the device's camera.
-    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
     LSUIElement: true
 
 dmg:

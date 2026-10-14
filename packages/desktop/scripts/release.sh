@@ -59,6 +59,10 @@ fi
 
 yarn run publish || fail "Build or upload failed. Fix the problem, then run 'yarn release:desktop' again to resume $TAG."
 
+# macOS builds aren't signed with a Developer ID, so installed Mac apps can't apply them;
+# without this file they stop downloading updates they can't install
+gh release delete-asset "$TAG" latest-mac.yml -R "$REPO" --yes >/dev/null 2>&1 || true
+
 gh release edit "$TAG" -R "$REPO" --draft=false --latest >/dev/null
 
 echo "✅ Flash Snap $TAG is live: https://github.com/$REPO/releases/tag/$TAG"

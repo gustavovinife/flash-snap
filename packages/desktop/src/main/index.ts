@@ -22,6 +22,8 @@ ipcMain.on('check-for-updates', () => {
   autoUpdater.checkForUpdates().catch(() => {})
 })
 
+const LAUNCHED_AT_LOGIN_ARG = '--hidden'
+
 let tray: Tray | null = null
 let mainWindow: BrowserWindow | null = null
 let isQuiting = false
@@ -44,9 +46,22 @@ const cachedSettings: { reviewTime: string; lastNotificationDate: string | null 
   lastNotificationDate: null
 }
 
+// macOS only allows notifications from apps signed with a Developer ID
+function setTrayTitle(title: string): void {
+  if (process.platform === 'darwin') tray?.setTitle(title)
+}
+
+function showReviewReminderWithoutNotification(): void {
+  setTrayTitle('Review time')
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show()
+    mainWindow.focus()
+  }
+}
+
 function showReviewNotification(message = 'Time for your daily review!'): void {
-  // Check if notifications are supported
   if (!Notification.isSupported()) {
+    showReviewReminderWithoutNotification()
     return
   }
 
@@ -63,6 +78,8 @@ function showReviewNotification(message = 'Time for your daily review!'): void {
       mainWindow.focus()
     }
   })
+
+  notification.on('failed', showReviewReminderWithoutNotification)
 
   notification.show()
 }
@@ -170,7 +187,9 @@ function createWindow(): void {
     })
   }
 
-  mainWindow.on('ready-to-show', () => mainWindow?.show())
+  mainWindow.on('ready-to-show', () => {
+    if (!wasOpenedAtLogin()) mainWindow?.show()
+  })
 
   mainWindow.on('close', (event) => {
     if (!isQuiting) {
@@ -189,6 +208,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('hide', () => {
+    setTrayTitle('')
     if (process.platform === 'darwin') {
       hideDockIcon()
     }
@@ -247,19 +267,36 @@ function createTray(): void {
   })
 }
 
-function setupAutoLaunch(): void {
-  const flashSnapAutoLauncher = new AutoLaunch({
-    name: 'Flash Snap',
-    path: app.getPath('exe'),
-    isHidden: true
-  })
+function wasOpenedAtLogin(): boolean {
+  if (process.argv.includes(LAUNCHED_AT_LOGIN_ARG)) return true
+  return process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAtLogin
+}
 
-  flashSnapAutoLauncher
-    .isEnabled()
-    .then((isEnabled) => {
-      if (!isEnabled) flashSnapAutoLauncher.enable()
+function setupAutoLaunch(): void {
+  if (is.dev) return
+
+  // Electron's login item API isn't available on Linux
+  if (process.platform === 'linux') {
+    const flashSnapAutoLauncher = new AutoLaunch({
+      name: 'Flash Snap',
+      path: app.getPath('exe'),
+      isHidden: true
     })
-    .catch(() => {})
+
+    flashSnapAutoLauncher
+      .isEnabled()
+      .then((isEnabled) => {
+        if (!isEnabled) flashSnapAutoLauncher.enable()
+      })
+      .catch(() => {})
+    return
+  }
+
+  // Native login items need no Automation/Accessibility permission on macOS (unlike AppleScript)
+  const loginItemOptions = { args: [LAUNCHED_AT_LOGIN_ARG] }
+  if (!app.getLoginItemSettings(loginItemOptions).openAtLogin) {
+    app.setLoginItemSettings({ ...loginItemOptions, openAtLogin: true })
+  }
 }
 
 app.whenReady().then(() => {

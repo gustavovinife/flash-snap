@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { usePostHog } from "posthog-js/react";
-import {
-  useGitHubRelease,
-  platformNames,
-  isMobileDevice,
-} from "./hooks/useGitHubRelease";
+import { INSTALL_APP_PATH, WEB_APP_PATH } from "./lib/webApp";
 
 // Facebook Pixel type declaration
 declare global {
@@ -20,44 +16,22 @@ import {
   Zap,
   Brain,
   Volume2,
-  Apple,
-  Monitor,
   Download,
   Mail,
-  Bell,
+  CalendarCheck,
   TrendingUp,
   BookOpen,
-  Laptop,
+  MonitorSmartphone,
   Sparkles,
   Wand2,
   MessageSquare,
   Shield,
-  Smartphone,
-  ArrowRight,
+  Globe,
 } from "lucide-react";
-
-const PlatformIcon = ({ platform }: { platform: string }) => {
-  switch (platform) {
-    case "mac":
-      return <Apple className="w-5 h-5" />;
-    case "windows":
-      return <Monitor className="w-5 h-5" />;
-    case "linux":
-      return <Monitor className="w-5 h-5" />;
-    default:
-      return <Download className="w-5 h-5" />;
-  }
-};
 
 function App() {
   const { t } = useTranslation();
   const posthog = usePostHog();
-  const { loading, platform, downloadInfo, allDownloads } = useGitHubRelease();
-  const isMobile = isMobileDevice();
-
-  const trackBetaClick = (location: "hero" | "footer") =>
-    posthog.capture("mobile_beta_clicked", { location });
-
   // Track scroll depth
   useEffect(() => {
     let maxScroll = 0;
@@ -78,25 +52,6 @@ function App() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [posthog]);
-
-  const handleDownload = () => {
-    if (downloadInfo?.url) {
-      posthog.capture("download_clicked", {
-        platform,
-        version: downloadInfo.version,
-        filename: downloadInfo.filename,
-        location: "hero",
-      });
-      // Track Facebook Pixel StartTrial event
-      if (typeof window.fbq === "function") {
-        window.fbq("track", "StartTrial", {
-          value: 0,
-          currency: "BRL",
-        });
-      }
-      window.open(downloadInfo.url, "_blank");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -127,57 +82,10 @@ function App() {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-              {isMobile ? t("hero.mobileSubtitle") : t("hero.subtitle")}
+              {t("hero.subtitle")}
             </p>
 
-            {isMobile ? (
-              <div className="flex flex-col gap-3 items-center">
-                <Link
-                  to="/beta"
-                  onClick={() => trackBetaClick("hero")}
-                  className="inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20"
-                >
-                  <Smartphone className="w-5 h-5" />
-                  <span>{t("hero.tryMobile")}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <span className="text-sm text-gray-500">
-                  {t("hero.mobileNote")}
-                </span>
-              </div>
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button
-                  onClick={handleDownload}
-                  disabled={loading || !downloadInfo}
-                  className="group relative inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20 hover:shadow-secondary-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <span>{t("hero.loading")}</span>
-                  ) : (
-                    <>
-                      <PlatformIcon platform={platform} />
-                      <span>
-                        {t("hero.downloadFor", {
-                          platform: platformNames[platform],
-                        })}
-                      </span>
-                      {downloadInfo && (
-                        <span className="text-sm opacity-75">
-                          ({downloadInfo.size})
-                        </span>
-                      )}
-                    </>
-                  )}
-                </button>
-
-                {downloadInfo && (
-                  <span className="text-sm text-gray-500">
-                    {t("hero.version", { version: downloadInfo.version })}
-                  </span>
-                )}
-              </div>
-            )}
+            <AppCtas location="hero" />
           </div>
         </div>
       </header>
@@ -194,14 +102,14 @@ function App() {
 
           <div className="grid md:grid-cols-3 gap-6">
             <FeatureCard
-              icon={<Laptop className="w-6 h-6 text-secondary-400" />}
-              title={t("features.desktopFirst.title")}
-              description={t("features.desktopFirst.description")}
+              icon={<MonitorSmartphone className="w-6 h-6 text-secondary-400" />}
+              title={t("features.everywhere.title")}
+              description={t("features.everywhere.description")}
             />
             <FeatureCard
-              icon={<Bell className="w-6 h-6 text-secondary-400" />}
-              title={t("features.notifications.title")}
-              description={t("features.notifications.description")}
+              icon={<CalendarCheck className="w-6 h-6 text-secondary-400" />}
+              title={t("features.dailyQueue.title")}
+              description={t("features.dailyQueue.description")}
             />
             <FeatureCard
               icon={<TrendingUp className="w-6 h-6 text-secondary-400" />}
@@ -352,60 +260,11 @@ function App() {
       <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-            {isMobile ? t("download.mobileTitle") : t("download.title")}
+            {t("download.title")}
           </h2>
-          <p className="text-gray-400 mb-10 text-lg">
-            {isMobile ? t("download.mobileSubtitle") : t("download.subtitle")}
-          </p>
+          <p className="text-gray-400 mb-10 text-lg">{t("download.subtitle")}</p>
 
-          {isMobile ? (
-            <Link
-              to="/beta"
-              onClick={() => trackBetaClick("footer")}
-              className="inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200"
-            >
-              <Smartphone className="w-5 h-5" />
-              <span>{t("hero.tryMobile")}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          ) : (
-            <div className="flex flex-wrap justify-center gap-4">
-              {(["mac", "windows", "linux"] as const).map((p) => {
-                const info = allDownloads[p];
-                return (
-                  <a
-                    key={p}
-                    href={info?.url || "#"}
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg border transition-all duration-200 ${
-                      info
-                        ? "border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 text-white"
-                        : "border-gray-800 opacity-50 cursor-not-allowed text-gray-500"
-                    }`}
-                    onClick={(e) => {
-                      if (!info) {
-                        e.preventDefault();
-                      } else {
-                        posthog.capture("download_clicked", {
-                          platform: p,
-                          version: info.version,
-                          filename: info.filename,
-                          location: "footer",
-                        });
-                      }
-                    }}
-                  >
-                    <PlatformIcon platform={p} />
-                    <span>{t(`download.platforms.${p}`)}</span>
-                    {info && (
-                      <span className="text-sm text-gray-500">
-                        ({info.size})
-                      </span>
-                    )}
-                  </a>
-                );
-              })}
-            </div>
-          )}
+          <AppCtas location="footer" />
         </div>
       </section>
 
@@ -436,6 +295,51 @@ function App() {
           </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function AppCtas({ location }: { location: "hero" | "footer" }) {
+  const { t } = useTranslation();
+  const posthog = usePostHog();
+
+  const trackInstall = () => {
+    posthog.capture("install_cta_clicked", { location });
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "StartTrial", { value: 0, currency: "BRL" });
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <a
+          href={INSTALL_APP_PATH}
+          onClick={trackInstall}
+          className="inline-flex items-center gap-3 bg-secondary-500 hover:bg-secondary-400 text-gray-900 font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-lg shadow-secondary-500/20 hover:shadow-secondary-400/30"
+        >
+          <Download className="w-5 h-5" />
+          <span>{t("cta.install")}</span>
+        </a>
+        <a
+          href={WEB_APP_PATH}
+          onClick={() => posthog.capture("web_app_opened", { location })}
+          className="inline-flex items-center gap-2 px-6 py-4 rounded-xl border border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 text-white transition-all duration-200"
+        >
+          <Globe className="w-5 h-5" />
+          <span>{t("cta.openInBrowser")}</span>
+        </a>
+      </div>
+      <p className="text-sm text-gray-500">
+        {t("cta.note")}
+        {" · "}
+        <Link
+          to="/install"
+          className="text-secondary-400 hover:text-secondary-300 hover:underline underline-offset-4"
+        >
+          {t("cta.howToInstall")}
+        </Link>
+      </p>
     </div>
   );
 }

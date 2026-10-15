@@ -5,30 +5,31 @@ const ptBR = {
     title: "Aprenda idiomas e qualquer assunto",
     titleHighlight: "enquanto trabalha",
     subtitle:
-      "App desktop de flashcards que vive no seu fluxo de trabalho. Receba notificações inteligentes, acompanhe seu progresso e domine idiomas ou qualquer tópico com repetição espaçada baseada em ciência.",
-    downloadFor: "Baixar para {{platform}}",
-    loading: "Carregando...",
-    version: "Versão {{version}}",
-    mobileSubtitle:
-      "Revise seus flashcards em qualquer lugar com repetição espaçada, baralhos gerados por IA e lembretes diários. Experimente o beta gratuito para celular.",
-    tryMobile: "Experimentar o app",
-    mobileNote: "Beta gratuito para iPhone e Android",
+      "Flashcards com repetição espaçada baseada em ciência e baralhos gerados por IA. Instale o Flash Snap no computador ou no celular com um clique: sem download, sem loja de apps.",
+  },
+
+  // Calls to action (hero and final section)
+  cta: {
+    install: "Instalar o Flash Snap",
+    openInBrowser: "Abrir no navegador",
+    note: "Grátis · Mac, Windows, Linux, iPhone e Android",
+    howToInstall: "Como funciona a instalação",
   },
 
   // Features section
   features: {
-    title: "Aprenda Sem Sair do Seu Desktop",
+    title: "Aprenda Um Pouco Todo Dia, Em Qualquer Lugar",
     subtitle:
-      "Perfeito para profissionais e estudantes ocupados. Estude idiomas, termos técnicos ou qualquer assunto enquanto trabalha—sem trocar de contexto.",
-    desktopFirst: {
-      title: "Aprendizado Desktop-First",
+      "Perfeito para profissionais e estudantes ocupados. Estude idiomas, termos técnicos ou qualquer assunto em poucos minutos por dia, no computador ou no celular.",
+    everywhere: {
+      title: "Em Todos os Dispositivos",
       description:
-        "Sempre acessível enquanto você trabalha. Crie flashcards rapidamente e revise-os sem quebrar seu fluxo.",
+        "Instala no computador com janela e ícone próprios, e na tela de início do celular. Seus baralhos ficam sincronizados em todos eles.",
     },
-    notifications: {
-      title: "Notificações Inteligentes",
+    dailyQueue: {
+      title: "Fila de Revisão Diária",
       description:
-        "Seja lembrado quando for hora de revisar. Mantenha-se consistente com notificações suaves que se encaixam na sua rotina.",
+        "O Flash Snap mostra exatamente quais cards vencem hoje, então poucos minutos de foco mantêm tudo fresco na memória. Sem planejamento.",
     },
     progress: {
       title: "Relatórios de Progresso",
@@ -105,9 +106,9 @@ const ptBR = {
         "Adicione flashcards manualmente ou deixe a IA gerar baralhos completos para qualquer tema que você queira aprender.",
     },
     step2: {
-      title: "Receba Notificações",
+      title: "Revise Todo Dia",
       description:
-        "Receba lembretes inteligentes quando for hora de revisar. Flash Snap agenda cards em intervalos ideais para máxima retenção.",
+        "O Flash Snap agenda cada card no momento certo. Abra o app, faça as revisões do dia em poucos minutos e siga com o seu dia.",
     },
     step3: {
       title: "Acompanhe o Progresso",
@@ -118,17 +119,9 @@ const ptBR = {
 
   // Download section
   download: {
-    title: "Comece a Aprender no Seu Desktop Hoje",
+    title: "Comece a Aprender Hoje",
     subtitle:
-      "App desktop gratuito para macOS, Windows e Linux. Inclui mais de 500 cards prontos, notificações inteligentes e acompanhamento de progresso.",
-    platforms: {
-      mac: "macOS",
-      windows: "Windows",
-      linux: "Linux",
-    },
-    mobileTitle: "Comece a aprender no celular hoje",
-    mobileSubtitle:
-      "O beta do Flash Snap para celular é gratuito. Seus baralhos sincronizam com o app desktop, para você estudar em qualquer lugar.",
+      "Grátis no Mac, Windows, Linux, iPhone e Android. Instale o Flash Snap com um clique, entre na sua conta e seus baralhos vão com você para qualquer lugar. Inclui mais de 500 cards prontos e relatórios de progresso.",
   },
 
   // FAQ section
@@ -137,7 +130,12 @@ const ptBR = {
     mobile: {
       question: "Existe um app mobile?",
       answer:
-        "Quase lá! Nossa equipe está trabalhando para trazer o Flash Snap para iOS e Android. Fique ligado no anúncio de lançamento que vem muito em breve.",
+        "Sim! Abra o Flash Snap no navegador do celular e adicione à tela de início. Ele abre em tela cheia como qualquer outro app e sincroniza com o seu computador.",
+    },
+    desktopApp: {
+      question: "O que aconteceu com o download para desktop?",
+      answer:
+        "Agora o Flash Snap instala direto pelo navegador, com janela e ícone próprios, e se atualiza sozinho. Se você usava o app desktop antigo, entre com a mesma conta: todos os seus baralhos estão lá.",
     },
     pricing: {
       question: "O Flash Snap é gratuito?",
@@ -172,7 +170,7 @@ const ptBR = {
       introduction: {
         title: "Introdução",
         content:
-          "Flash Snap (\"nós\", \"nosso\" ou \"nos\") está comprometido em proteger sua privacidade. Esta Política de Privacidade explica como coletamos, usamos e protegemos suas informações quando você usa nosso aplicativo desktop e serviços.",
+          "Flash Snap (\"nós\", \"nosso\" ou \"nos\") está comprometido em proteger sua privacidade. Esta Política de Privacidade explica como coletamos, usamos e protegemos suas informações quando você usa nosso aplicativo e serviços.",
       },
       dataCollection: {
         title: "Informações que Coletamos",
@@ -221,7 +219,7 @@ const ptBR = {
       cookies: {
         title: "Cookies e Armazenamento Local",
         content:
-          "Flash Snap usa armazenamento local para salvar suas preferências e informações de sessão. Não usamos cookies de rastreamento ou análises de terceiros em nosso aplicativo desktop.",
+          "Flash Snap usa armazenamento local para salvar suas preferências e informações de sessão. Não usamos cookies de rastreamento ou análises de terceiros no aplicativo Flash Snap.",
       },
       changes: {
         title: "Alterações nesta Política",
@@ -253,19 +251,47 @@ const ptBR = {
       "Precisa de ajuda? Entre em contato conosco em",
   },
 
-  // Mobile beta page
-  beta: {
-    badge: "Beta para celular",
-    title: "Flash Snap no seu celular",
+  // Install page (also served at /beta)
+  install: {
+    badge: "Sem download",
+    title: "Instale o Flash Snap",
     subtitle:
-      "Revise seus cartões, crie baralhos com IA e estude em qualquer lugar. Sem download: roda no navegador do celular e sincroniza com o app desktop.",
-    step1: "Abra esta página no celular e toque em \"Abrir o Flash Snap\" (ou escaneie o QR code).",
-    step2: "Toque em Compartilhar no Safari (ou ⋮ no Chrome).",
-    step3: "Escolha \"Adicionar à Tela de Início\" para ter o ícone do Flash Snap e depois entre na sua conta.",
-    scan: "Escaneie com a câmera do celular",
-    open: "Abrir o Flash Snap",
-    openHint: "Beta gratuito. Funciona no iPhone e no Android.",
-    backToHome: "Voltar ao início",
+      "O Flash Snap instala direto pelo navegador. Ele ganha ícone e janela próprios, abre em tela cheia no celular e mantém seus baralhos sincronizados em todo lugar.",
+    yourDevice: "Neste dispositivo",
+    otherDevices: "Outros dispositivos",
+    installNow: "Instalar o Flash Snap",
+    openInBrowser: "Abrir no navegador",
+    scan: "No celular? Escaneie para abrir o Flash Snap",
+    free: "Grátis. Funciona no Mac, Windows, Linux, iPhone e Android.",
+    backToHome: "Voltar ao Início",
+    platforms: {
+      "desktop-chromium": {
+        title: "Chrome ou Edge no computador",
+        step1: "Clique em \"Instalar o Flash Snap\".",
+        step2:
+          "Confirme em \"Instalar\". O Flash Snap abre em uma janela própria e aparece junto com seus outros apps.",
+      },
+      "mac-safari": {
+        title: "Safari no Mac",
+        step1: "Clique em \"Instalar o Flash Snap\" para abrir o app.",
+        step2: "Na barra de menus, escolha Arquivo → Adicionar ao Dock.",
+      },
+      ios: {
+        title: "iPhone e iPad",
+        step1: "Toque em \"Instalar o Flash Snap\" para abrir o app no Safari.",
+        step2: "Toque em Compartilhar e depois em \"Adicionar à Tela de Início\".",
+      },
+      android: {
+        title: "Android",
+        step1: "Toque em \"Instalar o Flash Snap\" para abrir o app no Chrome.",
+        step2: "Toque em \"Instalar\" (ou ⋮ → \"Instalar app\").",
+      },
+      "desktop-other": {
+        title: "Firefox e outros navegadores",
+        step1: "Abra esta página no Chrome, Edge ou Safari para instalar o Flash Snap.",
+        step2: "Ou clique em \"Abrir no navegador\" e use aqui mesmo.",
+      },
+    },
   },
 };
 

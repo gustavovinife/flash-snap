@@ -5,30 +5,31 @@ const enUS = {
     title: "Learn languages & any subject",
     titleHighlight: "while you work",
     subtitle:
-      "Desktop flashcard app that lives in your workflow. Get smart notifications, track your progress, and master languages or any topic with science-backed spaced repetition.",
-    downloadFor: "Download for {{platform}}",
-    loading: "Loading...",
-    version: "Version {{version}}",
-    mobileSubtitle:
-      "Review your flashcards anywhere with smart spaced repetition, AI-generated decks and daily reminders. Try the free mobile beta.",
-    tryMobile: "Try the mobile app",
-    mobileNote: "Free beta for iPhone and Android",
+      "Flashcards with science-backed spaced repetition and AI-generated decks. Install Flash Snap on your computer or phone in one click: no download, no app store.",
+  },
+
+  // Calls to action (hero and final section)
+  cta: {
+    install: "Install Flash Snap",
+    openInBrowser: "Open in the browser",
+    note: "Free · Mac, Windows, Linux, iPhone and Android",
+    howToInstall: "How installing works",
   },
 
   // Features section
   features: {
-    title: "Learn Without Leaving Your Desktop",
+    title: "Learn a Little Every Day, Anywhere",
     subtitle:
-      "Perfect for busy professionals and students. Study languages, technical terms, or any subject while working—no context switching required.",
-    desktopFirst: {
-      title: "Desktop-First Learning",
+      "Perfect for busy professionals and students. Study languages, technical terms, or any subject in a few minutes a day, on your computer or your phone.",
+    everywhere: {
+      title: "On Every Device",
       description:
-        "Always accessible while you work. Create flashcards quickly and review them without breaking your flow.",
+        "Installs on your computer with its own window and icon, and on your phone's home screen. Your decks stay in sync everywhere.",
     },
-    notifications: {
-      title: "Smart Notifications",
+    dailyQueue: {
+      title: "A Daily Review Queue",
       description:
-        "Get reminded when it's time to review. Stay consistent with gentle desktop notifications that fit your schedule.",
+        "Flash Snap shows exactly which cards are due today, so a few focused minutes keep everything fresh. No planning needed.",
     },
     progress: {
       title: "Progress Reports",
@@ -105,9 +106,9 @@ const enUS = {
         "Add flashcards manually or let AI generate complete decks for any topic you want to learn.",
     },
     step2: {
-      title: "Get Notified",
+      title: "Review Daily",
       description:
-        "Receive smart reminders when it's time to review. Flash Snap schedules cards at optimal intervals for maximum retention.",
+        "Flash Snap schedules every card at the right moment. Open the app, clear today's reviews in a few minutes, and get back to your day.",
     },
     step3: {
       title: "Track Progress",
@@ -118,17 +119,9 @@ const enUS = {
 
   // Download section
   download: {
-    title: "Start Learning on Your Desktop Today",
+    title: "Start Learning Today",
     subtitle:
-      "Free desktop app for macOS, Windows, and Linux. Includes 500+ template cards, smart notifications, and progress tracking.",
-    platforms: {
-      mac: "macOS",
-      windows: "Windows",
-      linux: "Linux",
-    },
-    mobileTitle: "Start learning on your phone today",
-    mobileSubtitle:
-      "The Flash Snap mobile beta is free. Your decks sync with the desktop app, so you can study anywhere.",
+      "Free on Mac, Windows, Linux, iPhone and Android. Install Flash Snap in one click, sign in, and your decks follow you everywhere. Includes 500+ template cards and progress reports.",
   },
 
   // FAQ section
@@ -137,7 +130,12 @@ const enUS = {
     mobile: {
       question: "Is there a mobile app?",
       answer:
-        "Almost there! Our team is working hard to bring Flash Snap to iOS and Android. Stay tuned for the launch announcement coming very soon.",
+        "Yes! Open Flash Snap in your phone's browser and add it to your home screen. It opens full screen like any other app and syncs with your computer.",
+    },
+    desktopApp: {
+      question: "What happened to the desktop download?",
+      answer:
+        "Flash Snap now installs straight from your browser, with its own window and icon, and updates itself automatically. If you used the old desktop app, sign in with the same account: all your decks are there.",
     },
     pricing: {
       question: "Is Flash Snap free?",
@@ -172,7 +170,7 @@ const enUS = {
       introduction: {
         title: "Introduction",
         content:
-          "Flash Snap (\"we\", \"our\", or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our desktop application and services.",
+          "Flash Snap (\"we\", \"our\", or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our app and services.",
       },
       dataCollection: {
         title: "Information We Collect",
@@ -221,7 +219,7 @@ const enUS = {
       cookies: {
         title: "Cookies and Local Storage",
         content:
-          "Flash Snap uses local storage to save your preferences and session information. We do not use tracking cookies or third-party analytics on our desktop application.",
+          "Flash Snap uses local storage to save your preferences and session information. We do not use tracking cookies or third-party analytics in the Flash Snap app.",
       },
       changes: {
         title: "Changes to This Policy",
@@ -253,19 +251,47 @@ const enUS = {
       "Need help? Contact us at",
   },
 
-  // Mobile beta page
-  beta: {
-    badge: "Mobile beta",
-    title: "Flash Snap on your phone",
+  // Install page (also served at /beta)
+  install: {
+    badge: "No download needed",
+    title: "Install Flash Snap",
     subtitle:
-      "Review your cards, create decks with AI and study anywhere. No download needed: it runs in your phone's browser and syncs with the desktop app.",
-    step1: "Open this page on your phone and tap \"Open Flash Snap\" (or scan the QR code).",
-    step2: "Tap Share in Safari (or ⋮ in Chrome).",
-    step3: "Choose \"Add to Home Screen\" to get the Flash Snap icon, then sign in.",
-    scan: "Scan with your phone's camera",
-    open: "Open Flash Snap",
-    openHint: "Free beta. Works on iPhone and Android.",
+      "Flash Snap installs right from your browser. It gets its own icon and window, opens full screen on your phone, and keeps your decks in sync everywhere.",
+    yourDevice: "On this device",
+    otherDevices: "Other devices",
+    installNow: "Install Flash Snap",
+    openInBrowser: "Open in the browser",
+    scan: "On your phone? Scan to open Flash Snap",
+    free: "Free. Works on Mac, Windows, Linux, iPhone and Android.",
     backToHome: "Back to Home",
+    platforms: {
+      "desktop-chromium": {
+        title: "Chrome or Edge on your computer",
+        step1: "Click \"Install Flash Snap\".",
+        step2:
+          "Confirm with \"Install\". Flash Snap opens in its own window and shows up with your other apps.",
+      },
+      "mac-safari": {
+        title: "Safari on Mac",
+        step1: "Click \"Install Flash Snap\" to open the app.",
+        step2: "In the menu bar, choose File → Add to Dock.",
+      },
+      ios: {
+        title: "iPhone and iPad",
+        step1: "Tap \"Install Flash Snap\" to open the app in Safari.",
+        step2: "Tap Share, then \"Add to Home Screen\".",
+      },
+      android: {
+        title: "Android",
+        step1: "Tap \"Install Flash Snap\" to open the app in Chrome.",
+        step2: "Tap \"Install\" (or ⋮ → \"Install app\").",
+      },
+      "desktop-other": {
+        title: "Firefox and other browsers",
+        step1: "Open this page in Chrome, Edge or Safari to install Flash Snap.",
+        step2: "Or click \"Open in the browser\" and use it right here.",
+      },
+    },
   },
 };
 

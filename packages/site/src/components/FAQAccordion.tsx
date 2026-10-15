@@ -9,6 +9,7 @@ interface FAQItem {
 
 const faqItems: FAQItem[] = [
   { questionKey: "faq.mobile.question", answerKey: "faq.mobile.answer" },
+  { questionKey: "faq.desktopApp.question", answerKey: "faq.desktopApp.answer" },
   { questionKey: "faq.pricing.question", answerKey: "faq.pricing.answer" },
   { questionKey: "faq.languages.question", answerKey: "faq.languages.answer" },
   { questionKey: "faq.premium.question", answerKey: "faq.premium.answer" },

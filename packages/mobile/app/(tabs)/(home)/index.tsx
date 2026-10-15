@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { track } from '@/lib/analytics'
 import { Button, EmptyState, IconButton, LoadingView, Pill, ProgressBar, Surface, Text } from '@/components'
 import { useAuth } from '@/context/AuthContext'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
@@ -75,7 +76,10 @@ export default function DecksScreen(): React.JSX.Element {
   const name = firstName(user?.user_metadata?.full_name, user?.email)
 
   const newDeck = (): void => guardDeckCreation(() => router.push('/deck-form'))
-  const createWithAI = (): void => guardDeckCreation(() => router.push('/ai-generate'))
+  const createWithAI = (): void => {
+    track('ai_generate_button_clicked', { location: 'home' })
+    guardDeckCreation(() => router.push('/ai-generate'))
+  }
   const openCreateMenu = (): void =>
     showActions(
       undefined,

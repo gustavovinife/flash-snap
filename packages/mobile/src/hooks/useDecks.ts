@@ -1,6 +1,7 @@
 import { type Card, type CardLink, type Deck, type DeckType, sm2, type Template } from '@flash-snap/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/context/AuthContext'
+import { track } from '@/lib/analytics'
 import { supabase } from '@/lib/supabase'
 
 const DECKS_KEY = ['decks'] as const
@@ -36,12 +37,17 @@ interface DeckInput {
   type: DeckType
 }
 
+/** Where a ready-made deck came from, for analytics */
+type DeckSource = { kind: 'ai' } | { kind: 'template'; templateId: string }
+
 interface CardInput {
   front: string
   back: string
   context: string | null
   links?: CardLink[]
 }
+
+type DeckWithCardsInput = DeckInput & { cards: CardInput[]; source: DeckSource }
 
 export function useDeckMutations() {
   const queryClient = useQueryClient()
@@ -69,16 +75,21 @@ export function useDeckMutations() {
       )
       return { ...deck, cards: [] }
     },
-    onSuccess: (deck) => setDecks((decks) => sortDecks([deck, ...decks]))
+    onSuccess: (deck) => {
+      setDecks((decks) => sortDecks([deck, ...decks]))
+      track('deck_created', { deck_id: deck.id, deck_name: deck.name, deck_type: deck.type, source: 'manual' })
+    }
   })
 
   const updateDeck = useMutation({
     mutationFn: async ({ id, ...input }: DeckInput & { id: string }) =>
       unwrap<Deck>(await supabase.from('decks').update(input).eq('id', id).select('*').single()),
-    onSuccess: (updated) =>
+    onSuccess: (updated) => {
       setDecks((decks) =>
         decks.map((deck) => (deck.id === updated.id ? { ...deck, ...updated, cards: deck.cards } : deck))
       )
+      track('deck_updated', { deck_id: updated.id, deck_name: updated.name, deck_type: updated.type })
+    }
   })
 
   const deleteDeck = useMutation({
@@ -87,7 +98,11 @@ export function useDeckMutations() {
       if (error) throw new Error(error.message)
       return id
     },
-    onSuccess: (id) => setDecks((decks) => decks.filter((deck) => deck.id !== id))
+    onSuccess: (id) => {
+      const deck = queryClient.getQueryData<Deck[]>(DECKS_KEY)?.find((d) => d.id === id)
+      setDecks((decks) => decks.filter((d) => d.id !== id))
+      track('deck_deleted', { deck_id: id, cards_count: deck?.cards.length })
+    }
   })
 
   const createCard = useMutation({
@@ -99,16 +114,31 @@ export function useDeckMutations() {
           .select('*')
           .single()
       ),
-    onSuccess: (card) => updateDeckCards(card.deck_id, (cards) => [card, ...cards])
+    onSuccess: (card) => {
+      updateDeckCards(card.deck_id, (cards) => [card, ...cards])
+      track('card_created', {
+        card_id: card.id,
+        deck_id: card.deck_id,
+        has_context: !!card.context,
+        links_count: card.links?.length ?? 0
+      })
+    }
   })
 
   const updateCard = useMutation({
     mutationFn: async ({ id, ...input }: CardInput & { id: number }) =>
       unwrap<Card>(await supabase.from('cards').update(input).eq('id', id).select('*').single()),
-    onSuccess: (updated) =>
+    onSuccess: (updated) => {
       updateDeckCards(updated.deck_id, (cards) =>
         cards.map((card) => (card.id === updated.id ? updated : card))
       )
+      track('card_updated', {
+        card_id: updated.id,
+        deck_id: updated.deck_id,
+        has_context: !!updated.context,
+        links_count: updated.links?.length ?? 0
+      })
+    }
   })
 
   const deleteCard = useMutation({
@@ -122,12 +152,12 @@ export function useDeckMutations() {
   })
 
   const createDeckWithCards = useMutation({
-    mutationFn: async ({ cards, ...input }: DeckInput & { cards: CardInput[] }): Promise<Deck> => {
+    mutationFn: async ({ name, type, cards }: DeckWithCardsInput): Promise<Deck> => {
       if (!user) throw new Error('Not signed in')
       const deck = unwrap<Deck>(
         await supabase
           .from('decks')
-          .insert({ ...input, user_id: user.id })
+          .insert({ name, type, user_id: user.id })
           .select('*')
           .single()
       )
@@ -139,7 +169,12 @@ export function useDeckMutations() {
       )
       return { ...deck, cards: created }
     },
-    onSuccess: (deck) => setDecks((decks) => sortDecks([deck, ...decks]))
+    onSuccess: (deck, { source }) => {
+      setDecks((decks) => sortDecks([deck, ...decks]))
+      const properties = { deck_id: deck.id, deck_name: deck.name, deck_type: deck.type, cards_count: deck.cards.length }
+      if (source.kind === 'ai') track('ai_deck_created', properties)
+      else track('template_installed', { ...properties, template_id: source.templateId })
+    }
   })
 
   const installTemplate = (template: Template, options?: Parameters<typeof createDeckWithCards.mutate>[1]): void =>
@@ -147,6 +182,7 @@ export function useDeckMutations() {
       {
         name: template.name,
         type: template.type,
+        source: { kind: 'template', templateId: template.id },
         cards: template.cards.map((card) => ({ front: card.front, back: card.back, context: card.content ?? null }))
       },
       options

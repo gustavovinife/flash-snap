@@ -204,6 +204,7 @@ const ptBR = {
           supabase: "Supabase - Banco de dados e autenticação (armazenamento de dados)",
           stripe: "Stripe - Processamento de pagamentos (para assinaturas Premium)",
           openai: "OpenAI - Geração de flashcards com IA (recurso Premium)",
+          posthog: "PostHog - Análise de uso do produto (como os recursos são usados no app e neste site)",
         },
       },
       userRights: {
@@ -219,7 +220,7 @@ const ptBR = {
       cookies: {
         title: "Cookies e Armazenamento Local",
         content:
-          "Flash Snap usa armazenamento local para salvar suas preferências e informações de sessão. Não usamos cookies de rastreamento ou análises de terceiros no aplicativo Flash Snap.",
+          "Flash Snap usa armazenamento local para salvar suas preferências e informações de sessão. No app e neste site usamos o PostHog, um serviço de análise de produto, para entender como o Flash Snap é usado, por exemplo quais telas são abertas e quando uma sessão de revisão é concluída. Os dados de uso ficam vinculados à sua conta para melhorarmos sua experiência; nunca vendemos esses dados. Este site também usa o Meta Pixel para medir nossos anúncios.",
       },
       changes: {
         title: "Alterações nesta Política",

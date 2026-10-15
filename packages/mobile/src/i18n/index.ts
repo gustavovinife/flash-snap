@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getLocales } from 'expo-localization'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import { track } from '@/lib/analytics'
 import enUS from './locales/en-US'
 import ptBR from './locales/pt-BR'
 
@@ -33,6 +34,7 @@ AsyncStorage.getItem(LANGUAGE_STORAGE_KEY).then((saved) => {
 })
 
 export async function setLanguage(code: LanguageCode): Promise<void> {
+  track('language_changed', { language: code, previous_language: i18n.language })
   await i18n.changeLanguage(code)
   await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, code)
 }

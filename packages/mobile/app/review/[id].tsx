@@ -11,6 +11,7 @@ import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { useLayout } from '@/hooks/useLayout'
 import { useReviewSounds } from '@/hooks/useReviewSounds'
+import { track } from '@/lib/analytics'
 import { showDialog } from '@/lib/dialogs'
 import { speak } from '@/lib/speech'
 import { centered, contentWidth, isHovered, radius, spacing, useTheme } from '@/theme'
@@ -26,6 +27,14 @@ const GRADES: { key: GradeKey; grade: Grade }[] = [
   { key: 'good', grade: 4 },
   { key: 'easy', grade: 5 }
 ]
+
+function linkDomain(url: string): string | null {
+  try {
+    return new URL(url).hostname
+  } catch {
+    return null
+  }
+}
 
 function haptic(grade: Grade): void {
   if (Platform.OS === 'web') return
@@ -60,8 +69,15 @@ export default function ReviewScreen(): React.JSX.Element {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
+  // Per-session numbers for the study_session_completed event
+  const stats = useRef({ startedAt: 0, keyboardGrades: 0, grades: { again: 0, hard: 0, good: 0, easy: 0 } })
+
   useEffect(() => {
-    if (decks && queue === null) setQueue(getDueCards(decks, id === 'all' ? undefined : id))
+    if (!decks || queue !== null) return
+    const due: DueCard<Card, Deck>[] = getDueCards(decks, id === 'all' ? undefined : id)
+    setQueue(due)
+    stats.current.startedAt = Date.now()
+    if (due.length > 0) track('review_started', { deck_id: id, due_count: due.length })
   }, [decks, id, queue])
 
   const gradeColors: Record<GradeKey, { bg: string; fg: string }> = {
@@ -73,9 +89,16 @@ export default function ReviewScreen(): React.JSX.Element {
 
   if (isLoading || queue === null) return <LoadingView />
 
-  const close = (): void => goBack()
   const current = queue[index]
   const finished = index >= queue.length
+  const deckName = id === 'all' ? undefined : decks?.find((deck) => deck.id === id)?.name
+
+  const close = (): void => {
+    if (!finished && queue.length > 0) {
+      track('review_exited', { deck_id: id, cards_reviewed: index, cards_total: queue.length })
+    }
+    goBack()
+  }
 
   const reveal = (): void => {
     if (revealed) return
@@ -85,8 +108,21 @@ export default function ReviewScreen(): React.JSX.Element {
     })
   }
 
-  const grade = (value: Grade): void => {
+  const grade = (value: Grade, input: 'pointer' | 'keyboard' = 'pointer'): void => {
     if (!current) return
+    const session = stats.current
+    session.grades[GRADES.find((g) => g.grade === value)!.key] += 1
+    if (input === 'keyboard') session.keyboardGrades += 1
+    if (index + 1 === queue.length) {
+      track('study_session_completed', {
+        cards_reviewed: queue.length,
+        deck_id: id,
+        deck_name: deckName,
+        duration_seconds: Math.round((Date.now() - session.startedAt) / 1000),
+        ...session.grades,
+        keyboard_grades: session.keyboardGrades
+      })
+    }
     haptic(value)
     playGradeSound(value)
     reviewCard.mutate(
@@ -109,7 +145,7 @@ export default function ReviewScreen(): React.JSX.Element {
       return
     }
     const choice = revealed ? GRADES[Number(event.key) - 1] : undefined
-    if (choice) grade(choice.grade)
+    if (choice) grade(choice.grade, 'keyboard')
   }
 
   if (queue.length === 0 || finished) {
@@ -176,7 +212,10 @@ export default function ReviewScreen(): React.JSX.Element {
               {deck.name.toUpperCase()}
             </Text>
             {deck.type === 'language' && (
-              <IconButton icon="volume-high" label={t('review.playPronunciation')} onPress={() => speak(card.front)} />
+              <IconButton icon="volume-high" label={t('review.playPronunciation')} onPress={() => {
+                  track('pronunciation_played', { deck_id: card.deck_id })
+                  speak(card.front)
+                }} />
             )}
           </View>
 
@@ -206,7 +245,10 @@ export default function ReviewScreen(): React.JSX.Element {
                         <Pressable
                           key={`${linkIndex}-${link.url}`}
                           accessibilityRole="link"
-                          onPress={() => void WebBrowser.openBrowserAsync(link.url)}
+                          onPress={() => {
+                            track('reference_link_opened', { deck_id: card.deck_id, card_id: card.id, domain: linkDomain(link.url) })
+                            void WebBrowser.openBrowserAsync(link.url)
+                          }}
                           style={(state) => [
                             styles.linkChip,
                             {

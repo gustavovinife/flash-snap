@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Logo } from '@/components'
 import { InstallPrompt } from '@/components/InstallPrompt'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
+import { usePageViews } from '@/hooks/usePageViews'
 import { DialogHost } from '@/lib/dialogs'
 import { useStackScreenOptions } from '@/navigation'
 import { useTheme } from '@/theme'
@@ -19,6 +20,7 @@ function RootNavigator(): React.JSX.Element {
   const { session, loading } = useAuth()
   const colors = useTheme()
   const screenOptions = useStackScreenOptions()
+  usePageViews()
 
   // Same look as the native splash screen, so startup flows straight into the app
   if (loading) {

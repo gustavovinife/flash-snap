@@ -2382,9 +2382,12 @@ __metadata:
     "@types/react-dom": "npm:~19.2.3"
     "@types/react-native-web": "npm:^0"
     expo: "npm:~57.0.29"
+    expo-application: "npm:~57.0.3"
     expo-asset: "npm:~57.0.20"
     expo-audio: "npm:~57.0.5"
     expo-constants: "npm:~57.0.22"
+    expo-device: "npm:~57.0.2"
+    expo-file-system: "npm:~57.0.7"
     expo-font: "npm:~57.0.4"
     expo-haptics: "npm:~57.0.3"
     expo-linking: "npm:~57.0.13"
@@ -2397,6 +2400,7 @@ __metadata:
     expo-updates: "npm:~57.0.26"
     expo-web-browser: "npm:~57.0.3"
     i18next: "npm:^25.8.0"
+    posthog-react-native: "npm:^4.81.2"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
     react-i18next: "npm:^16.5.3"
@@ -2889,10 +2893,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@posthog/core@npm:^1.59.1":
+  version: 1.59.1
+  resolution: "@posthog/core@npm:1.59.1"
+  dependencies:
+    "@posthog/types": "npm:^1.416.0"
+  checksum: 10c0/4211baa00c9e06fea5c555a12a3d28c29d62933aa8575b625e3ecafd27e9b142b267c82a423ce7b306577e82350704e3d3b6ef658f970b8de449aab20f09272b
+  languageName: node
+  linkType: hard
+
 "@posthog/types@npm:1.335.2":
   version: 1.335.2
   resolution: "@posthog/types@npm:1.335.2"
   checksum: 10c0/a1b8267c82b86d2340ae01d9d5511ab53fa3d27974eaafc20aa67e2ccd3c8dc246cde4387385e33871d5c0fb26511c3decb420c2bf088572141363ad804837ea
+  languageName: node
+  linkType: hard
+
+"@posthog/types@npm:^1.416.0":
+  version: 1.416.0
+  resolution: "@posthog/types@npm:1.416.0"
+  checksum: 10c0/d3227a4b6423a1ce69db9c8e74ada17a5c3fd8ba824b0e6ed496744d907859717a0d3ad162bde08d5908679916896e7a1c4f1793ea74c6e641cf08928fe80c4e
   languageName: node
   linkType: hard
 
@@ -7520,6 +7540,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-device@npm:~57.0.2":
+  version: 57.0.2
+  resolution: "expo-device@npm:57.0.2"
+  dependencies:
+    ua-parser-js: "npm:^0.7.33"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/4cc4df2f7a7410389525a383663a5ce0ae335caa61f59f86ce17062f86f301b43b59529dc2b3d8310c365a13d586820915eee26d2ab942c64f6759a8852472f0
+  languageName: node
+  linkType: hard
+
 "expo-eas-client@npm:~57.0.5":
   version: 57.0.5
   resolution: "expo-eas-client@npm:57.0.5"
@@ -11971,6 +12002,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"posthog-react-native@npm:^4.81.2":
+  version: 4.81.2
+  resolution: "posthog-react-native@npm:4.81.2"
+  dependencies:
+    "@posthog/core": "npm:^1.59.1"
+    "@posthog/types": "npm:^1.416.0"
+  peerDependencies:
+    "@posthog/react-native-plugin": ">= 2.9.3"
+    "@react-native-async-storage/async-storage": ">=1.0.0"
+    "@react-navigation/native": ">= 5.0.0"
+    expo-application: ">= 4.0.0"
+    expo-device: ">= 4.0.0"
+    expo-file-system: ">= 13.0.0"
+    expo-localization: ">= 11.0.0"
+    expo-updates: ">= 0.25.0"
+    posthog-react-native-session-replay: ">= 1.6.0"
+    react-native-device-info: ">= 10.0.0"
+    react-native-localize: ">= 3.0.0"
+    react-native-navigation: ">= 6.0.0"
+    react-native-safe-area-context: ">= 4.0.0"
+    react-native-svg: ">= 15.0.0"
+  peerDependenciesMeta:
+    "@posthog/react-native-plugin":
+      optional: true
+    "@react-native-async-storage/async-storage":
+      optional: true
+    "@react-navigation/native":
+      optional: true
+    expo-application:
+      optional: true
+    expo-device:
+      optional: true
+    expo-file-system:
+      optional: true
+    expo-localization:
+      optional: true
+    expo-updates:
+      optional: true
+    posthog-react-native-session-replay:
+      optional: true
+    react-native-device-info:
+      optional: true
+    react-native-localize:
+      optional: true
+    react-native-navigation:
+      optional: true
+    react-native-safe-area-context:
+      optional: true
+    react-native-svg:
+      optional: true
+  bin:
+    posthog-react-native-xcode: tooling/posthog-xcode.sh
+  checksum: 10c0/79fc8c53b5956360754fc96d581b5b4c09a772d08e09e865001cd0330e87064f53d38baf17ff21d43e00fc2808c545b824a531e9bddfc5e12d2c4846291127ff
+  languageName: node
+  linkType: hard
+
 "preact@npm:^10.28.0":
   version: 10.28.2
   resolution: "preact@npm:10.28.2"
@@ -14273,6 +14360,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/2f25c74e65663c248fa1ade2b8459d9ce5372ff9dad07067310f132966ebec1d93f6c42f0baf77a6b6a7a91460463f708e6887013aaade22111037457c6b25df
+  languageName: node
+  linkType: hard
+
+"ua-parser-js@npm:^0.7.33":
+  version: 0.7.41
+  resolution: "ua-parser-js@npm:0.7.41"
+  bin:
+    ua-parser-js: script/cli.js
+  checksum: 10c0/b134bc0d8da10c76e07740a0ade61c193fd4c4d120ba2cb2530e26931f6b550dd60b6e801d8891f6d9c23dfebadf5590294739069edff94396f173cc8cc5767e
   languageName: node
   linkType: hard
 

@@ -9,6 +9,7 @@ import { Button, Surface, Text } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { useLayout } from '@/hooks/useLayout'
+import { track } from '@/lib/analytics'
 import { showDialog } from '@/lib/dialogs'
 import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
@@ -57,7 +58,10 @@ export default function ExploreScreen(): React.JSX.Element {
           <Text variant="headline">{t('explore.title')}</Text>
           <Text tone="muted">{t('explore.subtitle')}</Text>
           <Surface
-            onPress={() => guardDeckCreation(() => router.push('/ai-generate'))}
+            onPress={() => {
+              track('ai_generate_button_clicked', { location: 'explore' })
+              guardDeckCreation(() => router.push('/ai-generate'))
+            }}
             style={[styles.aiBanner, { backgroundColor: colors.primary, borderColor: colors.primary }]}
           >
             <View style={styles.aiIcon}>

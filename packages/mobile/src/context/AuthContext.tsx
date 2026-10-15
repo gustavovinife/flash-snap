@@ -1,6 +1,7 @@
 import type { Session, User } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { identifyUser, resetAnalytics, track } from '@/lib/analytics'
 import { supabase } from '@/lib/supabase'
 
 interface AuthResult {
@@ -33,6 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }): React.JSX.E
       const nextUserId = next?.user.id ?? null
       if (userIdRef.current !== nextUserId) {
         queryClient.clear()
+        if (next) identifyUser(next.user)
+        else if (userIdRef.current) resetAnalytics()
         userIdRef.current = nextUserId
       }
       setSession(next)
@@ -53,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.JSX.E
 
       signIn: async (email, password) => {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+        if (!error) track('user_signed_in', { method: 'email' })
         return { error: error?.message ?? null }
       },
 
@@ -62,10 +66,13 @@ export function AuthProvider({ children }: { children: ReactNode }): React.JSX.E
           password,
           options: fullName ? { data: { full_name: fullName.trim() } } : undefined
         })
-        return { error: error?.message ?? null, needsConfirmation: !error && !data.session }
+        const needsConfirmation = !error && !data.session
+        if (!error) track('user_signed_up', { method: 'email', needs_confirmation: needsConfirmation })
+        return { error: error?.message ?? null, needsConfirmation }
       },
 
       signOut: async () => {
+        track('user_signed_out')
         await supabase.auth.signOut()
       }
     }),

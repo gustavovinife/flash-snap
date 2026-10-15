@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Platform, Pressable, StyleSheet, View } from 'react-native'
 import {
@@ -18,6 +18,7 @@ import {
   wasRecentlyDismissed
 } from '@/lib/install'
 import { useLayout } from '@/hooks/useLayout'
+import { track } from '@/lib/analytics'
 import { radius, spacing, useTheme } from '@/theme'
 import { Button } from './Button'
 import { Logo } from './Logo'
@@ -48,14 +49,24 @@ export function InstallPrompt(): React.JSX.Element | null {
   const colors = useTheme()
   const { isDesktop } = useLayout()
   const [mode, setMode] = useState<InstallDialogMode | null>(null)
+  // What opened the dialog: the website's Install link, an Install button, or the automatic prompt on phones
+  const source = useRef<'link' | 'button' | 'auto'>('auto')
+
+  useEffect(() => {
+    if (mode) track('install_prompt_shown', { mode, source: source.current })
+  }, [mode])
 
   useEffect(() => {
     if (Platform.OS !== 'web') return
 
-    onOpenInstallPrompt(() => setMode(getInstallMode()))
+    onOpenInstallPrompt(() => {
+      source.current = 'button'
+      setMode(getInstallMode())
+    })
 
     // Opened from an "Install" link on the website: show the dialog right away
     if (hasInstallRequest()) {
+      source.current = 'link'
       void waitForInstallMode(4000).then((ready) => {
         // Chrome only offers one-click install after some engagement with the site; until then its own install button works
         if (!isInstalled()) setMode(ready ?? (isDesktopChromium() ? 'desktop-manual' : 'unsupported'))

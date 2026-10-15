@@ -27,7 +27,7 @@ export function PrivacyPolicy() {
 
         <div className="prose prose-invert prose-gray max-w-none">
           <p className="text-gray-400 mb-6">
-            {t("privacy.lastUpdated", { date: "January 25, 2026" })}
+            {t("privacy.lastUpdated", { date: "October 15, 2026" })}
           </p>
 
           <section className="mb-8">
@@ -76,6 +76,21 @@ export function PrivacyPolicy() {
             <p className="text-gray-400">
               {t("privacy.sections.dataSecurity.content")}
             </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              {t("privacy.sections.thirdParty.title")}
+            </h2>
+            <p className="text-gray-400 mb-4">
+              {t("privacy.sections.thirdParty.content")}
+            </p>
+            <ul className="list-disc list-inside text-gray-400 space-y-2">
+              <li>{t("privacy.sections.thirdParty.items.supabase")}</li>
+              <li>{t("privacy.sections.thirdParty.items.stripe")}</li>
+              <li>{t("privacy.sections.thirdParty.items.openai")}</li>
+              <li>{t("privacy.sections.thirdParty.items.posthog")}</li>
+            </ul>
           </section>
 
           <section className="mb-8">

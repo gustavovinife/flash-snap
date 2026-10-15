@@ -13,6 +13,7 @@ import { confirm, showActions } from '@/lib/actions'
 import { openInstallPrompt, useInstallMode } from '@/lib/install'
 import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
+import { track } from '@/lib/analytics'
 import { areSoundEffectsEnabled, setSoundEffectsEnabled } from '@/lib/soundSettings'
 import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
@@ -57,6 +58,7 @@ export default function SettingsScreen(): React.JSX.Element {
   const updateReminder = async (next: ReminderSettings): Promise<void> => {
     setReminder(next)
     const allowed = await saveReminderSettings(next)
+    track('reminder_updated', { enabled: next.enabled && allowed, hour: next.hour, permission_denied: next.enabled && !allowed })
     if (!allowed) {
       setReminder({ ...next, enabled: false })
       showDialog(t('settings.reminder'), t('settings.notificationsDenied'))
@@ -121,7 +123,7 @@ export default function SettingsScreen(): React.JSX.Element {
       {((!isPremium && canUpgrade) || subscription?.stripe_customer_id) && (
         <Section title={t('settings.plan')}>
           {!isPremium && canUpgrade && (
-            <ListRow icon="diamond-outline" title={t('settings.upgrade')} onPress={() => openStripe(openCheckout)} />
+            <ListRow icon="diamond-outline" title={t('settings.upgrade')} onPress={() => openStripe(() => openCheckout('settings'))} />
           )}
           {!isPremium && canUpgrade && subscription?.stripe_customer_id && (
             <View style={[styles.separator, { backgroundColor: colors.border }]} />
@@ -148,6 +150,7 @@ export default function SettingsScreen(): React.JSX.Element {
               onValueChange={(enabled) => {
                 setSoundEffects(enabled)
                 void setSoundEffectsEnabled(enabled)
+                track('sound_effects_toggled', { enabled })
               }}
               trackColor={{ true: colors.primary, false: colors.border }}
                 thumbColor="#ffffff"

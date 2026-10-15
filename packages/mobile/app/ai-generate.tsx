@@ -8,6 +8,7 @@ import { Button, Pill, Surface, Text, TextField } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations } from '@/hooks/useDecks'
 import { generateDeck } from '@/lib/ai'
+import { track } from '@/lib/analytics'
 import { showDialog } from '@/lib/dialogs'
 import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
@@ -30,12 +31,22 @@ export default function AIGenerateScreen(): React.JSX.Element {
     if (trimmedPrompt.length < AI_MIN_PROMPT_LENGTH) return
     setGenerating(true)
     setError(null)
+    const startedAt = Date.now()
+    const preset = AI_PRESET_PROMPTS.find((p) => p.prompt === trimmedPrompt)
+    track('ai_prompt_submitted', { prompt: trimmedPrompt, prompt_length: trimmedPrompt.length, preset_id: preset?.id ?? null })
     try {
       const generated = await generateDeck(trimmedPrompt)
       setResult(generated)
       setDeckName(generated.deckName)
+      track('ai_cards_generated', {
+        cards_count: generated.cards.length,
+        deck_type: generated.deckType,
+        duration_ms: Date.now() - startedAt
+      })
     } catch (e) {
-      setError(e instanceof Error ? e.message : t('common.error'))
+      const message = e instanceof Error ? e.message : t('common.error')
+      setError(message)
+      track('ai_generation_failed', { reason: message, duration_ms: Date.now() - startedAt })
     } finally {
       setGenerating(false)
     }
@@ -51,6 +62,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
         {
           name: deckName.trim(),
           type: result.deckType,
+          source: { kind: 'ai' },
           cards: result.cards.map((card) => ({ front: card.front, back: card.back, context: card.context ?? null }))
         },
         {

@@ -1,9 +1,11 @@
 import type { Subscription } from '@flash-snap/shared'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { Platform } from 'react-native'
 import { useAuth } from '@/context/AuthContext'
+import { setAnalyticsPlan, track } from '@/lib/analytics'
 import { supabase } from '@/lib/supabase'
 
 const FREE_DECK_LIMIT = 1
@@ -14,7 +16,7 @@ interface UseSubscription {
   isPremium: boolean
   canUpgrade: boolean
   canCreateDeck: (deckCount: number) => boolean
-  openCheckout: () => Promise<void>
+  openCheckout: (location: 'settings' | 'deck_limit') => Promise<void>
   openPortal: () => Promise<void>
 }
 
@@ -37,6 +39,22 @@ async function openStripePage(functionName: string, body: Record<string, string>
   await WebBrowser.openAuthSessionAsync(data.url, returnUrl)
 }
 
+// Shared by every screen using this hook, so a plan change is reported once. On web it's also saved,
+// because Stripe Checkout is a full-page redirect and the app reloads when the user comes back
+let lastKnownPremium: boolean | undefined
+const PLAN_KEY = 'flashSnap.lastKnownPlan'
+
+function readLastKnownPremium(userId: string): boolean | undefined {
+  if (lastKnownPremium !== undefined || Platform.OS !== 'web') return lastKnownPremium
+  const saved = window.localStorage.getItem(`${PLAN_KEY}.${userId}`)
+  return saved === null ? undefined : saved === 'premium'
+}
+
+function saveLastKnownPremium(userId: string, premium: boolean): void {
+  lastKnownPremium = premium
+  if (Platform.OS === 'web') window.localStorage.setItem(`${PLAN_KEY}.${userId}`, premium ? 'premium' : 'free')
+}
+
 export function useSubscription(): UseSubscription {
   const { user } = useAuth()
 
@@ -56,6 +74,16 @@ export function useSubscription(): UseSubscription {
   })
 
   const isPremium = subscription?.status === 'active'
+  const loaded = subscription !== undefined
+
+  useEffect(() => {
+    if (!loaded || !user) return
+    if (readLastKnownPremium(user.id) === false && isPremium) {
+      track('subscription_started', { subscription_id: subscription?.id, plan: 'premium' })
+    }
+    saveLastKnownPremium(user.id, isPremium)
+    setAnalyticsPlan(isPremium ? 'premium' : 'free')
+  }, [loaded, isPremium, subscription?.id, user])
 
   return {
     subscription: subscription ?? null,
@@ -63,8 +91,9 @@ export function useSubscription(): UseSubscription {
     canUpgrade: !!STRIPE_PRICE_ID,
     canCreateDeck: (deckCount) => isPremium || deckCount < FREE_DECK_LIMIT,
 
-    openCheckout: async () => {
+    openCheckout: async (location) => {
       if (!STRIPE_PRICE_ID) return
+      track('upgrade_clicked', { location, current_plan: isPremium ? 'premium' : 'free' })
       await openStripePage('create-checkout-session', { priceId: STRIPE_PRICE_ID })
       await refetch()
       // Stripe's webhook can land a moment after the user is redirected back
@@ -72,6 +101,7 @@ export function useSubscription(): UseSubscription {
     },
 
     openPortal: async () => {
+      track('manage_subscription_clicked')
       await openStripePage('create-portal-session', {})
       await refetch()
     }

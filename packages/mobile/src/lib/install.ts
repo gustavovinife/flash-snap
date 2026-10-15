@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
+import { track } from './analytics'
 
 // Helpers for installing the web build to the home screen. Everything is a no-op on native.
 
@@ -35,6 +36,7 @@ if (isWeb) {
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null
     notifyAvailability()
+    track('app_installed')
   })
 
   // Registered on the deployed site only, so local development never serves cached bundles
@@ -145,7 +147,9 @@ export async function promptNativeInstall(): Promise<boolean> {
   deferredPrompt = null
   notifyAvailability()
   await prompt.prompt()
-  return (await prompt.userChoice).outcome === 'accepted'
+  const { outcome } = await prompt.userChoice
+  track('install_prompt_result', { outcome })
+  return outcome === 'accepted'
 }
 
 export function openInstallPrompt(): void {

@@ -18,7 +18,7 @@ export function useDeckLimit(): (action: () => void) => void {
     showDialog(t('premium.limitTitle'), t('premium.limitBody'), [
       { text: t('premium.notNow'), style: 'cancel' },
       ...(canUpgrade
-        ? [{ text: t('premium.upgrade'), onPress: () => void openCheckout().catch(() => {}) }]
+        ? [{ text: t('premium.upgrade'), onPress: () => void openCheckout('deck_limit').catch(() => {}) }]
         : [])
     ])
   }

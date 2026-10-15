@@ -204,6 +204,7 @@ const enUS = {
           supabase: "Supabase - Database and authentication (data storage)",
           stripe: "Stripe - Payment processing (for Premium subscriptions)",
           openai: "OpenAI - AI-powered flashcard generation (Premium feature)",
+          posthog: "PostHog - Product analytics (how features are used in the app and on this website)",
         },
       },
       userRights: {
@@ -219,7 +220,7 @@ const enUS = {
       cookies: {
         title: "Cookies and Local Storage",
         content:
-          "Flash Snap uses local storage to save your preferences and session information. We do not use tracking cookies or third-party analytics in the Flash Snap app.",
+          "Flash Snap uses local storage to save your preferences and session information. In the app and on this website we use PostHog, a product analytics service, to understand how Flash Snap is used, for example which screens are opened and when a review session is completed. Analytics are linked to your account so we can improve your experience; we never sell this data. This website also uses the Meta Pixel to measure our ads.",
       },
       changes: {
         title: "Changes to This Policy",

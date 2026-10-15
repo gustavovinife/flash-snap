@@ -12,17 +12,59 @@ if (!outDir) {
 const BASE = '/app'
 const VIOLET = '#7c3aed'
 
+// Description and screenshots make Chrome/Edge show their richer, app-store-like install dialog
 const manifest = {
+  id: `${BASE}/`,
   name: 'Flash Snap',
   short_name: 'Flash Snap',
+  description:
+    'Spaced-repetition flashcards: create decks with AI, review a few minutes a day and remember everything you learn.',
   start_url: `${BASE}/`,
   scope: `${BASE}/`,
   display: 'standalone',
   background_color: VIOLET,
   theme_color: VIOLET,
+  categories: ['education', 'productivity'],
   icons: [
     { src: `${BASE}/icon-192.png`, sizes: '192x192', type: 'image/png' },
     { src: `${BASE}/icon-512.png`, sizes: '512x512', type: 'image/png' }
+  ],
+  screenshots: [
+    {
+      src: `${BASE}/screenshots/desktop-decks.png`,
+      sizes: '1440x900',
+      type: 'image/png',
+      form_factor: 'wide',
+      label: 'Your decks and what is due today'
+    },
+    {
+      src: `${BASE}/screenshots/desktop-review.png`,
+      sizes: '1440x900',
+      type: 'image/png',
+      form_factor: 'wide',
+      label: 'Reviewing a card with keyboard shortcuts'
+    },
+    {
+      src: `${BASE}/screenshots/phone-decks.png`,
+      sizes: '1170x2532',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'Your decks on the phone'
+    },
+    {
+      src: `${BASE}/screenshots/phone-review.png`,
+      sizes: '1170x2532',
+      type: 'image/png',
+      form_factor: 'narrow',
+      label: 'Reviewing a card on the phone'
+    }
+  ],
+  shortcuts: [
+    {
+      name: 'Start review',
+      url: `${BASE}/review/all`,
+      icons: [{ src: `${BASE}/icon-192.png`, sizes: '192x192', type: 'image/png' }]
+    }
   ]
 }
 writeFileSync(join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2))

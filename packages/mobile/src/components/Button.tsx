@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { ActivityIndicator, Pressable, StyleSheet, View, type ViewStyle } from 'react-native'
-import { radius, spacing, useTheme } from '@/theme'
+import { isHovered, radius, spacing, useTheme } from '@/theme'
 import { Text } from './Text'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -42,10 +42,13 @@ export function Button({
       accessibilityState={{ disabled: isDisabled }}
       onPress={onPress}
       disabled={isDisabled}
-      style={({ pressed }) => [
+      style={(state) => [
         styles.base,
         compact && styles.compact,
-        { backgroundColor: pressed ? palette.pressed : palette.bg, opacity: isDisabled ? 0.5 : 1 },
+        {
+          backgroundColor: state.pressed || (isHovered(state) && !isDisabled) ? palette.pressed : palette.bg,
+          opacity: isDisabled ? 0.5 : 1
+        },
         style
       ]}
     >

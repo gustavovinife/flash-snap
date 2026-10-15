@@ -1,10 +1,10 @@
-import { Pressable, StyleSheet, View, type ViewProps, type ViewStyle } from 'react-native'
-import { radius, spacing, useTheme } from '@/theme'
+import { Pressable, type StyleProp, StyleSheet, View, type ViewProps, type ViewStyle } from 'react-native'
+import { isHovered, radius, spacing, useTheme } from '@/theme'
 
 interface SurfaceProps extends ViewProps {
   onPress?: () => void
   padded?: boolean
-  style?: ViewStyle | ViewStyle[]
+  style?: StyleProp<ViewStyle>
 }
 
 export function Surface({ onPress, padded = true, style, children, ...props }: SurfaceProps): React.JSX.Element {
@@ -27,7 +27,12 @@ export function Surface({ onPress, padded = true, style, children, ...props }: S
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
-      style={({ pressed }) => [...base, pressed && { transform: [{ scale: 0.985 }], opacity: 0.92 }, style]}
+      style={(state) => [
+        ...base,
+        isHovered(state) && [styles.hovered, { borderColor: colors.primary }],
+        state.pressed && { transform: [{ scale: 0.985 }], opacity: 0.92 },
+        style
+      ]}
     >
       {children}
     </Pressable>
@@ -41,5 +46,11 @@ const styles = StyleSheet.create({
   },
   padded: {
     padding: spacing.lg
+  },
+  hovered: {
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 }
   }
 })

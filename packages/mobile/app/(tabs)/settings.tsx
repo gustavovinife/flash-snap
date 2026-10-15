@@ -6,16 +6,19 @@ import { Platform, ScrollView, StyleSheet, Switch, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ListRow, Pill, Surface, Text } from '@/components'
 import { useAuth } from '@/context/AuthContext'
+import { useLayout } from '@/hooks/useLayout'
 import { useSubscription } from '@/hooks/useSubscription'
 import { LANGUAGES, type LanguageCode, setLanguage } from '@/i18n'
 import { confirm, showActions } from '@/lib/actions'
-import { getInstallMode, openInstallPrompt } from '@/lib/install'
+import { openInstallPrompt, useInstallMode } from '@/lib/install'
 import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
 import { areSoundEffectsEnabled, setSoundEffectsEnabled } from '@/lib/soundSettings'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
 const supportsReminders = Platform.OS !== 'web'
+// React Native Web colors the active thumb teal unless told otherwise
+const webSwitchProps = Platform.OS === 'web' ? ({ activeThumbColor: '#ffffff' } as object) : {}
 
 function Section({ title, children }: { title: string; children: React.ReactNode }): React.JSX.Element {
   return (
@@ -44,6 +47,8 @@ export default function SettingsScreen(): React.JSX.Element {
   const { isPremium, canUpgrade, subscription, openCheckout, openPortal } = useSubscription()
   const [reminder, setReminder] = useState<ReminderSettings | null>(null)
   const [soundEffects, setSoundEffects] = useState(areSoundEffectsEnabled)
+  const installMode = useInstallMode()
+  const { isDesktop } = useLayout()
 
   useEffect(() => {
     if (supportsReminders) getReminderSettings().then(setReminder)
@@ -90,7 +95,11 @@ export default function SettingsScreen(): React.JSX.Element {
   return (
     <ScrollView
       style={{ backgroundColor: colors.background }}
-      contentContainerStyle={[styles.content, { paddingTop: insets.top + spacing.lg }]}
+      contentContainerStyle={[
+        styles.content,
+        centered(contentWidth.narrow),
+        { paddingTop: isDesktop ? spacing.xxl : insets.top + spacing.lg }
+      ]}
     >
       <Text variant="headline">{t('settings.title')}</Text>
 
@@ -123,7 +132,7 @@ export default function SettingsScreen(): React.JSX.Element {
         </Section>
       )}
 
-      {getInstallMode() && (
+      {installMode && (
         <Section title={t('settings.app')}>
           <ListRow icon="phone-portrait-outline" title={t('settings.installApp')} onPress={openInstallPrompt} />
         </Section>
@@ -141,6 +150,8 @@ export default function SettingsScreen(): React.JSX.Element {
                 void setSoundEffectsEnabled(enabled)
               }}
               trackColor={{ true: colors.primary, false: colors.border }}
+                thumbColor="#ffffff"
+                {...webSwitchProps}
             />
           }
         />
@@ -160,6 +171,8 @@ export default function SettingsScreen(): React.JSX.Element {
                 value={reminder.enabled}
                 onValueChange={(enabled) => void updateReminder({ ...reminder, enabled })}
                 trackColor={{ true: colors.primary, false: colors.border }}
+                thumbColor="#ffffff"
+                {...webSwitchProps}
               />
             }
           />

@@ -8,7 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, EmptyState, IconButton, LoadingView, Pill, ProgressBar, Surface, Text, TextField } from '@/components'
 import { useDeck, useDeckMutations } from '@/hooks/useDecks'
 import { confirm, showActions } from '@/lib/actions'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, isHovered, radius, spacing, useTheme } from '@/theme'
+import { goBack } from '@/navigation'
 
 function Stat({ value, label }: { value: string; label: string }): React.JSX.Element {
   return (
@@ -27,9 +28,12 @@ function CardRow({ card, onPress }: { card: Card; onPress: () => void }): React.
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [
+      style={(state) => [
         styles.cardRow,
-        { backgroundColor: pressed ? colors.surfaceMuted : colors.surface, borderColor: colors.border }
+        {
+          backgroundColor: state.pressed ? colors.surfaceMuted : colors.surface,
+          borderColor: isHovered(state) ? colors.primary : colors.border
+        }
       ]}
     >
       <View style={styles.flex}>
@@ -72,7 +76,7 @@ export default function DeckScreen(): React.JSX.Element {
     return (
       <View style={[styles.flex, { backgroundColor: colors.background }]}>
         <EmptyState icon="albums-outline" title={t('deck.notFound')}>
-          <Button title={t('review.backToDecks')} onPress={() => router.back()} variant="secondary" />
+          <Button title={t('review.backToDecks')} onPress={goBack} variant="secondary" />
         </EmptyState>
       </View>
     )
@@ -88,7 +92,7 @@ export default function DeckScreen(): React.JSX.Element {
           destructive: true,
           onPress: () =>
             confirm(t('deck.deleteTitle'), t('deck.deleteBody'), t('common.delete'), t('common.cancel'), () => {
-              deleteDeck.mutate(deck.id, { onSuccess: () => router.back() })
+              deleteDeck.mutate(deck.id, { onSuccess: goBack })
             })
         }
       ],
@@ -167,7 +171,7 @@ export default function DeckScreen(): React.JSX.Element {
             </Text>
           )
         }
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 96 }]}
+        contentContainerStyle={[styles.list, centered(contentWidth.medium), { paddingBottom: insets.bottom + 96 }]}
         keyboardShouldPersistTaps="handled"
       />
       {deck.cards.length > 0 && (

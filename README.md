@@ -1,11 +1,11 @@
 # Flash Snap Monorepo
 
-Flash Snap is a spaced repetition learning application available on desktop and mobile platforms. This monorepo contains both the Electron desktop application and the React Native mobile application.
+Flash Snap is a spaced repetition learning application. It runs on every device from a single Expo app: iOS, Android and the web (desktop and mobile browsers, installable as a PWA at https://www.flashsnap.com.br/app).
 
 ## 📦 Packages
 
-- **[@flash-snap/desktop](./packages/desktop)** - Electron desktop application
-- **[@flash-snap/mobile](./packages/mobile)** - React Native mobile application (Expo)
+- **[@flash-snap/mobile](./packages/mobile)** - The Flash Snap app (Expo): iOS, Android and the web app for desktop and mobile browsers
+- **[@flash-snap/desktop](./packages/desktop)** - **Deprecated** Electron desktop app, no longer released. Still hosts the Supabase project (`supabase/`: Edge Functions and migrations)
 - **[@flash-snap/site](./packages/site)** - Landing page
 - **[@flash-snap/shared](./packages/shared)** - Code shared by the apps: entities (DTOs), spaced-repetition scheduling, reports, templates and the AI deck-generation contract. Consumed as TypeScript source, no build step
 

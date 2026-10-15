@@ -1,13 +1,19 @@
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Platform, Pressable, StyleSheet, View } from 'react-native'
 import {
   getInstallMode,
-  type InstallMode,
+  hasInstallRequest,
+  type InstallDialogMode,
+  INSTALL_PARAM,
+  isInstalled,
+  isMobileBrowser,
   onOpenInstallPrompt,
   promptNativeInstall,
   snoozeInstallPrompt,
+  waitForInstallMode,
   wasRecentlyDismissed
 } from '@/lib/install'
 import { radius, spacing, useTheme } from '@/theme'
@@ -38,14 +44,23 @@ function Step({ index, icon, text }: { index: number; icon: IconName; text: stri
 export function InstallPrompt(): React.JSX.Element | null {
   const { t } = useTranslation()
   const colors = useTheme()
-  const [mode, setMode] = useState<InstallMode | null>(null)
+  const [mode, setMode] = useState<InstallDialogMode | null>(null)
 
   useEffect(() => {
     if (Platform.OS !== 'web') return
 
     onOpenInstallPrompt(() => setMode(getInstallMode()))
+
+    // Opened from an "Install" link on the website: show the dialog right away
+    if (hasInstallRequest()) {
+      void waitForInstallMode(4000).then((ready) => {
+        if (!isInstalled()) setMode(ready ?? 'unsupported')
+      })
+      return () => onOpenInstallPrompt(null)
+    }
+    // Desktop browsers get an Install button in the sidebar instead of an automatic dialog
     const timer = setTimeout(() => {
-      if (!wasRecentlyDismissed()) setMode(getInstallMode())
+      if (isMobileBrowser() && !wasRecentlyDismissed()) setMode(getInstallMode())
     }, SHOW_DELAY_MS)
 
     return () => {
@@ -56,14 +71,20 @@ export function InstallPrompt(): React.JSX.Element | null {
 
   if (!mode) return null
 
+  const hide = (): void => {
+    // The router keeps query params in its own state, so the install flag is cleared through it
+    if (hasInstallRequest()) router.setParams({ [INSTALL_PARAM]: undefined })
+    setMode(null)
+  }
+
   const close = (): void => {
     snoozeInstallPrompt()
-    setMode(null)
+    hide()
   }
 
   const install = async (): Promise<void> => {
     await promptNativeInstall()
-    setMode(null)
+    hide()
   }
 
   return (
@@ -84,6 +105,17 @@ export function InstallPrompt(): React.JSX.Element | null {
             <View style={styles.steps}>
               <Step index={1} icon="share-outline" text={t('install.iosStep1')} />
               <Step index={2} icon="add-circle-outline" text={t('install.iosStep2')} />
+            </View>
+          )}
+          {mode === 'unsupported' && (
+            <Text tone="muted" center>
+              {t('install.unsupported')}
+            </Text>
+          )}
+          {mode === 'macos-safari' && (
+            <View style={styles.steps}>
+              <Step index={1} icon="menu-outline" text={t('install.macStep1')} />
+              <Step index={2} icon="albums-outline" text={t('install.macStep2')} />
             </View>
           )}
           {mode === 'android-manual' && (

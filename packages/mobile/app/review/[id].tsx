@@ -1,18 +1,20 @@
 import { Ionicons } from '@expo/vector-icons'
 import { type Card, type Deck, type DueCard, getDueCards, linkLabel, sm2 } from '@flash-snap/shared'
 import * as Haptics from 'expo-haptics'
-import { router, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import * as WebBrowser from 'expo-web-browser'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Animated, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '@/components'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
+import { useLayout } from '@/hooks/useLayout'
 import { useReviewSounds } from '@/hooks/useReviewSounds'
 import { showDialog } from '@/lib/dialogs'
 import { speak } from '@/lib/speech'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, isHovered, radius, spacing, useTheme } from '@/theme'
+import { goBack } from '@/navigation'
 
 type GradeKey = 'again' | 'hard' | 'good' | 'easy'
 // SM-2 recall grades (0-5); below 3 counts as forgotten
@@ -46,6 +48,17 @@ export default function ReviewScreen(): React.JSX.Element {
   const [index, setIndex] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const flip = useRef(new Animated.Value(0)).current
+  const { isDesktop } = useLayout()
+  const showShortcuts = Platform.OS === 'web' && isDesktop
+
+  // Registered once; always calls the latest handler so shortcuts see the current card
+  const keyHandler = useRef<(event: KeyboardEvent) => void>(() => {})
+  useEffect(() => {
+    if (Platform.OS !== 'web') return
+    const onKeyDown = (event: KeyboardEvent): void => keyHandler.current(event)
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   useEffect(() => {
     if (decks && queue === null) setQueue(getDueCards(decks, id === 'all' ? undefined : id))
@@ -60,7 +73,7 @@ export default function ReviewScreen(): React.JSX.Element {
 
   if (isLoading || queue === null) return <LoadingView />
 
-  const close = (): void => router.back()
+  const close = (): void => goBack()
   const current = queue[index]
   const finished = index >= queue.length
 
@@ -82,6 +95,21 @@ export default function ReviewScreen(): React.JSX.Element {
     )
     setRevealed(false)
     setIndex((i) => i + 1)
+  }
+
+  keyHandler.current = (event) => {
+    if (event.key === 'Escape') {
+      close()
+      return
+    }
+    if (!current || finished) return
+    if (!revealed && (event.key === ' ' || event.key === 'Enter')) {
+      event.preventDefault()
+      reveal()
+      return
+    }
+    const choice = revealed ? GRADES[Number(event.key) - 1] : undefined
+    if (choice) grade(choice.grade)
   }
 
   if (queue.length === 0 || finished) {
@@ -119,6 +147,7 @@ export default function ReviewScreen(): React.JSX.Element {
         }
       ]}
     >
+      <View style={[styles.flex, centered(contentWidth.narrow)]}>
       <View style={styles.topBar}>
         <IconButton icon="close" label={t('common.cancel')} onPress={close} />
         <View style={styles.progress}>
@@ -129,10 +158,16 @@ export default function ReviewScreen(): React.JSX.Element {
         </Text>
       </View>
 
-      <Pressable style={styles.cardArea} onPress={reveal} accessibilityRole="button" accessibilityHint={t('review.tapToReveal')}>
+      <Pressable
+        style={[styles.cardArea, isDesktop && styles.cardAreaDesktop]}
+        onPress={reveal}
+        accessibilityRole="button"
+        accessibilityHint={t('review.tapToReveal')}
+      >
         <Animated.View
           style={[
             styles.card,
+            isDesktop ? styles.cardDesktop : styles.flex,
             { backgroundColor: colors.surface, borderColor: colors.border, transform: [{ perspective: 1000 }, { rotateY: rotate }] }
           ]}
         >
@@ -145,7 +180,7 @@ export default function ReviewScreen(): React.JSX.Element {
             )}
           </View>
 
-          <View style={styles.cardBody}>
+          <ScrollView style={styles.cardScroll} contentContainerStyle={styles.cardBody}>
             <Text variant="headline" center>
               {card.front}
             </Text>
@@ -172,9 +207,12 @@ export default function ReviewScreen(): React.JSX.Element {
                           key={`${linkIndex}-${link.url}`}
                           accessibilityRole="link"
                           onPress={() => void WebBrowser.openBrowserAsync(link.url)}
-                          style={({ pressed }) => [
+                          style={(state) => [
                             styles.linkChip,
-                            { backgroundColor: pressed ? colors.primarySoft : colors.surfaceMuted }
+                            {
+                              backgroundColor:
+                                state.pressed || isHovered(state) ? colors.primarySoft : colors.surfaceMuted
+                            }
                           ]}
                         >
                           <Ionicons name="open-outline" size={14} color={colors.primary} />
@@ -191,11 +229,11 @@ export default function ReviewScreen(): React.JSX.Element {
               <View style={styles.hint}>
                 <Ionicons name="hand-left-outline" size={18} color={colors.textSubtle} />
                 <Text variant="small" tone="subtle">
-                  {t('review.tapToReveal')}
+                  {showShortcuts ? t('review.clickToReveal') : t('review.tapToReveal')}
                 </Text>
               </View>
             )}
-          </View>
+          </ScrollView>
         </Animated.View>
       </Pressable>
 
@@ -206,16 +244,25 @@ export default function ReviewScreen(): React.JSX.Element {
               {t('review.howWell')}
             </Text>
             <View style={styles.grades}>
-              {GRADES.map(({ key, grade: value }) => (
+              {GRADES.map(({ key, grade: value }, gradeIndex) => (
                 <Pressable
                   key={key}
                   accessibilityRole="button"
                   onPress={() => grade(value)}
-                  style={({ pressed }) => [
+                  style={(state) => [
                     styles.gradeButton,
-                    { backgroundColor: gradeColors[key].bg, transform: [{ scale: pressed ? 0.96 : 1 }] }
+                    {
+                      backgroundColor: gradeColors[key].bg,
+                      borderColor: isHovered(state) ? gradeColors[key].fg : 'transparent',
+                      transform: [{ scale: state.pressed ? 0.96 : 1 }]
+                    }
                   ]}
                 >
+                  {showShortcuts && (
+                    <Text variant="caption" style={[styles.keyBadge, { color: gradeColors[key].fg }]}>
+                      {gradeIndex + 1}
+                    </Text>
+                  )}
                   <Text variant="label" style={{ color: gradeColors[key].fg }}>
                     {t(`review.${key}`)}
                   </Text>
@@ -229,6 +276,12 @@ export default function ReviewScreen(): React.JSX.Element {
         ) : (
           <Button title={t('review.tapToReveal')} icon="eye-outline" onPress={reveal} />
         )}
+        {showShortcuts && (
+          <Text variant="caption" tone="subtle" center>
+            {t('review.shortcuts')}
+          </Text>
+        )}
+      </View>
       </View>
     </View>
   )
@@ -246,8 +299,9 @@ const styles = StyleSheet.create({
   },
   progress: { flex: 1 },
   cardArea: { flex: 1, padding: spacing.lg },
+  cardAreaDesktop: { justifyContent: 'center' },
+  cardDesktop: { flexShrink: 1, minHeight: 380, maxHeight: 620 },
   card: {
-    flex: 1,
     borderRadius: radius.xl,
     borderWidth: StyleSheet.hairlineWidth,
     padding: spacing.xl,
@@ -258,7 +312,9 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   cardHeader: { flexDirection: 'row', alignItems: 'center', minHeight: 40 },
-  cardBody: { flex: 1, justifyContent: 'center', gap: spacing.lg },
+  // Long answers scroll inside the card instead of overflowing it
+  cardScroll: { flexGrow: 1, flexShrink: 1 },
+  cardBody: { flexGrow: 1, justifyContent: 'center', gap: spacing.lg, paddingVertical: spacing.sm },
   divider: { height: StyleSheet.hairlineWidth, marginHorizontal: spacing.xl },
   context: { fontStyle: 'italic' },
   links: { gap: spacing.sm, marginTop: spacing.xs },
@@ -276,8 +332,10 @@ const styles = StyleSheet.create({
   hint: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   footer: { paddingHorizontal: spacing.lg, paddingBottom: spacing.lg, gap: spacing.md, minHeight: 110 },
   grades: { flexDirection: 'row', gap: spacing.sm },
+  keyBadge: { position: 'absolute', top: 6, right: 8, opacity: 0.6 },
   gradeButton: {
     flex: 1,
+    borderWidth: 1.5,
     minHeight: 64,
     borderRadius: radius.md,
     alignItems: 'center',

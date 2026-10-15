@@ -21,7 +21,10 @@ const enUS = {
     haveAccount: 'Already have an account?',
     checkEmailTitle: 'Check your email',
     checkEmailBody: 'We sent you a confirmation link. Open it, then sign in here.',
-    missingFields: 'Enter your email and password.'
+    missingFields: 'Enter your email and password.',
+    featureReview: 'Spaced repetition that schedules reviews for you',
+    featureAI: 'Create complete decks with AI in seconds',
+    featureDevices: 'Study on your computer and phone, always in sync'
   },
   tabs: {
     decks: 'Decks',
@@ -101,6 +104,8 @@ const enUS = {
   review: {
     progress: '{{current}} of {{total}}',
     tapToReveal: 'Tap to reveal the answer',
+    clickToReveal: 'Click or press Space to reveal the answer',
+    shortcuts: 'Shortcuts: Space shows the answer · 1–4 grade · Esc exits',
     playPronunciation: 'Play pronunciation',
     learnMore: 'Learn more',
     howWell: 'How well did you remember?',
@@ -205,8 +210,11 @@ const enUS = {
     body: 'Add Flash Snap to your home screen to open it like an app, in full screen.',
     iosStep1: 'Tap the Share button in your browser',
     iosStep2: 'Scroll down and tap "Add to Home Screen"',
+    macStep1: 'In the menu bar, open File',
+    macStep2: 'Choose "Add to Dock"',
     androidStep1: 'Open your browser menu',
     androidStep2: 'Tap "Install app" or "Add to Home screen"',
+    unsupported: "This browser can't install Flash Snap from here. If it's already installed, open it from your apps. Otherwise, use Chrome or Edge to install it, or keep using it right here.",
     install: 'Install',
     gotIt: 'Got it',
     notNow: 'Not now'

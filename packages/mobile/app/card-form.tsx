@@ -1,14 +1,15 @@
 import { Ionicons } from '@expo/vector-icons'
 import { type CardLink, linkLabel, normalizeLinkUrl } from '@flash-snap/shared'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
-import { useRef, useState } from 'react'
+import { Stack, useLocalSearchParams } from 'expo-router'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, type TextInput, View } from 'react-native'
 import { Button, Surface, Text, TextField } from '@/components'
 import { useDeck, useDeckMutations } from '@/hooks/useDecks'
 import { confirm } from '@/lib/actions'
 import { showDialog } from '@/lib/dialogs'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
+import { goBack } from '@/navigation'
 
 export default function CardFormScreen(): React.JSX.Element {
   const { t } = useTranslation()
@@ -25,6 +26,17 @@ export default function CardFormScreen(): React.JSX.Element {
   const [linkUrl, setLinkUrl] = useState('')
   const [linkTitle, setLinkTitle] = useState('')
   const [linkError, setLinkError] = useState(false)
+  const loadedCardId = useRef(card?.id)
+
+  // On a direct URL or refresh the decks query loads after the first render
+  useEffect(() => {
+    if (!card || loadedCardId.current === card.id) return
+    loadedCardId.current = card.id
+    setFront(card.front)
+    setBack(card.back)
+    setContext(card.context ?? '')
+    setLinks(card.links ?? [])
+  }, [card])
   const frontRef = useRef<TextInput>(null)
   const backRef = useRef<TextInput>(null)
   const contextRef = useRef<TextInput>(null)
@@ -39,7 +51,7 @@ export default function CardFormScreen(): React.JSX.Element {
     const input = { front: front.trim(), back: back.trim(), context: context.trim() || null, links }
 
     if (card) {
-      updateCard.mutate({ id: card.id, ...input }, { onSuccess: () => router.back(), onError })
+      updateCard.mutate({ id: card.id, ...input }, { onSuccess: goBack, onError })
       return
     }
 
@@ -48,7 +60,7 @@ export default function CardFormScreen(): React.JSX.Element {
       {
         onSuccess: () => {
           if (!addAnother) {
-            router.back()
+            goBack()
             return
           }
           setFront('')
@@ -77,7 +89,7 @@ export default function CardFormScreen(): React.JSX.Element {
   const remove = (): void => {
     if (!card) return
     confirm(t('cardForm.deleteTitle'), t('cardForm.deleteBody'), t('common.delete'), t('common.cancel'), () =>
-      deleteCard.mutate(card, { onSuccess: () => router.back(), onError })
+      deleteCard.mutate(card, { onSuccess: goBack, onError })
     )
   }
 
@@ -87,7 +99,7 @@ export default function CardFormScreen(): React.JSX.Element {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Stack.Screen options={{ title: isEditing ? t('cardForm.editTitle') : t('cardForm.newTitle') }} />
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.content, centered(contentWidth.narrow)]} keyboardShouldPersistTaps="handled">
         <TextField
           ref={frontRef}
           label={t('cardForm.front')}

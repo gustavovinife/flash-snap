@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { radius, spacing, useTheme } from '@/theme'
+import { isHovered, radius, spacing, useTheme } from '@/theme'
 import { Text } from './Text'
 
 interface SegmentedOption<T extends string> {
@@ -29,11 +29,11 @@ export function OptionTiles<T extends string>({ options, value, onChange }: Segm
             accessibilityRole="radio"
             accessibilityState={{ selected }}
             onPress={() => onChange(option.value)}
-            style={[
+            style={(state) => [
               styles.tile,
               {
                 backgroundColor: selected ? colors.primarySoft : colors.surface,
-                borderColor: selected ? colors.primary : colors.border
+                borderColor: selected || isHovered(state) ? colors.primary : colors.border
               }
             ]}
           >
@@ -77,9 +77,19 @@ export function IconButton({ icon, onPress, label, tone = 'default' }: IconButto
       accessibilityLabel={label}
       hitSlop={8}
       onPress={onPress}
-      style={({ pressed }) => [
+      style={(state) => [
         styles.iconButton,
-        { backgroundColor: tone === 'primary' ? colors.primary : colors.surfaceMuted, opacity: pressed ? 0.7 : 1 }
+        {
+          backgroundColor:
+            tone === 'primary'
+              ? isHovered(state)
+                ? colors.primaryPressed
+                : colors.primary
+              : isHovered(state)
+                ? colors.border
+                : colors.surfaceMuted,
+          opacity: state.pressed ? 0.7 : 1
+        }
       ]}
     >
       <Ionicons name={icon} size={20} color={tone === 'primary' ? colors.onPrimary : colors.text} />
@@ -103,7 +113,10 @@ export function ListRow({ icon, title, value, onPress, right, destructive }: Lis
     <Pressable
       disabled={!onPress}
       onPress={onPress}
-      style={({ pressed }) => [styles.row, { backgroundColor: pressed ? colors.surfaceMuted : 'transparent' }]}
+      style={(state) => [
+        styles.row,
+        { backgroundColor: state.pressed || (onPress && isHovered(state)) ? colors.surfaceMuted : 'transparent' }
+      ]}
     >
       <View style={[styles.rowIcon, { backgroundColor: destructive ? colors.dangerSoft : colors.primarySoft }]}>
         <Ionicons name={icon} size={18} color={tint} />

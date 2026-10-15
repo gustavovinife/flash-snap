@@ -23,7 +23,10 @@ const ptBR: typeof enUS = {
     haveAccount: 'Já tem uma conta?',
     checkEmailTitle: 'Confira seu e-mail',
     checkEmailBody: 'Enviamos um link de confirmação. Abra o link e depois entre aqui.',
-    missingFields: 'Informe seu e-mail e senha.'
+    missingFields: 'Informe seu e-mail e senha.',
+    featureReview: 'Repetição espaçada que agenda suas revisões',
+    featureAI: 'Crie baralhos completos com IA em segundos',
+    featureDevices: 'Estude no computador e no celular, sempre sincronizado'
   },
   tabs: {
     decks: 'Baralhos',
@@ -103,6 +106,8 @@ const ptBR: typeof enUS = {
   review: {
     progress: '{{current}} de {{total}}',
     tapToReveal: 'Toque para ver a resposta',
+    clickToReveal: 'Clique ou pressione Espaço para ver a resposta',
+    shortcuts: 'Atalhos: Espaço mostra a resposta · 1–4 avaliam · Esc sai',
     playPronunciation: 'Ouvir pronúncia',
     learnMore: 'Saiba mais',
     howWell: 'Quão bem você lembrou?',
@@ -208,8 +213,11 @@ const ptBR: typeof enUS = {
     body: 'Adicione o Flash Snap à tela de início para abrir como um app, em tela cheia.',
     iosStep1: 'Toque no botão Compartilhar do navegador',
     iosStep2: 'Role para baixo e toque em "Adicionar à Tela de Início"',
+    macStep1: 'Na barra de menus, abra Arquivo',
+    macStep2: 'Escolha "Adicionar ao Dock"',
     androidStep1: 'Abra o menu do navegador',
     androidStep2: 'Toque em "Instalar app" ou "Adicionar à tela inicial"',
+    unsupported: 'Este navegador não consegue instalar o Flash Snap daqui. Se ele já estiver instalado, abra pelos seus apps. Senão, use o Chrome ou o Edge para instalar, ou continue usando aqui mesmo.',
     install: 'Instalar',
     gotIt: 'Entendi',
     notNow: 'Agora não'

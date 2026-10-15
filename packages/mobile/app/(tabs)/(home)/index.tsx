@@ -9,22 +9,23 @@ import { Button, EmptyState, IconButton, LoadingView, Pill, ProgressBar, Surface
 import { useAuth } from '@/context/AuthContext'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDecks } from '@/hooks/useDecks'
+import { useLayout } from '@/hooks/useLayout'
 import { showActions } from '@/lib/actions'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, isHovered, radius, spacing, useTheme } from '@/theme'
 
 function firstName(fullName: unknown, email: string | undefined): string | null {
   if (typeof fullName === 'string' && fullName.trim()) return fullName.trim().split(' ')[0]
   return email?.split('@')[0] ?? null
 }
 
-function DeckRow({ deck }: { deck: Deck }): React.JSX.Element {
+function DeckRow({ deck, fill }: { deck: Deck; fill?: boolean }): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
   const due = countDueCards(deck.cards)
   const progress = calculateDeckProgress(deck)
 
   return (
-    <Surface onPress={() => router.push(`/deck/${deck.id}`)} style={styles.deck}>
+    <Surface onPress={() => router.push(`/deck/${deck.id}`)} style={[styles.deck, fill && styles.fill]}>
       <View style={styles.deckHeader}>
         <View style={[styles.deckIcon, { backgroundColor: colors.primarySoft }]}>
           <Ionicons
@@ -34,7 +35,7 @@ function DeckRow({ deck }: { deck: Deck }): React.JSX.Element {
           />
         </View>
         <View style={styles.deckTitle}>
-          <Text variant="label" numberOfLines={1} style={styles.deckName}>
+          <Text variant="label" numberOfLines={2} style={styles.deckName}>
             {deck.name}
           </Text>
           <Text variant="small" tone="muted">
@@ -62,6 +63,13 @@ export default function DecksScreen(): React.JSX.Element {
   const { user } = useAuth()
   const { data: decks = [], isLoading, isRefetching, refetch, error } = useDecks()
   const guardDeckCreation = useDeckLimit()
+  const { isTablet, isDesktop, isWide } = useLayout()
+  const columns = isWide ? 3 : isTablet ? 2 : 1
+  // Empty cells keep the last row's cards the same width as the others
+  const gridData = useMemo<(Deck | null)[]>(() => {
+    const remainder = decks.length % columns
+    return remainder ? [...decks, ...Array<null>(columns - remainder).fill(null)] : decks
+  }, [decks, columns])
 
   const totalDue = useMemo(() => decks.reduce((sum, deck) => sum + countDueCards(deck.cards), 0), [decks])
   const name = firstName(user?.user_metadata?.full_name, user?.email)
@@ -105,7 +113,7 @@ export default function DecksScreen(): React.JSX.Element {
               <Pressable
                 accessibilityRole="button"
                 onPress={() => router.push('/review/all')}
-                style={({ pressed }) => [styles.heroButton, { opacity: pressed ? 0.85 : 1 }]}
+                style={(state) => [styles.heroButton, { opacity: state.pressed ? 0.85 : isHovered(state) ? 0.92 : 1 }]}
               >
                 <Text variant="label" tone="primary">
                   {t('home.startReview')}
@@ -139,9 +147,15 @@ export default function DecksScreen(): React.JSX.Element {
 
   return (
     <FlatList
-      data={decks}
-      keyExtractor={(deck) => deck.id}
-      renderItem={({ item }) => <DeckRow deck={item} />}
+      key={`columns-${columns}`}
+      data={gridData}
+      numColumns={columns}
+      columnWrapperStyle={columns > 1 ? styles.row : undefined}
+      keyExtractor={(item, index) => item?.id ?? `empty-${index}`}
+      renderItem={({ item }) => {
+        if (columns === 1) return item ? <DeckRow deck={item} /> : null
+        return <View style={styles.cell}>{item && <DeckRow deck={item} fill />}</View>
+      }}
       ListHeaderComponent={header}
       ListEmptyComponent={
         error ? (
@@ -156,7 +170,13 @@ export default function DecksScreen(): React.JSX.Element {
           </EmptyState>
         )
       }
-      contentContainerStyle={[styles.list, { paddingTop: insets.top + spacing.lg }]}
+      contentContainerStyle={[
+        styles.list,
+        centered(contentWidth.wide),
+        isDesktop
+          ? { paddingTop: spacing.xxl, paddingHorizontal: spacing.xxl }
+          : { paddingTop: insets.top + spacing.lg }
+      ]}
       style={{ backgroundColor: colors.background }}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor={colors.primary} />}
     />
@@ -166,6 +186,9 @@ export default function DecksScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   list: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl, gap: spacing.md },
+  row: { gap: spacing.md },
+  cell: { flex: 1 },
+  fill: { flex: 1, justifyContent: 'space-between' },
   header: { gap: spacing.lg },
   titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   hero: {

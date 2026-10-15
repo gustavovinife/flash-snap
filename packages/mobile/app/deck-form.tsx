@@ -1,13 +1,14 @@
 import type { DeckType } from '@flash-snap/shared'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { Button, OptionTiles, Text, TextField } from '@/components'
 import { useDeck, useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { useSubscription } from '@/hooks/useSubscription'
 import { showDialog } from '@/lib/dialogs'
-import { spacing, useTheme } from '@/theme'
+import { centered, contentWidth, spacing, useTheme } from '@/theme'
+import { goBack } from '@/navigation'
 
 export default function DeckFormScreen(): React.JSX.Element {
   const { t } = useTranslation()
@@ -21,6 +22,15 @@ export default function DeckFormScreen(): React.JSX.Element {
   const [name, setName] = useState(deck?.name ?? '')
   const [type, setType] = useState<DeckType>(deck?.type ?? 'language')
   const isEditing = !!deck
+  const loadedDeckId = useRef(deck?.id)
+
+  // On a direct URL or refresh the decks query loads after the first render
+  useEffect(() => {
+    if (!deck || loadedDeckId.current === deck.id) return
+    loadedDeckId.current = deck.id
+    setName(deck.name)
+    setType(deck.type)
+  }, [deck])
   const saving = createDeck.isPending || updateDeck.isPending
 
   const save = (): void => {
@@ -29,7 +39,7 @@ export default function DeckFormScreen(): React.JSX.Element {
     const onError = (error: Error): void => showDialog(t('common.error'), error.message)
 
     if (isEditing) {
-      updateDeck.mutate({ id: deck.id, name: trimmed, type }, { onSuccess: () => router.back(), onError })
+      updateDeck.mutate({ id: deck.id, name: trimmed, type }, { onSuccess: goBack, onError })
       return
     }
 
@@ -49,7 +59,7 @@ export default function DeckFormScreen(): React.JSX.Element {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Stack.Screen options={{ title: isEditing ? t('deckForm.editTitle') : t('deckForm.newTitle') }} />
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.content, centered(contentWidth.narrow)]} keyboardShouldPersistTaps="handled">
         <TextField
           label={t('deckForm.name')}
           placeholder={t('deckForm.namePlaceholder')}

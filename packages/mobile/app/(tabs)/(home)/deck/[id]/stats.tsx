@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { EmptyState, LoadingView, ProgressBar, Surface, Text } from '@/components'
 import { useDeck } from '@/hooks/useDecks'
-import { radius, spacing, useTheme } from '@/theme'
+import { useLayout } from '@/hooks/useLayout'
+import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
 function Tile({ label, value }: { label: string; value: string }): React.JSX.Element {
+  const { isDesktop } = useLayout()
   return (
-    <Surface style={styles.tile}>
+    <Surface style={[styles.tile, isDesktop && styles.tileDesktop]}>
       <Text variant="caption" tone="muted">
         {label}
       </Text>
@@ -53,7 +55,10 @@ export default function StatsScreen(): React.JSX.Element {
   ]
 
   return (
-    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={[styles.content, centered(contentWidth.medium)]}
+    >
       <Stack.Screen options={{ title: t('stats.title') }} />
       <Text variant="headline">{deck.name}</Text>
 
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
   content: { padding: spacing.lg, gap: spacing.lg, paddingBottom: spacing.xxl },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
   tile: { flexBasis: '47%', flexGrow: 1, gap: spacing.xs },
+  tileDesktop: { flexBasis: '22%' },
   section: { gap: spacing.lg, padding: spacing.xl },
   sectionHeader: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
   statusRow: { gap: spacing.sm },

@@ -9,7 +9,7 @@ import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations } from '@/hooks/useDecks'
 import { generateDeck } from '@/lib/ai'
 import { showDialog } from '@/lib/dialogs'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
 export default function AIGenerateScreen(): React.JSX.Element {
   const { t } = useTranslation()
@@ -73,7 +73,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <Stack.Screen options={{ title: t('aiGeneration.title') }} />
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.content, centered(contentWidth.narrow)]} keyboardShouldPersistTaps="handled">
         {!result ? (
           <>
             <View style={styles.intro}>

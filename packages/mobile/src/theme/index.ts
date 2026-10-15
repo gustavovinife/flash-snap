@@ -88,3 +88,22 @@ export const fontSize = {
 export function useTheme(): ThemeColors {
   return useColorScheme() === 'dark' ? dark : light
 }
+
+export const contentWidth = {
+  /** Forms, settings, review */
+  narrow: 640,
+  /** Deck detail and stats */
+  medium: 860,
+  /** Grids of decks and templates */
+  wide: 1120
+}
+
+/** Centers content and caps its width on large screens */
+export function centered(maxWidth: number): { width: '100%'; maxWidth: number; alignSelf: 'center' } {
+  return { width: '100%', maxWidth, alignSelf: 'center' }
+}
+
+/** Pressable's hover state, which React Native Web adds for mouse users */
+export function isHovered(state: object): boolean {
+  return (state as { hovered?: boolean }).hovered === true
+}

@@ -8,6 +8,7 @@ import { Logo } from '@/components'
 import { InstallPrompt } from '@/components/InstallPrompt'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { DialogHost } from '@/lib/dialogs'
+import { useStackScreenOptions } from '@/navigation'
 import { useTheme } from '@/theme'
 
 const queryClient = new QueryClient({
@@ -17,6 +18,7 @@ const queryClient = new QueryClient({
 function RootNavigator(): React.JSX.Element {
   const { session, loading } = useAuth()
   const colors = useTheme()
+  const screenOptions = useStackScreenOptions()
 
   // Same look as the native splash screen, so startup flows straight into the app
   if (loading) {
@@ -31,24 +33,13 @@ function RootNavigator(): React.JSX.Element {
   return (
     <>
       <StatusBar style={colors.scheme === 'dark' ? 'light' : 'dark'} />
-      <Stack
-        screenOptions={{
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: colors.background },
-          headerTintColor: colors.primary,
-          headerTitleStyle: { color: colors.text, fontWeight: '700' },
-          headerBackButtonDisplayMode: 'minimal',
-          contentStyle: { backgroundColor: colors.background }
-        }}
-      >
+      <Stack screenOptions={screenOptions}>
         <Stack.Protected guard={!session}>
           <Stack.Screen name="sign-in" options={{ headerShown: false }} />
         </Stack.Protected>
 
         <Stack.Protected guard={!!session}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="deck/[id]/index" options={{ title: '' }} />
-          <Stack.Screen name="deck/[id]/stats" />
           <Stack.Screen
             name="review/[id]"
             options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }}

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 
 // Helpers for installing the web build to the home screen. Everything is a no-op on native.
@@ -10,21 +11,58 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-export type InstallMode = 'native-prompt' | 'ios' | 'android-manual'
+export type InstallMode = 'native-prompt' | 'ios' | 'android-manual' | 'macos-safari'
+/** Shown only when someone explicitly asked to install from a browser that can't (e.g. Firefox) */
+export type InstallDialogMode = InstallMode | 'unsupported'
 
 const isWeb = Platform.OS === 'web' && typeof window !== 'undefined'
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null
 let openListener: (() => void) | null = null
+const availabilityListeners = new Set<() => void>()
+const notifyAvailability = (): void => availabilityListeners.forEach((listener) => listener())
 
 // Chrome fires this once, early, so capture it as soon as the module loads
 if (isWeb) {
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault()
     deferredPrompt = event as BeforeInstallPromptEvent
+    notifyAvailability()
   })
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null
+    notifyAvailability()
+  })
+
+  // Registered on the deployed site only, so local development never serves cached bundles
+  if ('serviceWorker' in navigator && window.location.hostname !== 'localhost') {
+    navigator.serviceWorker.register('/app/sw.js', { scope: '/app/' }).catch(() => {})
+  }
+}
+
+/** Query parameter set by the website's "Install" links (…/app/?install=1) */
+export const INSTALL_PARAM = 'install'
+
+export function hasInstallRequest(): boolean {
+  return isWeb && new URLSearchParams(window.location.search).has(INSTALL_PARAM)
+}
+
+/** Resolves with the install mode once known; Chrome's install event can arrive a few seconds after load. */
+export function waitForInstallMode(timeoutMs: number): Promise<InstallMode | null> {
+  const ready = getInstallMode()
+  // Safari never fires the install event, so its manual steps are already final
+  if (!isWeb || ready === 'native-prompt' || ready === 'ios' || ready === 'macos-safari') return Promise.resolve(ready)
+  return new Promise((resolve) => {
+    const finish = (): void => {
+      availabilityListeners.delete(onChange)
+      clearTimeout(timer)
+      resolve(getInstallMode())
+    }
+    const onChange = (): void => {
+      if (getInstallMode() === 'native-prompt') finish()
+    }
+    const timer = setTimeout(finish, timeoutMs)
+    availabilityListeners.add(onChange)
   })
 }
 
@@ -42,6 +80,16 @@ function isAndroid(): boolean {
   return userAgent().includes('android')
 }
 
+function isMacSafari(): boolean {
+  const ua = userAgent()
+  return ua.includes('macintosh') && ua.includes('safari') && !/chrome|crios|edg|firefox|fxios/.test(ua)
+}
+
+/** Phones and tablets, where the install dialog is shown automatically */
+export function isMobileBrowser(): boolean {
+  return isIOS() || isAndroid()
+}
+
 export function isInstalled(): boolean {
   if (!isWeb) return true
   const iosStandalone = (navigator as Navigator & { standalone?: boolean }).standalone === true
@@ -54,7 +102,21 @@ export function getInstallMode(): InstallMode | null {
   if (deferredPrompt) return 'native-prompt'
   if (isIOS()) return 'ios'
   if (isAndroid()) return 'android-manual'
+  if (isMacSafari()) return 'macos-safari'
   return null
+}
+
+/** Re-renders when the browser makes installing available (Chrome fires that event late) */
+export function useInstallMode(): InstallMode | null {
+  const [mode, setMode] = useState(getInstallMode)
+  useEffect(() => {
+    const update = (): void => setMode(getInstallMode())
+    availabilityListeners.add(update)
+    return () => {
+      availabilityListeners.delete(update)
+    }
+  }, [])
+  return mode
 }
 
 export function wasRecentlyDismissed(): boolean {
@@ -72,6 +134,7 @@ export async function promptNativeInstall(): Promise<boolean> {
   if (!deferredPrompt) return false
   const prompt = deferredPrompt
   deferredPrompt = null
+  notifyAvailability()
   await prompt.prompt()
   return (await prompt.userChoice).outcome === 'accepted'
 }

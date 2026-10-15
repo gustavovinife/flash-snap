@@ -1,10 +1,18 @@
-# flash-snap
+# flash-snap (desktop) — deprecated
 
-An Electron application with React and TypeScript
+> **Deprecated.** The Electron desktop app is no longer developed or released. Flash Snap now runs as a web app on every device (desktop and mobile) from [`packages/mobile`](../mobile), served at https://www.flashsnap.com.br/app.
+>
+> This package stays in the repo for reference and because it hosts the Supabase project (`supabase/` with Edge Functions and migrations), which is still in use. Version 1.0.24 on GitHub Releases is the last desktop release.
 
-## Recommended IDE Setup
+An Electron application with React and TypeScript.
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Supabase
+
+Edge Functions and migrations live in `supabase/` and are deployed with:
+
+```bash
+npx supabase functions deploy <name>
+```
 
 ## Project Setup
 

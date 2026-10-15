@@ -3,6 +3,8 @@ import { Tabs } from 'expo-router'
 import { useTranslation } from 'react-i18next'
 import { type ColorValue, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Sidebar } from '@/components/Sidebar'
+import { useLayout } from '@/hooks/useLayout'
 import { spacing, useTheme } from '@/theme'
 
 type IconName = keyof typeof Ionicons.glyphMap
@@ -17,6 +19,7 @@ export default function TabsLayout(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
   const insets = useSafeAreaInsets()
+  const { isDesktop } = useLayout()
   // Devices reporting no bottom inset (Android 3-button navigation, browsers) still get some room;
   // React Navigation sizes the bar from this inset
   const bottomInset = Math.max(insets.bottom, spacing.md)
@@ -24,8 +27,10 @@ export default function TabsLayout(): React.JSX.Element {
   return (
     <Tabs
       safeAreaInsets={{ bottom: bottomInset }}
+      tabBar={isDesktop ? (props) => <Sidebar {...props} /> : undefined}
       screenOptions={{
         headerShown: false,
+        tabBarPosition: isDesktop ? 'left' : 'bottom',
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSubtle,
         tabBarStyle: {
@@ -38,7 +43,7 @@ export default function TabsLayout(): React.JSX.Element {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{ title: t('tabs.decks'), tabBarIcon: tabIcon('albums', 'albums-outline') }}
       />
       <Tabs.Screen

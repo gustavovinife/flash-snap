@@ -8,8 +8,9 @@ import { Ionicons } from '@expo/vector-icons'
 import { Button, Surface, Text } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
+import { useLayout } from '@/hooks/useLayout'
 import { showDialog } from '@/lib/dialogs'
-import { radius, spacing, useTheme } from '@/theme'
+import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
 export default function ExploreScreen(): React.JSX.Element {
   const { t } = useTranslation()
@@ -19,6 +20,8 @@ export default function ExploreScreen(): React.JSX.Element {
   const { installTemplate } = useDeckMutations()
   const guardDeckCreation = useDeckLimit()
   const [installingId, setInstallingId] = useState<string | null>(null)
+  const { isDesktop } = useLayout()
+  const columns = isDesktop ? 2 : 1
 
   const install = (template: Template): void =>
     guardDeckCreation(() => {
@@ -36,10 +39,19 @@ export default function ExploreScreen(): React.JSX.Element {
 
   return (
     <FlatList
+      key={`columns-${columns}`}
       data={templates}
+      numColumns={columns}
+      columnWrapperStyle={columns > 1 ? styles.row : undefined}
       keyExtractor={(template) => template.id}
       style={{ backgroundColor: colors.background }}
-      contentContainerStyle={[styles.list, { paddingTop: insets.top + spacing.lg }]}
+      contentContainerStyle={[
+        styles.list,
+        centered(contentWidth.wide),
+        isDesktop
+          ? { paddingTop: spacing.xxl, paddingHorizontal: spacing.xxl }
+          : { paddingTop: insets.top + spacing.lg }
+      ]}
       ListHeaderComponent={
         <View style={styles.header}>
           <Text variant="headline">{t('explore.title')}</Text>
@@ -66,7 +78,7 @@ export default function ExploreScreen(): React.JSX.Element {
       renderItem={({ item }) => {
         const installed = isTemplateInstalled(item, decks)
         return (
-          <Surface style={styles.item}>
+          <Surface style={[styles.item, columns > 1 && styles.cell]}>
             <View style={[styles.emoji, { backgroundColor: colors.primarySoft }]}>
               <Text style={styles.emojiText}>{item.emoji ?? '📚'}</Text>
             </View>
@@ -100,6 +112,8 @@ export default function ExploreScreen(): React.JSX.Element {
 const styles = StyleSheet.create({
   flex: { flex: 1, gap: 2 },
   list: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl, gap: spacing.md },
+  row: { gap: spacing.md },
+  cell: { flex: 1 },
   header: { gap: spacing.xs, marginBottom: spacing.sm },
   item: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   emoji: { width: 48, height: 48, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },

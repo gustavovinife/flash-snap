@@ -12,8 +12,11 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export type InstallMode = 'native-prompt' | 'ios' | 'android-manual' | 'macos-safari'
-/** Shown only when someone explicitly asked to install from a browser that can't (e.g. Firefox) */
-export type InstallDialogMode = InstallMode | 'unsupported'
+/**
+ * Extra modes used only when someone explicitly asked to install (…/app/?install=1):
+ * desktop Chrome/Edge before they offer one-click install, and browsers that can't install (e.g. Firefox)
+ */
+export type InstallDialogMode = InstallMode | 'desktop-manual' | 'unsupported'
 
 const isWeb = Platform.OS === 'web' && typeof window !== 'undefined'
 
@@ -78,6 +81,12 @@ function isIOS(): boolean {
 
 function isAndroid(): boolean {
   return userAgent().includes('android')
+}
+
+/** Chrome, Edge and other Chromium browsers on a computer can install from their address bar or menu */
+export function isDesktopChromium(): boolean {
+  const ua = userAgent()
+  return /chrome|chromium|edg\//.test(ua) && !/firefox|android|mobile/.test(ua)
 }
 
 function isMacSafari(): boolean {

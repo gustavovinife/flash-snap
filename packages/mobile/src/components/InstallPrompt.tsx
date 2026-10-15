@@ -8,6 +8,7 @@ import {
   hasInstallRequest,
   type InstallDialogMode,
   INSTALL_PARAM,
+  isDesktopChromium,
   isInstalled,
   isMobileBrowser,
   onOpenInstallPrompt,
@@ -16,6 +17,7 @@ import {
   waitForInstallMode,
   wasRecentlyDismissed
 } from '@/lib/install'
+import { useLayout } from '@/hooks/useLayout'
 import { radius, spacing, useTheme } from '@/theme'
 import { Button } from './Button'
 import { Logo } from './Logo'
@@ -44,6 +46,7 @@ function Step({ index, icon, text }: { index: number; icon: IconName; text: stri
 export function InstallPrompt(): React.JSX.Element | null {
   const { t } = useTranslation()
   const colors = useTheme()
+  const { isDesktop } = useLayout()
   const [mode, setMode] = useState<InstallDialogMode | null>(null)
 
   useEffect(() => {
@@ -54,7 +57,8 @@ export function InstallPrompt(): React.JSX.Element | null {
     // Opened from an "Install" link on the website: show the dialog right away
     if (hasInstallRequest()) {
       void waitForInstallMode(4000).then((ready) => {
-        if (!isInstalled()) setMode(ready ?? 'unsupported')
+        // Chrome only offers one-click install after some engagement with the site; until then its own install button works
+        if (!isInstalled()) setMode(ready ?? (isDesktopChromium() ? 'desktop-manual' : 'unsupported'))
       })
       return () => onOpenInstallPrompt(null)
     }
@@ -89,15 +93,18 @@ export function InstallPrompt(): React.JSX.Element | null {
 
   return (
     <Modal transparent animationType="fade" onRequestClose={close}>
-      <Pressable style={styles.backdrop} onPress={close}>
-        <Pressable style={[styles.sheet, { backgroundColor: colors.surface }]} onPress={() => {}}>
+      <Pressable style={[styles.backdrop, isDesktop && styles.backdropCentered]} onPress={close}>
+        <Pressable
+          style={[styles.sheet, isDesktop && styles.sheetCentered, { backgroundColor: colors.surface }]}
+          onPress={() => {}}
+        >
           <View style={styles.header}>
             <Logo size={64} />
             <Text variant="title" center>
               {t('install.title')}
             </Text>
             <Text tone="muted" center>
-              {t('install.body')}
+              {isMobileBrowser() ? t('install.body') : t('install.bodyDesktop')}
             </Text>
           </View>
 
@@ -111,6 +118,12 @@ export function InstallPrompt(): React.JSX.Element | null {
             <Text tone="muted" center>
               {t('install.unsupported')}
             </Text>
+          )}
+          {mode === 'desktop-manual' && (
+            <View style={styles.steps}>
+              <Step index={1} icon="download-outline" text={t('install.desktopStep1')} />
+              <Step index={2} icon="checkmark-circle-outline" text={t('install.desktopStep2')} />
+            </View>
           )}
           {mode === 'macos-safari' && (
             <View style={styles.steps}>
@@ -155,6 +168,8 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
     gap: spacing.lg
   },
+  backdropCentered: { justifyContent: 'center', padding: spacing.xl },
+  sheetCentered: { borderRadius: radius.xl, paddingBottom: spacing.xl },
   header: { alignItems: 'center', gap: spacing.sm },
   steps: { gap: spacing.sm },
   step: {

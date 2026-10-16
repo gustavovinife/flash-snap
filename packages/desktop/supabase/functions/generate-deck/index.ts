@@ -41,11 +41,20 @@ interface PreparedRequest {
 }
 
 async function preparePromptRequest(req: Request): Promise<PreparedRequest | Response> {
-  // A PDF comes as raw bytes (or multipart form data); a topic description as JSON
-  const contentType = req.headers.get('content-type') ?? ''
-  const isPdf = contentType.startsWith('application/pdf') || contentType.startsWith('multipart/form-data')
-  const prepared = isPdf ? await preparePdfRequest(req, contentType, user.id) : await preparePromptRequest(req)
-  if (prepared instanceof Response) return prepared
+  let prompt: unknown
+  try {
+    ;({ prompt } = await req.json())
+  } catch {
+    return json({ error: 'Invalid request body.' }, 400)
+  }
+
+  const trimmed = typeof prompt === 'string' ? prompt.trim() : ''
+  if (trimmed.length < AI_MIN_PROMPT_LENGTH || trimmed.length > AI_MAX_PROMPT_LENGTH) {
+    return json(
+      { error: `Describe your topic in ${AI_MIN_PROMPT_LENGTH} to ${AI_MAX_PROMPT_LENGTH} characters.` },
+      400
+    )
+  }
   return { userMessage: buildGenerationUserMessage(trimmed) }
 }
 
@@ -142,20 +151,11 @@ Deno.serve(async (req) => {
     return json({ error: 'AI generation is not available right now.' }, 500)
   }
 
-  let prompt: unknown
-  try {
-    ;({ prompt } = await req.json())
-  } catch {
-    return json({ error: 'Invalid request body.' }, 400)
-  }
-
-  const trimmed = typeof prompt === 'string' ? prompt.trim() : ''
-  if (trimmed.length < AI_MIN_PROMPT_LENGTH || trimmed.length > AI_MAX_PROMPT_LENGTH) {
-    return json(
-      { error: `Describe your topic in ${AI_MIN_PROMPT_LENGTH} to ${AI_MAX_PROMPT_LENGTH} characters.` },
-      400
-    )
-  }
+  // A PDF comes as raw bytes (or multipart form data); a topic description as JSON
+  const contentType = req.headers.get('content-type') ?? ''
+  const isPdf = contentType.startsWith('application/pdf') || contentType.startsWith('multipart/form-data')
+  const prepared = isPdf ? await preparePdfRequest(req, contentType, user.id) : await preparePromptRequest(req)
+  if (prepared instanceof Response) return prepared
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',

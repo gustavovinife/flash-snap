@@ -2387,6 +2387,7 @@ __metadata:
     expo-audio: "npm:~57.0.5"
     expo-constants: "npm:~57.0.22"
     expo-device: "npm:~57.0.2"
+    expo-document-picker: "npm:~57.0.3"
     expo-file-system: "npm:~57.0.7"
     expo-font: "npm:~57.0.4"
     expo-haptics: "npm:~57.0.3"
@@ -7548,6 +7549,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10c0/4cc4df2f7a7410389525a383663a5ce0ae335caa61f59f86ce17062f86f301b43b59529dc2b3d8310c365a13d586820915eee26d2ab942c64f6759a8852472f0
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:~57.0.3":
+  version: 57.0.3
+  resolution: "expo-document-picker@npm:57.0.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/17ff2d1d7063fd25a3c20961ab1f384d147923cea42c27d4431f1648b0db70d595cde6d5ce614a94ee973a85bec7626572de90131cf05539b4d8978fb16c5ea5
   languageName: node
   linkType: hard
 

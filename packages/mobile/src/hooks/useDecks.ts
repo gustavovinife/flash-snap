@@ -39,7 +39,7 @@ interface DeckInput {
 }
 
 /** Where a ready-made deck came from, for analytics */
-type DeckSource = { kind: 'ai' } | { kind: 'template'; templateId: string }
+type DeckSource = { kind: 'ai'; input: 'prompt' | 'pdf' } | { kind: 'template'; templateId: string }
 
 interface CardInput {
   front: string
@@ -173,7 +173,7 @@ export function useDeckMutations() {
     onSuccess: (deck, { source }) => {
       setDecks((decks) => sortDecks([deck, ...decks]))
       const properties = { deck_id: deck.id, deck_name: deck.name, deck_type: deck.type, cards_count: deck.cards.length }
-      if (source.kind === 'ai') track('ai_deck_created', properties)
+      if (source.kind === 'ai') track('ai_deck_created', { ...properties, input: source.input })
       else track('template_installed', { ...properties, template_id: source.templateId })
     }
   })

@@ -57,11 +57,11 @@ const enUS = {
   aiFeature: {
     title: "Create Flashcards with AI",
     subtitle:
-      "Let artificial intelligence do the heavy lifting. Generate complete flashcard decks in seconds from any topic you want to learn.",
+      "Let artificial intelligence do the heavy lifting. Generate complete flashcard decks from any topic you describe, or from your own PDFs: notes, book chapters and slides.",
     feature1: {
       title: "Instant Deck Generation",
       description:
-        "Just describe what you want to learn and AI creates a complete deck with questions and answers. No manual card creation needed.",
+        "Describe what you want to learn, or upload a PDF, and AI creates a complete deck with questions and answers. No manual card creation needed.",
     },
     feature2: {
       title: "Smart Content",

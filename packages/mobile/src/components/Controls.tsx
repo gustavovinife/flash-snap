@@ -14,13 +14,15 @@ interface SegmentedProps<T extends string> {
   options: SegmentedOption<T>[]
   value: T
   onChange: (value: T) => void
+  /** Side by side, for short two- or three-way choices */
+  horizontal?: boolean
 }
 
 // Large selectable tiles, used for choices like deck type or language
-export function OptionTiles<T extends string>({ options, value, onChange }: SegmentedProps<T>): React.JSX.Element {
+export function OptionTiles<T extends string>({ options, value, onChange, horizontal }: SegmentedProps<T>): React.JSX.Element {
   const colors = useTheme()
   return (
-    <View style={styles.tiles}>
+    <View style={[styles.tiles, horizontal && styles.tilesRow]}>
       {options.map((option) => {
         const selected = option.value === value
         return (
@@ -31,6 +33,7 @@ export function OptionTiles<T extends string>({ options, value, onChange }: Segm
             onPress={() => onChange(option.value)}
             style={(state) => [
               styles.tile,
+              horizontal && styles.tileCompact,
               {
                 backgroundColor: selected ? colors.primarySoft : colors.surface,
                 borderColor: selected || isHovered(state) ? colors.primary : colors.border
@@ -146,6 +149,8 @@ const styles = StyleSheet.create({
     borderWidth: 1.5
   },
   tileText: { flex: 1, gap: 2 },
+  tilesRow: { flexDirection: 'row' },
+  tileCompact: { flex: 1, padding: spacing.md, gap: spacing.sm },
   iconButton: {
     width: 40,
     height: 40,

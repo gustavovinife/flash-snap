@@ -57,11 +57,11 @@ const ptBR = {
   aiFeature: {
     title: "Crie Flashcards com IA",
     subtitle:
-      "Deixe a inteligência artificial fazer o trabalho pesado. Gere baralhos completos de flashcards em segundos sobre qualquer tema que você queira aprender.",
+      "Deixe a inteligência artificial fazer o trabalho pesado. Gere baralhos completos de flashcards sobre qualquer tema que você descrever, ou a partir dos seus PDFs: anotações, capítulos de livros e slides.",
     feature1: {
       title: "Geração Instantânea de Baralhos",
       description:
-        "Apenas descreva o que você quer aprender e a IA cria um baralho completo com perguntas e respostas. Sem criação manual de cards.",
+        "Descreva o que você quer aprender, ou envie um PDF, e a IA cria um baralho completo com perguntas e respostas. Sem criação manual de cards.",
     },
     feature2: {
       title: "Conteúdo Inteligente",

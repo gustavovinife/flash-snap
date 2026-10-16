@@ -1,16 +1,31 @@
 import { Ionicons } from '@expo/vector-icons'
-import { AI_MAX_PROMPT_LENGTH, AI_MIN_PROMPT_LENGTH, AI_PRESET_PROMPTS, type GenerationResult } from '@flash-snap/shared'
+import {
+  AI_MAX_FOCUS_LENGTH,
+  AI_MAX_PDF_BYTES,
+  AI_MAX_PROMPT_LENGTH,
+  AI_MIN_PROMPT_LENGTH,
+  AI_PRESET_PROMPTS,
+  type GenerationResult
+} from '@flash-snap/shared'
+import * as DocumentPicker from 'expo-document-picker'
 import { router, Stack } from 'expo-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
-import { Button, Pill, Surface, Text, TextField } from '@/components'
+import { Button, OptionTiles, Pill, Surface, Text, TextField } from '@/components'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDeckMutations } from '@/hooks/useDecks'
-import { generateDeck } from '@/lib/ai'
+import { generateDeck, generateDeckFromPdf, GenerateDeckFailure, type PickedPdf } from '@/lib/ai'
 import { track } from '@/lib/analytics'
 import { showDialog } from '@/lib/dialogs'
 import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
+
+type Mode = 'prompt' | 'pdf'
+
+function formatSize(bytes: number | undefined): string {
+  if (!bytes) return ''
+  return bytes >= 1024 * 1024 ? `${(bytes / (1024 * 1024)).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`
+}
 
 export default function AIGenerateScreen(): React.JSX.Element {
   const { t } = useTranslation()
@@ -18,7 +33,10 @@ export default function AIGenerateScreen(): React.JSX.Element {
   const guardDeckCreation = useDeckLimit()
   const { createDeckWithCards } = useDeckMutations()
 
+  const [mode, setMode] = useState<Mode>('prompt')
   const [prompt, setPrompt] = useState('')
+  const [pdf, setPdf] = useState<PickedPdf | null>(null)
+  const [focus, setFocus] = useState('')
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [result, setResult] = useState<GenerationResult | null>(null)
@@ -27,26 +45,48 @@ export default function AIGenerateScreen(): React.JSX.Element {
   const trimmedPrompt = prompt.trim()
   const promptTooShort = trimmedPrompt.length > 0 && trimmedPrompt.length < AI_MIN_PROMPT_LENGTH
 
+  const canGenerate = mode === 'pdf' ? !!pdf : trimmedPrompt.length >= AI_MIN_PROMPT_LENGTH
+
+  const pickPdf = async (): Promise<void> => {
+    const picked = await DocumentPicker.getDocumentAsync({ type: 'application/pdf', copyToCacheDirectory: true })
+    if (picked.canceled) return
+    const asset = picked.assets[0]
+    if (asset.size && asset.size > AI_MAX_PDF_BYTES) {
+      setError(t('aiGeneration.errors.pdf_too_large'))
+      return
+    }
+    setPdf({ name: asset.name, uri: asset.uri, size: asset.size, mimeType: asset.mimeType, file: asset.file })
+    setError(null)
+  }
+
   const generate = async (): Promise<void> => {
-    if (trimmedPrompt.length < AI_MIN_PROMPT_LENGTH) return
+    if (!canGenerate) return
     setGenerating(true)
     setError(null)
     const startedAt = Date.now()
-    const preset = AI_PRESET_PROMPTS.find((p) => p.prompt === trimmedPrompt)
-    track('ai_prompt_submitted', { prompt: trimmedPrompt, prompt_length: trimmedPrompt.length, preset_id: preset?.id ?? null })
+    if (mode === 'pdf') {
+      track('ai_prompt_submitted', { input: 'pdf', file_size_kb: pdf?.size ? Math.round(pdf.size / 1024) : null, has_focus: !!focus.trim() })
+    } else {
+      const preset = AI_PRESET_PROMPTS.find((p) => p.prompt === trimmedPrompt)
+      track('ai_prompt_submitted', { input: 'prompt', prompt: trimmedPrompt, prompt_length: trimmedPrompt.length, preset_id: preset?.id ?? null })
+    }
     try {
-      const generated = await generateDeck(trimmedPrompt)
+      const generated = mode === 'pdf' && pdf ? await generateDeckFromPdf(pdf, focus) : await generateDeck(trimmedPrompt)
       setResult(generated)
       setDeckName(generated.deckName)
       track('ai_cards_generated', {
+        input: mode,
         cards_count: generated.cards.length,
         deck_type: generated.deckType,
+        pages: generated.pages,
+        truncated: generated.truncated,
         duration_ms: Date.now() - startedAt
       })
     } catch (e) {
-      const message = e instanceof Error ? e.message : t('common.error')
+      const code = e instanceof GenerateDeckFailure ? e.code : undefined
+      const message = code ? t(`aiGeneration.errors.${code}`) : e instanceof Error ? e.message : t('common.error')
       setError(message)
-      track('ai_generation_failed', { reason: message, duration_ms: Date.now() - startedAt })
+      track('ai_generation_failed', { input: mode, code, reason: e instanceof Error ? e.message : null, duration_ms: Date.now() - startedAt })
     } finally {
       setGenerating(false)
     }
@@ -62,7 +102,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
         {
           name: deckName.trim(),
           type: result.deckType,
-          source: { kind: 'ai' },
+          source: { kind: 'ai', input: mode },
           cards: result.cards.map((card) => ({ front: card.front, back: card.back, context: card.context ?? null }))
         },
         {
@@ -93,24 +133,78 @@ export default function AIGenerateScreen(): React.JSX.Element {
                 <Ionicons name="sparkles" size={26} color={colors.primary} />
               </View>
               <Text variant="headline">{t('aiGeneration.heading')}</Text>
-              <Text tone="muted">{t('aiGeneration.subtitle')}</Text>
+              <Text tone="muted">{mode === 'pdf' ? t('aiGeneration.pdfSubtitle') : t('aiGeneration.subtitle')}</Text>
             </View>
 
-            <TextField
-              value={prompt}
-              onChangeText={setPrompt}
-              placeholder={t('aiGeneration.promptPlaceholder')}
-              multiline
-              maxLength={AI_MAX_PROMPT_LENGTH}
-              editable={!generating}
+            <OptionTiles
+              horizontal
+              value={mode}
+              onChange={(next) => {
+                setMode(next)
+                setError(null)
+              }}
+              options={[
+                { value: 'prompt', label: t('aiGeneration.modeTopic'), icon: 'create-outline' },
+                { value: 'pdf', label: t('aiGeneration.modePdf'), icon: 'document-text-outline' }
+              ]}
             />
-            {promptTooShort && (
-              <Text variant="small" tone="muted">
-                {t('aiGeneration.minLength')}
-              </Text>
+
+            {mode === 'pdf' ? (
+              <>
+                {pdf ? (
+                  <Surface style={styles.pdfRow}>
+                    <View style={[styles.pdfIcon, { backgroundColor: colors.primarySoft }]}>
+                      <Ionicons name="document-text" size={22} color={colors.primary} />
+                    </View>
+                    <View style={styles.flex}>
+                      <Text variant="label" numberOfLines={1}>
+                        {pdf.name}
+                      </Text>
+                      <Text variant="small" tone="muted">
+                        {formatSize(pdf.size)}
+                      </Text>
+                    </View>
+                    <Button compact variant="ghost" title={t('aiGeneration.changePdf')} onPress={pickPdf} disabled={generating} />
+                  </Surface>
+                ) : (
+                  <Surface onPress={pickPdf} style={[styles.pdfPicker, { borderColor: colors.primary }]}>
+                    <Ionicons name="cloud-upload-outline" size={30} color={colors.primary} />
+                    <Text variant="label" tone="primary">
+                      {t('aiGeneration.choosePdf')}
+                    </Text>
+                    <Text variant="small" tone="muted" center>
+                      {t('aiGeneration.choosePdfHint')}
+                    </Text>
+                  </Surface>
+                )}
+                <TextField
+                  label={t('aiGeneration.focusLabel')}
+                  value={focus}
+                  onChangeText={setFocus}
+                  placeholder={t('aiGeneration.focusPlaceholder')}
+                  maxLength={AI_MAX_FOCUS_LENGTH}
+                  editable={!generating}
+                />
+              </>
+            ) : (
+              <>
+                <TextField
+                  value={prompt}
+                  onChangeText={setPrompt}
+                  placeholder={t('aiGeneration.promptPlaceholder')}
+                  multiline
+                  maxLength={AI_MAX_PROMPT_LENGTH}
+                  editable={!generating}
+                />
+                {promptTooShort && (
+                  <Text variant="small" tone="muted">
+                    {t('aiGeneration.minLength')}
+                  </Text>
+                )}
+              </>
             )}
 
-            <View style={styles.ideas}>
+            {mode === 'prompt' && <View style={styles.ideas}>
               <Text variant="label" tone="muted">
                 {t('aiGeneration.ideas')}
               </Text>
@@ -142,7 +236,7 @@ export default function AIGenerateScreen(): React.JSX.Element {
                   )
                 })}
               </View>
-            </View>
+            </View>}
 
             {error && (
               <View style={[styles.error, { backgroundColor: colors.dangerSoft }]}>
@@ -153,15 +247,21 @@ export default function AIGenerateScreen(): React.JSX.Element {
             )}
 
             <Button
-              title={generating ? t('aiGeneration.generating') : t('aiGeneration.generate')}
+              title={
+                generating
+                  ? mode === 'pdf'
+                    ? t('aiGeneration.readingPdf')
+                    : t('aiGeneration.generating')
+                  : t('aiGeneration.generate')
+              }
               icon="sparkles"
               onPress={generate}
               loading={generating}
-              disabled={trimmedPrompt.length < AI_MIN_PROMPT_LENGTH}
+              disabled={!canGenerate}
             />
             {generating && (
               <Text variant="small" tone="muted" center>
-                {t('aiGeneration.generatingHint')}
+                {mode === 'pdf' ? t('aiGeneration.pdfHint') : t('aiGeneration.generatingHint')}
               </Text>
             )}
           </>
@@ -172,6 +272,11 @@ export default function AIGenerateScreen(): React.JSX.Element {
               <Text variant="title">{t('aiGeneration.cardsTitle', { count: result.cards.length })}</Text>
               <Pill label={t(`deck.types.${result.deckType}`)} tone="primary" />
             </View>
+            {result.truncated && (
+              <Text variant="small" tone="muted">
+                {t('aiGeneration.truncated')}
+              </Text>
+            )}
 
             {result.cards.map((card, index) => (
               <Surface key={`${index}-${card.front}`} style={styles.card}>
@@ -207,7 +312,11 @@ export default function AIGenerateScreen(): React.JSX.Element {
                 loading={createDeckWithCards.isPending}
                 disabled={!deckName.trim() || result.cards.length === 0}
               />
-              <Button title={t('aiGeneration.regenerate')} variant="ghost" onPress={startOver} />
+              <Button
+                title={mode === 'pdf' ? t('aiGeneration.tryAnotherPdf') : t('aiGeneration.regenerate')}
+                variant="ghost"
+                onPress={startOver}
+              />
             </View>
           </>
         )}
@@ -240,6 +349,9 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   error: { borderRadius: radius.sm, padding: spacing.md },
+  pdfPicker: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.xl, borderStyle: 'dashed', borderWidth: 1.5 },
+  pdfRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  pdfIcon: { width: 44, height: 44, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center' },
   resultHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   card: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   cardFront: { fontSize: 16 },

@@ -169,7 +169,25 @@ const ptBR: typeof enUS = {
     save_one: 'Salvar baralho com {{count}} cartão',
     save_other: 'Salvar baralho com {{count}} cartões',
     regenerate: 'Tentar outro pedido',
-    banner: 'Descreva qualquer assunto e receba um baralho pronto para estudar em segundos.'
+    tryAnotherPdf: 'Tentar outro PDF',
+    banner: 'Descreva qualquer assunto ou envie um PDF e receba um baralho pronto para estudar.',
+    modeTopic: 'Descrever um tema',
+    modePdf: 'A partir de um PDF',
+    pdfSubtitle: 'Envie anotações, um capítulo de livro ou slides e a IA transforma tudo em flashcards.',
+    choosePdf: 'Escolher um PDF',
+    choosePdfHint: 'Até 10 MB. Funciona melhor com PDFs de texto selecionável (não digitalizados).',
+    changePdf: 'Trocar',
+    focusLabel: 'Em que os cartões devem focar? (opcional)',
+    focusPlaceholder: 'ex.: Só o capítulo 3, 25 cartões',
+    readingPdf: 'Lendo seu PDF…',
+    pdfHint: 'Ler o PDF e escrever os cartões pode levar até um minuto.',
+    truncated: 'Este PDF é longo, então os cartões cobrem a primeira parte.',
+    errors: {
+      pdf_too_large: 'Este PDF tem mais de 10 MB. Tente um arquivo menor ou divida o PDF.',
+      pdf_invalid: 'Este arquivo não é um PDF.',
+      pdf_unreadable: 'Não foi possível ler este PDF. Tente outro arquivo.',
+      pdf_no_text: 'Este PDF não tem texto selecionável (pode ser digitalizado). Tente um PDF em que dê para selecionar o texto.'
+    }
   },
   explore: {
     title: 'Explorar',

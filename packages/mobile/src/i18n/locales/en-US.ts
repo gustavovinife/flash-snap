@@ -167,7 +167,25 @@ const enUS = {
     save_one: 'Save deck with {{count}} card',
     save_other: 'Save deck with {{count}} cards',
     regenerate: 'Try another prompt',
-    banner: 'Describe any topic and get a ready-to-study deck in seconds.'
+    tryAnotherPdf: 'Try another PDF',
+    banner: 'Describe any topic or upload a PDF and get a ready-to-study deck.',
+    modeTopic: 'Describe a topic',
+    modePdf: 'From a PDF',
+    pdfSubtitle: 'Upload notes, a book chapter or slides and AI will turn them into flashcards.',
+    choosePdf: 'Choose a PDF',
+    choosePdfHint: 'Up to 10 MB. PDFs with selectable text work best (not scans).',
+    changePdf: 'Change',
+    focusLabel: 'What should the cards focus on? (optional)',
+    focusPlaceholder: 'e.g. Only chapter 3, 25 cards',
+    readingPdf: 'Reading your PDF…',
+    pdfHint: 'Reading the PDF and writing cards can take up to a minute.',
+    truncated: 'This PDF is long, so the cards cover its first part.',
+    errors: {
+      pdf_too_large: 'This PDF is larger than 10 MB. Try a smaller file or split it.',
+      pdf_invalid: "This file isn't a PDF.",
+      pdf_unreadable: "This PDF couldn't be read. Try another file.",
+      pdf_no_text: 'This PDF has no selectable text (it may be a scan). Try a PDF where you can select the text.'
+    }
   },
   explore: {
     title: 'Explore',

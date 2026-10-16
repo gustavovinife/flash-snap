@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { track } from '@/lib/analytics'
-import { Button, EmptyState, IconButton, LoadingView, Pill, ProgressBar, Surface, Text } from '@/components'
+import { Button, EmptyState, IconButton, LoadingView, Pill, ProgressBar, StreakBadge, Surface, Text } from '@/components'
 import { useAuth } from '@/context/AuthContext'
 import { useDeckLimit } from '@/hooks/useDeckLimit'
 import { useDecks } from '@/hooks/useDecks'
@@ -101,7 +101,11 @@ export default function DecksScreen(): React.JSX.Element {
           </Text>
           <Text variant="headline">{name ? t('home.greeting', { name }) : t('home.greetingNoName')}</Text>
         </View>
-        <IconButton icon="add" label={t('home.newDeck')} onPress={openCreateMenu} tone="primary" />
+        <View style={styles.headerActions}>
+          {/* On wide screens the sidebar shows the streak */}
+          {!isDesktop && <StreakBadge />}
+          <IconButton icon="add" label={t('home.newDeck')} onPress={openCreateMenu} tone="primary" />
+        </View>
       </View>
 
       {decks.length > 0 && (
@@ -188,6 +192,7 @@ export default function DecksScreen(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   flex: { flex: 1 },
   list: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl, gap: spacing.md },
   row: { gap: spacing.md },

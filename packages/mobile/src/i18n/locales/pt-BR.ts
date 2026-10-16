@@ -225,6 +225,13 @@ const ptBR: typeof enUS = {
     gotIt: 'Entendi',
     notNow: 'Agora não'
   },
+  streak: {
+    days_one: 'Sequência de {{count}} dia',
+    days_other: 'Sequência de {{count}} dias',
+    keepItGoing_zero: 'Revise hoje para começar uma sequência',
+    keepItGoing_one: 'Revise hoje para manter sua sequência de {{count}} dia',
+    keepItGoing_other: 'Revise hoje para manter sua sequência de {{count}} dias'
+  },
   notifications: {
     title: 'Hora de revisar ✨',
     body: 'Seus cartões estão esperando. Poucos minutos por dia mantêm tudo fresco.'

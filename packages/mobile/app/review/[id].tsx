@@ -7,10 +7,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Animated, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { Button, EmptyState, IconButton, LoadingView, ProgressBar, Text } from '@/components'
+import { Button, EmptyState, IconButton, LoadingView, ProgressBar, StreakBadge, Text } from '@/components'
 import { useDeckMutations, useDecks } from '@/hooks/useDecks'
 import { useLayout } from '@/hooks/useLayout'
 import { useReviewSounds } from '@/hooks/useReviewSounds'
+import { useStreak } from '@/hooks/useStreak'
 import { track } from '@/lib/analytics'
 import { showDialog } from '@/lib/dialogs'
 import { speak } from '@/lib/speech'
@@ -51,6 +52,7 @@ export default function ReviewScreen(): React.JSX.Element {
   const { data: decks, isLoading } = useDecks()
   const { reviewCard } = useDeckMutations()
   const playGradeSound = useReviewSounds()
+  const streak = useStreak()
 
   // The queue is fixed when the session starts, so graded cards don't reshuffle it
   const [queue, setQueue] = useState<DueCard<Card, Deck>[] | null>(null)
@@ -120,7 +122,9 @@ export default function ReviewScreen(): React.JSX.Element {
         deck_name: deckName,
         duration_seconds: Math.round((Date.now() - session.startedAt) / 1000),
         ...session.grades,
-        keyboard_grades: session.keyboardGrades
+        keyboard_grades: session.keyboardGrades,
+        // This session counts for today even if the streak data hasn't caught up yet
+        streak_days: streak.reviewedToday ? streak.current : streak.current + 1
       })
     }
     haptic(value)
@@ -163,6 +167,7 @@ export default function ReviewScreen(): React.JSX.Element {
           title={reviewed > 0 ? t('review.doneTitle') : t('review.nothingDueTitle')}
           body={reviewed > 0 ? t('review.doneBody', { count: reviewed }) : t('review.nothingDueBody')}
         >
+          {reviewed > 0 && <StreakBadge showLabel style={styles.streak} />}
           <Button title={t('review.backToDecks')} onPress={close} />
         </EmptyState>
       </View>
@@ -197,7 +202,8 @@ export default function ReviewScreen(): React.JSX.Element {
       <Pressable
         style={[styles.cardArea, isDesktop && styles.cardAreaDesktop]}
         onPress={reveal}
-        accessibilityRole="button"
+        // On web a role="button" renders a <button>, which can't contain the link and audio buttons inside the card
+        accessibilityRole={Platform.OS === 'web' ? undefined : 'button'}
         accessibilityHint={t('review.tapToReveal')}
       >
         <Animated.View
@@ -331,6 +337,7 @@ export default function ReviewScreen(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  streak: { alignSelf: 'center' },
   centered: { justifyContent: 'center' },
   topBar: {
     flexDirection: 'row',

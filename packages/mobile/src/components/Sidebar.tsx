@@ -6,6 +6,7 @@ import { openInstallPrompt, useInstallMode } from '@/lib/install'
 import { isHovered, radius, spacing, useTheme } from '@/theme'
 import { Button } from './Button'
 import { Logo } from './Logo'
+import { StreakBadge } from './StreakBadge'
 import { Text } from './Text'
 
 type TabBarProps = Parameters<NonNullable<React.ComponentProps<typeof Tabs>['tabBar']>>[0]
@@ -65,6 +66,7 @@ export function Sidebar({ state, descriptors, navigation }: TabBarProps): React.
       </View>
 
       <View style={styles.footer}>
+        <StreakBadge showLabel />
         {installMode && (
           <Button
             compact

@@ -222,6 +222,13 @@ const enUS = {
     gotIt: 'Got it',
     notNow: 'Not now'
   },
+  streak: {
+    days_one: '{{count}}-day streak',
+    days_other: '{{count}}-day streak',
+    keepItGoing_zero: 'Review today to start a streak',
+    keepItGoing_one: 'Review today to keep your {{count}}-day streak',
+    keepItGoing_other: 'Review today to keep your {{count}}-day streak'
+  },
   notifications: {
     title: 'Time to review ✨',
     body: 'Your flashcards are waiting. A few minutes a day keeps them fresh.'

@@ -1,6 +1,7 @@
-import { type Card, type CardLink, type Deck, type DeckType, sm2, type Template } from '@flash-snap/shared'
+import { type Card, type CardLink, type DayString, type Deck, type DeckType, localDay, sm2, type Template } from '@flash-snap/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/context/AuthContext'
+import { REVIEW_DAYS_KEY } from '@/hooks/useStreak'
 import { track } from '@/lib/analytics'
 import { supabase } from '@/lib/supabase'
 
@@ -201,8 +202,14 @@ export function useDeckMutations() {
         .from('decks')
         .update({ last_reviewed: new Date().toISOString() })
         .eq('id', card.deck_id)
+      // Streak bookkeeping; a failure here shouldn't fail the review
+      await supabase.rpc('record_review', { p_day: localDay() })
     },
     onMutate: async ({ card, grade }) => {
+      const today = localDay()
+      queryClient.setQueriesData<DayString[]>({ queryKey: REVIEW_DAYS_KEY }, (days) =>
+        days && !days.includes(today) ? [...days, today] : days
+      )
       await queryClient.cancelQueries({ queryKey: DECKS_KEY })
       const previous = queryClient.getQueryData<Deck[]>(DECKS_KEY)
       const schedule = scheduleAfterReview(card, grade)

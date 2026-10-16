@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: spacing.sm
   },
-  emptyActions: { alignSelf: 'stretch', gap: spacing.sm, marginTop: spacing.lg },
+  emptyActions: { alignSelf: 'stretch', width: '100%', maxWidth: 400, marginHorizontal: 'auto', gap: spacing.sm, marginTop: spacing.lg },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' }
 })

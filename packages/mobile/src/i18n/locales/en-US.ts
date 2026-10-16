@@ -253,6 +253,7 @@ const enUS = {
     notNow: 'Not now'
   },
   streak: {
+    start: 'Start a streak',
     days_one: '{{count}}-day streak',
     days_other: '{{count}}-day streak',
     keepItGoing_zero: 'Review today to start a streak',

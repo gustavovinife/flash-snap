@@ -26,7 +26,7 @@ export function StreakBadge({
     >
       <Ionicons name={reviewedToday ? 'flame' : 'flame-outline'} size={18} color={color} />
       <Text variant="label" style={{ color }}>
-        {showLabel ? t('streak.days', { count: current }) : current}
+        {showLabel ? (current > 0 ? t('streak.days', { count: current }) : t('streak.start')) : current}
       </Text>
     </View>
   )

@@ -256,6 +256,7 @@ const ptBR: typeof enUS = {
     notNow: 'Agora não'
   },
   streak: {
+    start: 'Comece uma sequência',
     days_one: 'Sequência de {{count}} dia',
     days_other: 'Sequência de {{count}} dias',
     keepItGoing_zero: 'Revise hoje para começar uma sequência',

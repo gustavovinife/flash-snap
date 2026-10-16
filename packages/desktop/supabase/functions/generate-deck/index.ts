@@ -18,7 +18,7 @@ import {
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-file-name, x-focus'
 }
 
 function json(body: unknown, status = 200): Response {
@@ -41,26 +41,55 @@ interface PreparedRequest {
 }
 
 async function preparePromptRequest(req: Request): Promise<PreparedRequest | Response> {
-  // A PDF upload comes as multipart form data; a topic description as JSON
-  const isPdf = (req.headers.get('content-type') ?? '').startsWith('multipart/form-data')
-  const prepared = isPdf ? await preparePdfRequest(req, user.id) : await preparePromptRequest(req)
+  // A PDF comes as raw bytes (or multipart form data); a topic description as JSON
+  const contentType = req.headers.get('content-type') ?? ''
+  const isPdf = contentType.startsWith('application/pdf') || contentType.startsWith('multipart/form-data')
+  const prepared = isPdf ? await preparePdfRequest(req, contentType, user.id) : await preparePromptRequest(req)
   if (prepared instanceof Response) return prepared
   return { userMessage: buildGenerationUserMessage(trimmed) }
 }
 
-async function preparePdfRequest(req: Request, userId: string): Promise<PreparedRequest | Response> {
+interface PdfUpload {
+  bytes: Uint8Array
+  fileName: string
+  focus: string
+}
+
+function decodeHeader(value: string | null): string {
+  try {
+    return value ? decodeURIComponent(value) : ''
+  } catch {
+    return ''
+  }
+}
+
+/** The app sends the PDF as the raw body (name and focus in headers); multipart form data also works */
+async function readPdfUpload(req: Request, contentType: string): Promise<PdfUpload | Response> {
+  if (contentType.startsWith('application/pdf')) {
+    if (Number(req.headers.get('content-length') ?? 0) > AI_MAX_PDF_BYTES) {
+      return pdfError('pdf_too_large', 'This PDF is larger than 10 MB.', 413)
+    }
+    const bytes = new Uint8Array(await req.arrayBuffer())
+    if (bytes.length === 0) return pdfError('pdf_invalid', 'Choose a PDF file.', 400)
+    return { bytes, fileName: decodeHeader(req.headers.get('x-file-name')), focus: decodeHeader(req.headers.get('x-focus')) }
+  }
+
   let form: FormData
   try {
     form = await req.formData()
   } catch {
     return pdfError('pdf_invalid', 'Choose a PDF file.', 400)
   }
-
   const file = form.get('file')
   if (!(file instanceof File)) return pdfError('pdf_invalid', 'Choose a PDF file.', 400)
-  if (file.size > AI_MAX_PDF_BYTES) return pdfError('pdf_too_large', 'This PDF is larger than 10 MB.', 413)
+  return { bytes: new Uint8Array(await file.arrayBuffer()), fileName: file.name, focus: String(form.get('focus') ?? '') }
+}
 
-  const bytes = new Uint8Array(await file.arrayBuffer())
+async function preparePdfRequest(req: Request, contentType: string, userId: string): Promise<PreparedRequest | Response> {
+  const upload = await readPdfUpload(req, contentType)
+  if (upload instanceof Response) return upload
+  const { bytes } = upload
+  if (bytes.length > AI_MAX_PDF_BYTES) return pdfError('pdf_too_large', 'This PDF is larger than 10 MB.', 413)
   // Every PDF starts with "%PDF"
   if (String.fromCharCode(...bytes.subarray(0, 4)) !== '%PDF') return pdfError('pdf_invalid', 'This file is not a PDF.', 400)
 
@@ -83,8 +112,8 @@ async function preparePdfRequest(req: Request, userId: string): Promise<Prepared
     return pdfError('pdf_no_text', 'This PDF has no selectable text, so it may be a scan.', 422)
   }
 
-  const focus = String(form.get('focus') ?? '').trim().slice(0, AI_MAX_FOCUS_LENGTH)
-  const fileName = file.name.replace(/["\n\r]/g, '').slice(0, 120) || 'document.pdf'
+  const focus = upload.focus.trim().slice(0, AI_MAX_FOCUS_LENGTH)
+  const fileName = upload.fileName.replace(/["\n\r]/g, '').slice(0, 120) || 'document.pdf'
   const truncated = text.length > AI_MAX_SOURCE_CHARS
   return {
     userMessage: buildDocumentUserMessage(text.slice(0, AI_MAX_SOURCE_CHARS), focus, fileName),

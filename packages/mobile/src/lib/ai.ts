@@ -6,6 +6,7 @@ import {
   type GenerationResult
 } from '@flash-snap/shared'
 import { FunctionsHttpError } from '@supabase/supabase-js'
+import { File as FsFile } from 'expo-file-system'
 import { supabase } from './supabase'
 
 /** Carries the server's error code so the screen can explain it in the user's language */
@@ -27,10 +28,7 @@ export interface PickedPdf {
   file?: File
 }
 
-// The generate-deck Edge Function keeps the OpenAI key on the server
-async function invokeGenerateDeck(body: GenerateDeckRequest | FormData): Promise<GenerationResult> {
-  const { data, error } = await supabase.functions.invoke<GenerationResult>(AI_FUNCTION_NAME, { body })
-
+async function handleResponse(data: GenerationResult | null, error: unknown): Promise<GenerationResult> {
   if (error instanceof FunctionsHttpError) {
     const details = (await error.context.json().catch(() => null)) as GenerateDeckError | null
     throw new GenerateDeckFailure(details?.error ?? 'AI service temporarily unavailable. Please try again.', details?.code)
@@ -42,18 +40,24 @@ async function invokeGenerateDeck(body: GenerateDeckRequest | FormData): Promise
   return data
 }
 
-export function generateDeck(prompt: string): Promise<GenerationResult> {
-  return invokeGenerateDeck({ prompt })
+// The generate-deck Edge Function keeps the OpenAI key on the server
+export async function generateDeck(prompt: string): Promise<GenerationResult> {
+  const body: GenerateDeckRequest = { prompt }
+  const { data, error } = await supabase.functions.invoke<GenerationResult>(AI_FUNCTION_NAME, { body })
+  return handleResponse(data, error)
 }
 
-export function generateDeckFromPdf(pdf: PickedPdf, focus: string): Promise<GenerationResult> {
-  const form = new FormData()
-  if (pdf.file) {
-    form.append('file', pdf.file, pdf.name)
-  } else {
-    // React Native's FormData uploads a local file from its uri
-    form.append('file', { uri: pdf.uri, name: pdf.name, type: pdf.mimeType ?? 'application/pdf' } as unknown as Blob)
-  }
-  if (focus.trim()) form.append('focus', focus.trim())
-  return invokeGenerateDeck(form)
+// The PDF goes as the raw request body (multipart FormData isn't encoded the same way by every
+// React Native fetch); the file name and focus travel in headers, URI-encoded to stay ASCII
+export async function generateDeckFromPdf(pdf: PickedPdf, focus: string): Promise<GenerationResult> {
+  const bytes = pdf.file ? await pdf.file.arrayBuffer() : await new FsFile(pdf.uri).arrayBuffer()
+  const { data, error } = await supabase.functions.invoke<GenerationResult>(AI_FUNCTION_NAME, {
+    body: bytes,
+    headers: {
+      'Content-Type': 'application/pdf',
+      'x-file-name': encodeURIComponent(pdf.name),
+      ...(focus.trim() && { 'x-focus': encodeURIComponent(focus.trim()) })
+    }
+  })
+  return handleResponse(data, error)
 }

@@ -15,7 +15,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     storage: AsyncStorage,
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false
+    // Google sign-in on the web returns to the app with the session in the URL
+    detectSessionInUrl: Platform.OS === 'web'
   }
 })
 

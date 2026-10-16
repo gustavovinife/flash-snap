@@ -24,6 +24,8 @@ const ptBR: typeof enUS = {
     checkEmailTitle: 'Confira seu e-mail',
     checkEmailBody: 'Enviamos um link de confirmação. Abra o link e depois entre aqui.',
     missingFields: 'Informe seu e-mail e senha.',
+    continueWithGoogle: 'Continuar com o Google',
+    or: 'ou',
     featureReview: 'Repetição espaçada que agenda suas revisões',
     featureAI: 'Crie baralhos completos com IA em segundos',
     featureDevices: 'Estude no computador e no celular, sempre sincronizado'

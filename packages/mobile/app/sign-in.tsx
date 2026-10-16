@@ -27,7 +27,7 @@ const FEATURES: { icon: keyof typeof Ionicons.glyphMap; key: string }[] = [
 export default function SignInScreen(): React.JSX.Element {
   const { t } = useTranslation()
   const colors = useTheme()
-  const { signIn, signUp } = useAuth()
+  const { signIn, signUp, signInWithGoogle } = useAuth()
   const { isDesktop } = useLayout()
 
   const [mode, setMode] = useState<Mode>('signIn')
@@ -36,6 +36,7 @@ export default function SignInScreen(): React.JSX.Element {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false)
   const passwordRef = useRef<TextInput>(null)
 
@@ -62,6 +63,18 @@ export default function SignInScreen(): React.JSX.Element {
     }
   }
 
+  const continueWithGoogle = async (): Promise<void> => {
+    setError(null)
+    setGoogleLoading(true)
+    try {
+      const result = await signInWithGoogle()
+      if (result.error) setError(result.error)
+    } finally {
+      // On the web the page has already left for Google
+      setGoogleLoading(false)
+    }
+  }
+
   const switchMode = (): void => {
     setMode(isSignUp ? 'signIn' : 'signUp')
     setError(null)
@@ -82,6 +95,21 @@ export default function SignInScreen(): React.JSX.Element {
       ) : (
         <View style={styles.form}>
           <Text variant="title">{isSignUp ? t('auth.signUp') : t('auth.signIn')}</Text>
+
+          <Button
+            title={t('auth.continueWithGoogle')}
+            icon="logo-google"
+            variant="secondary"
+            onPress={continueWithGoogle}
+            loading={googleLoading}
+          />
+          <View style={styles.divider}>
+            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+            <Text variant="small" tone="muted">
+              {t('auth.or')}
+            </Text>
+            <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+          </View>
 
           {isSignUp && (
             <TextField
@@ -203,6 +231,8 @@ export default function SignInScreen(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  divider: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth },
   container: { flex: 1 },
   flex: { flex: 1 },
   hero: {

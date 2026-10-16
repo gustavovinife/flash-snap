@@ -22,6 +22,8 @@ const enUS = {
     checkEmailTitle: 'Check your email',
     checkEmailBody: 'We sent you a confirmation link. Open it, then sign in here.',
     missingFields: 'Enter your email and password.',
+    continueWithGoogle: 'Continue with Google',
+    or: 'or',
     featureReview: 'Spaced repetition that schedules reviews for you',
     featureAI: 'Create complete decks with AI in seconds',
     featureDevices: 'Study on your computer and phone, always in sync'

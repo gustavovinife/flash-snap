@@ -394,6 +394,11 @@ entrypoint = "./functions/stripe-webhook/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/stripe-webhook/*.html" ]
 
+# Called by pg_cron with CRON_SECRET (not a JWT); signed-in users are checked inside the function
+[functions.send-reminders]
+enabled = true
+verify_jwt = false
+
 [functions.send-welcome-email]
 enabled = true
 verify_jwt = false

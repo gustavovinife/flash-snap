@@ -1,6 +1,6 @@
 import DateTimePicker, { DateTimePickerAndroid, type DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import Constants from 'expo-constants'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, ScrollView, StyleSheet, Switch, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -15,6 +15,16 @@ import { showDialog } from '@/lib/dialogs'
 import { getReminderSettings, type ReminderSettings, rescheduleReminder, saveReminderSettings } from '@/lib/reminders'
 import { track } from '@/lib/analytics'
 import { areSoundEffectsEnabled, setSoundEffectsEnabled } from '@/lib/soundSettings'
+import {
+  disableWebPush,
+  enableWebPush,
+  getWebPushSupport,
+  isThisBrowserSubscribed,
+  loadWebReminderSettings,
+  saveWebReminderSettings,
+  sendTestNotification,
+  type WebReminderSettings
+} from '@/lib/webPush'
 import { centered, contentWidth, radius, spacing, useTheme } from '@/theme'
 
 const supportsReminders = Platform.OS !== 'web'
@@ -31,6 +41,146 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         {children}
       </Surface>
     </View>
+  )
+}
+
+// Reminder times offered on the web, where there's no native time picker
+const WEB_REMINDER_HOURS = [7, 8, 9, 12, 13, 18, 19, 20, 21]
+
+function formatTime(hour: number, minute: number): string {
+  const date = new Date()
+  date.setHours(hour, minute, 0, 0)
+  return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+}
+
+/** Daily and streak reminders through web push (the phone builds use on-device notifications) */
+function WebReminders(): React.JSX.Element | null {
+  const { t, i18n } = useTranslation()
+  const colors = useTheme()
+  const { user } = useAuth()
+  const support = useMemo(getWebPushSupport, [])
+  const [settings, setSettings] = useState<WebReminderSettings | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    if (support !== 'supported' || !user) return
+    void Promise.all([loadWebReminderSettings(user.id), isThisBrowserSubscribed()]).then(([saved, subscribed]) =>
+      setSettings({ ...saved, enabled: saved.enabled && subscribed })
+    )
+  }, [support, user])
+
+  // Notifications are written in the language saved with the schedule
+  const language = useRef(i18n.language)
+  useEffect(() => {
+    if (language.current === i18n.language) return
+    language.current = i18n.language
+    if (settings?.enabled && user) void saveWebReminderSettings(user.id, settings, i18n.language).catch(() => {})
+  }, [i18n.language, settings, user])
+
+  if (support === 'unsupported') return null
+
+  if (support === 'needs-install') {
+    return (
+      <Section title={t('settings.reminder')}>
+        <ListRow icon="notifications-outline" title={t('settings.reminderInstall')} onPress={openInstallPrompt} />
+        <Text variant="small" tone="muted" style={styles.footnote}>
+          {t('settings.reminderInstallBody')}
+        </Text>
+      </Section>
+    )
+  }
+
+  if (!settings || !user) return null
+
+  const save = async (next: WebReminderSettings): Promise<void> => {
+    setSettings(next)
+    await saveWebReminderSettings(user.id, next, i18n.language)
+    track('reminder_updated', { platform: 'web', enabled: next.enabled, hour: next.hour, streak_nudge: next.streakNudge })
+  }
+
+  const run = (action: () => Promise<void>): void => {
+    setBusy(true)
+    action()
+      .catch((error: Error) => showDialog(t('common.error'), error.message))
+      .finally(() => setBusy(false))
+  }
+
+  const toggle = (enabled: boolean): void =>
+    run(async () => {
+      if (!enabled) {
+        const otherBrowsers = await disableWebPush(user.id)
+        // Other browsers keep their reminders; the schedule only turns off when none are left
+        if (otherBrowsers === 0) await save({ ...settings, enabled: false })
+        else setSettings({ ...settings, enabled: false })
+        return
+      }
+      const result = await enableWebPush()
+      track('push_permission_result', { result })
+      if (result === 'denied') return showDialog(t('settings.reminder'), t('settings.notificationsDeniedWeb'))
+      if (result === 'failed') return showDialog(t('common.error'), t('settings.reminderFailed'))
+      await save({ ...settings, enabled: true })
+    })
+
+  const chooseTime = (): void =>
+    showActions(
+      t('settings.reminderTime'),
+      WEB_REMINDER_HOURS.map((hour) => ({
+        label: formatTime(hour, 0),
+        onPress: () => run(() => save({ ...settings, hour, minute: 0 }))
+      })),
+      t('common.cancel')
+    )
+
+  const sendTest = (): void =>
+    run(async () => {
+      const sent = await sendTestNotification()
+      track('test_notification_sent', { sent })
+      showDialog(t('settings.testSentTitle'), sent > 0 ? t('settings.testSentBody') : t('settings.testNoDevices'))
+    })
+
+  return (
+    <Section title={t('settings.reminder')}>
+      <ListRow
+        icon="notifications-outline"
+        title={t('settings.reminder')}
+        right={
+          <Switch
+            value={settings.enabled}
+            disabled={busy}
+            onValueChange={toggle}
+            trackColor={{ true: colors.primary, false: colors.border }}
+            thumbColor="#ffffff"
+            {...webSwitchProps}
+          />
+        }
+      />
+      {settings.enabled && (
+        <>
+          <View style={[styles.separator, { backgroundColor: colors.border }]} />
+          <ListRow icon="time-outline" title={t('settings.reminderTime')} value={formatTime(settings.hour, settings.minute)} onPress={chooseTime} />
+          <View style={[styles.separator, { backgroundColor: colors.border }]} />
+          <ListRow
+            icon="flame-outline"
+            title={t('settings.streakReminder')}
+            right={
+              <Switch
+                value={settings.streakNudge}
+                disabled={busy}
+                onValueChange={(streakNudge) => run(() => save({ ...settings, streakNudge }))}
+                trackColor={{ true: colors.primary, false: colors.border }}
+                thumbColor="#ffffff"
+                {...webSwitchProps}
+              />
+            }
+          />
+          <View style={[styles.separator, { backgroundColor: colors.border }]} />
+          <ListRow icon="paper-plane-outline" title={t('settings.testNotification')} onPress={sendTest} />
+        </>
+      )}
+      <Text variant="small" tone="muted" style={styles.footnote}>
+        {t('settings.reminderWebBody')}
+      </Text>
+    </Section>
   )
 }
 
@@ -163,6 +313,8 @@ export default function SettingsScreen(): React.JSX.Element {
       <Section title={t('settings.language')}>
         <ListRow icon="language-outline" title={t('settings.language')} value={languageLabel} onPress={chooseLanguage} />
       </Section>
+
+      {Platform.OS === 'web' && <WebReminders />}
 
       {supportsReminders && reminder && (
         <Section title={t('settings.reminder')}>

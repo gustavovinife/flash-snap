@@ -75,7 +75,7 @@ function userAgent(): string {
   return isWeb ? navigator.userAgent.toLowerCase() : ''
 }
 
-function isIOS(): boolean {
+export function isIOS(): boolean {
   const ua = userAgent()
   // iPadOS reports itself as a Mac, so also check for touch support
   return /iphone|ipad|ipod/.test(ua) || (ua.includes('macintosh') && navigator.maxTouchPoints > 1)

@@ -39,6 +39,9 @@ export type AnalyticsEvent =
   | 'language_changed'
   | 'sound_effects_toggled'
   | 'reminder_updated'
+  | 'push_permission_result'
+  | 'test_notification_sent'
+  | 'notification_opened'
 
 type PropertyValue = string | number | boolean | null | undefined
 export type AnalyticsProperties = Record<string, PropertyValue>
@@ -78,6 +81,11 @@ function createClient(): PostHog | null {
     ...(siteId && { bootstrap: { distinctId: siteId } })
   })
   client.register({ app: 'flash-snap', platform: Platform.OS, ...(isWeb && { display_mode: webDisplayMode() }) })
+
+  // Reminder notifications open the app with ?from=push
+  if (isWeb && new URLSearchParams(window.location.search).get('from') === 'push') {
+    client.capture('notification_opened', { path: window.location.pathname })
+  }
 
   if (isWeb) {
     // Send queued events before the tab is closed or hidden

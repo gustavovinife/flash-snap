@@ -56,6 +56,42 @@ self.addEventListener('fetch', (event) => {
   }
 })
 
+// Reminders sent by the send-reminders Edge Function: { title, body, url, tag }
+self.addEventListener('push', (event) => {
+  let data = {}
+  try {
+    data = event.data ? event.data.json() : {}
+  } catch {
+    data = { body: event.data ? event.data.text() : '' }
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Flash Snap', {
+      body: data.body,
+      icon: '/app/icon-192.png',
+      badge: '/app/icon-192.png',
+      tag: data.tag,
+      data: { url: data.url || '/app/' }
+    })
+  )
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  const target = new URL((event.notification.data && event.notification.data.url) || '/app/', self.location.origin).href
+  event.waitUntil(
+    (async () => {
+      const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+      const app = windows.find((client) => new URL(client.url).pathname.startsWith('/app'))
+      if (app) {
+        await app.focus()
+        if ('navigate' in app) await app.navigate(target).catch(() => {})
+        return
+      }
+      await self.clients.openWindow(target)
+    })()
+  )
+})
+
 const BUNDLE_DIR = '/app/_expo/static/js/'
 
 async function cacheAsset(request, response) {
